@@ -53,7 +53,27 @@ class POPOConverterTest extends \PHPUnit_Framework_TestCase
 		];
 	}
 
-	// FIXME 1 level, int, string, float, bool
+	public function testConversionOfSimpleClassWithBasicTypeValues()
+	{
+		$simpleObject = new SimpleKlass();
+		$simpleObject->setNullValue(null);
+		$simpleObject->setBoolValue(true);
+		$simpleObject->setIntValue(42);
+		$simpleObject->setFloatValue(12.95);
+		$simpleObject->setStringValue('Lorem ipsum');
+
+		$expectedObject = new \stdClass();
+		$expectedObject->nullValue = null;
+		$expectedObject->boolValue = true;
+		$expectedObject->intValue = 42;
+		$expectedObject->floatValue = 12.95;
+		$expectedObject->stringValue = 'Lorem ipsum';
+
+		$actual = $this->converter->convert($simpleObject);
+		$this->assertEquals(print_r($expectedObject, 1), print_r($actual, 1));
+		$this->assertEquals($expectedObject, $actual);
+	}
+
 	// FIXME 1 level, array|string[]
 	// FIXME 1 level, object
 	// FIXME 1 array of objects with full classname

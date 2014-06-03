@@ -4,7 +4,7 @@ namespace NorthslopePL\Metassione;
 class POPOConverter
 {
 	/**
-	 * @param object $value
+	 * @param object|array $value
 	 *
 	 * @return \stdClass
 	 *
@@ -24,11 +24,42 @@ class POPOConverter
 		}
 		else if (is_object($value))
 		{
-			return new \stdClass();
+			return $this->convertObject($value);
 		}
 		else
 		{
 			throw new ConversionException('Given value is not an array nor an object. Type was: ' . gettype($value));
 		}
+	}
+
+	private function convertObject($object)
+	{
+		$retvalObject = new \stdClass();
+
+		$reflectionObject = new \ReflectionObject($object);
+
+		foreach ($reflectionObject->getProperties() as $property)
+		{
+			$property->setAccessible(true);
+			$propertyName = $property->getName();
+			$propertyValue = $property->getValue($object);
+
+			if (is_object($propertyValue))
+			{
+				$propertyValue = $this->convert($propertyValue);
+			}
+			else if (is_array($propertyValue))
+			{
+				$propertyValue = $this->convert($propertyValue);
+			}
+			else
+			{
+				// just use $propertyValue unchanged
+			}
+
+			$retvalObject->$propertyName = $propertyValue;
+		}
+
+		return $retvalObject;
 	}
 }
