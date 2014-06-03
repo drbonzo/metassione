@@ -3,13 +3,32 @@ namespace NorthslopePL\Metassione;
 
 class POPOConverter
 {
-
 	/**
-	 * @param object $object
+	 * @param object $value
+	 *
 	 * @return \stdClass
+	 *
+	 * @throws ConversionException
 	 */
-	public function convert($object)
+	public function convert($value)
 	{
-		return new \stdClass();
+		if (is_array(($value)))
+		{
+			$retval = [];
+			foreach ($value as $object)
+			{
+				$retval[] = $this->convert($object); // force sequential indexing
+			}
+
+			return $retval;
+		}
+		else if (is_object($value))
+		{
+			return new \stdClass();
+		}
+		else
+		{
+			throw new ConversionException('Given value is not an array nor an object. Type was: ' . gettype($value));
+		}
 	}
 }
