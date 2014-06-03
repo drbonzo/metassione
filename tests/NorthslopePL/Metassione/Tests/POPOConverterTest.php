@@ -1,8 +1,6 @@
 <?php
 namespace NorthslopePL\Metassione\Tests;
 
-require_once __DIR__ . '/EmptyKlass.php';
-
 use NorthslopePL\Metassione\POPOConverter;
 
 class POPOConverterTest extends \PHPUnit_Framework_TestCase

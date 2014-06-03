@@ -14,7 +14,7 @@
 	},
 	"autoload-dev": {
 		"psr-0": {
-			"NorthslopePL\\MetassioneTest\\Tests": "tests/"
+			"NorthslopePL\\Metassione\\Tests": "tests/"
 		}
 	}
 }
