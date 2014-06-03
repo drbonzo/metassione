@@ -31,28 +31,6 @@ class POPOConverterTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($expected, $this->converter->convert($emptyObjects));
 	}
 
-	/**
-	 * @param $value
-	 * @dataProvider convertingNotObjectNorArrayThrowsExceptionDataProvider
-	 */
-	public function testConvertingNotObjectNorArrayThrowsException($value)
-	{
-		$this->setExpectedException('NorthslopePL\Metassione\ConversionException');
-		$this->converter->convert($value);
-	}
-
-	public function convertingNotObjectNorArrayThrowsExceptionDataProvider()
-	{
-		return [
-			[null],
-			[true],
-			[false],
-			[10],
-			[12.345],
-			['foobar']
-		];
-	}
-
 	public function testConversionOfSimpleClassWithBasicTypeValues()
 	{
 		$simpleObject = new SimpleKlass();
@@ -74,10 +52,33 @@ class POPOConverterTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($expectedObject, $actual);
 	}
 
-	// FIXME 1 level, array|string[]
-	// FIXME 1 level, object
-	// FIXME 1 array of objects with full classname
-	// FIXME many levels of objects (3) Blog, Post, Comment
+	public function testConvertingObjectWithPropertiesOfTypeArrays()
+	{
+		// input
+		$arrayedObject = new ArrayedKlass();
+		$arrayedObject->setNumbers([1, 2, 3, 4, 5]);
 
+		$object6 = new OnePropertyKlass();
+		$object6->setValue(6);
+		$object7 = new OnePropertyKlass();
+		$object7->setValue(7);
+		$object8 = new OnePropertyKlass();
+		$object8->setValue(8);
+		$objects = [$object6, $object7, $object8];
+
+		$arrayedObject->setObjects($objects);
+
+		// expected
+		$expectedObject = new \stdClass();
+		$expectedObject->numbers = [1, 2, 3, 4, 5];
+		$expectedObject->objects = [];
+		$expectedObject->objects[] = (object)['value' => 6];
+		$expectedObject->objects[] = (object)['value' => 7];
+		$expectedObject->objects[] = (object)['value' => 8];
+
+		// result
+		$actual = $this->converter->convert($arrayedObject);
+		$this->assertEquals($expectedObject, $actual);
+	}
 }
 

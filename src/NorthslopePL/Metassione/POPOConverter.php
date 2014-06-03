@@ -7,8 +7,6 @@ class POPOConverter
 	 * @param object|array $value
 	 *
 	 * @return \stdClass
-	 *
-	 * @throws ConversionException
 	 */
 	public function convert($value)
 	{
@@ -28,7 +26,7 @@ class POPOConverter
 		}
 		else
 		{
-			throw new ConversionException('Given value is not an array nor an object. Type was: ' . gettype($value));
+			return $value;
 		}
 	}
 
