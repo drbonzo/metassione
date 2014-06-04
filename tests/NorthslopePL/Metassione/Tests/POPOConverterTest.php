@@ -2,6 +2,10 @@
 namespace NorthslopePL\Metassione\Tests;
 
 use NorthslopePL\Metassione\POPOConverter;
+use NorthslopePL\Metassione\Tests\Examples\ArrayedKlass;
+use NorthslopePL\Metassione\Tests\Examples\EmptyKlass;
+use NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass;
+use NorthslopePL\Metassione\Tests\Examples\SimpleKlass;
 
 class POPOConverterTest extends \PHPUnit_Framework_TestCase
 {

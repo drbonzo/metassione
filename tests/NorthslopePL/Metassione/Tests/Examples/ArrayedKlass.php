@@ -1,5 +1,5 @@
 <?php
-namespace NorthslopePL\Metassione\Tests;
+namespace NorthslopePL\Metassione\Tests\Examples;
 
 class ArrayedKlass
 {
@@ -9,34 +9,34 @@ class ArrayedKlass
 	private $numbers;
 
 	/**
-	 * @var array|\NorthslopePL\Metassione\Tests\OnePropertyKlass[]
+	 * @var array|\NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass[]
 	 */
 	private $objects;
 
 	/**
 	 * Inverted order of 'array' and classname
 	 *
-	 * @var \NorthslopePL\Metassione\Tests\OnePropertyKlass[]|array
+	 * @var \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass[]|array
 	 */
 	private $objects2;
 
 	/**
 	 * Without [] at the end
 	 *
-	 * @var array|\NorthslopePL\Metassione\Tests\OnePropertyKlass
+	 * @var array|\NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass
 	 */
 	private $objects3;
 
 	/**
 	 * Without 'array|'
 	 *
-	 * @var \NorthslopePL\Metassione\Tests\OnePropertyKlass[]
+	 * @var \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass[]
 	 */
 	private $invalidSpecificationForObjects;
 
 
 	/**
-	 * @param array|\NorthslopePL\Metassione\Tests\OnePropertyKlass[] $objects
+	 * @param array|\NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass[] $objects
 	 */
 	public function setObjects($objects)
 	{
@@ -44,7 +44,7 @@ class ArrayedKlass
 	}
 
 	/**
-	 * @return array|\NorthslopePL\Metassione\Tests\OnePropertyKlass[]
+	 * @return array|\NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass[]
 	 */
 	public function getObjects()
 	{
@@ -68,7 +68,7 @@ class ArrayedKlass
 	}
 
 	/**
-	 * @param array|\NorthslopePL\Metassione\Tests\OnePropertyKlass[] $objects2
+	 * @param array|\NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass[] $objects2
 	 */
 	public function setObjects2($objects2)
 	{
@@ -76,7 +76,7 @@ class ArrayedKlass
 	}
 
 	/**
-	 * @return array|\NorthslopePL\Metassione\Tests\OnePropertyKlass[]
+	 * @return array|\NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass[]
 	 */
 	public function getObjects2()
 	{
@@ -84,7 +84,7 @@ class ArrayedKlass
 	}
 
 	/**
-	 * @param array|\NorthslopePL\Metassione\Tests\OnePropertyKlass $objects3
+	 * @param array|\NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass $objects3
 	 */
 	public function setObjects3($objects3)
 	{
@@ -92,7 +92,7 @@ class ArrayedKlass
 	}
 
 	/**
-	 * @return array|\NorthslopePL\Metassione\Tests\OnePropertyKlass
+	 * @return array|\NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass
 	 */
 	public function getObjects3()
 	{
@@ -100,7 +100,7 @@ class ArrayedKlass
 	}
 
 	/**
-	 * @param \NorthslopePL\Metassione\Tests\OnePropertyKlass[] $invalidSpecificationForObjects
+	 * @param \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass[] $invalidSpecificationForObjects
 	 */
 	public function setInvalidSpecificationForObjects($invalidSpecificationForObjects)
 	{
@@ -108,7 +108,7 @@ class ArrayedKlass
 	}
 
 	/**
-	 * @return \NorthslopePL\Metassione\Tests\OnePropertyKlass[]
+	 * @return \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass[]
 	 */
 	public function getInvalidSpecificationForObjects()
 	{

@@ -1,12 +1,12 @@
 <?php
-namespace NorthslopePL\Metassione\Tests;
+namespace NorthslopePL\Metassione\Tests\Examples;
 
 class PropertyNotFoundKlass
 {
 	/**
 	 * Class Foo just does not exist. This is expected behaviour for that test.
 	 *
-	 * @var \NorthslopePL\Metassione\Tests\Foo
+	 * @var \NorthslopePL\Metassione\Tests\Examples\Foo
 	 */
 	private $foo;
 
@@ -19,7 +19,7 @@ class PropertyNotFoundKlass
 	private $one;
 
 	/**
-	 * @param \NorthslopePL\Metassione\Tests\Foo $foo
+	 * @param \NorthslopePL\Metassione\Tests\Examples\Foo $foo
 	 */
 	public function setFoo($foo)
 	{
@@ -27,7 +27,7 @@ class PropertyNotFoundKlass
 	}
 
 	/**
-	 * @return \NorthslopePL\Metassione\Tests\Foo
+	 * @return \NorthslopePL\Metassione\Tests\Examples\Foo
 	 */
 	public function getFoo()
 	{
@@ -35,7 +35,7 @@ class PropertyNotFoundKlass
 	}
 
 	/**
-	 * @param \NorthslopePL\Metassione\Tests\OnePropertyKlass $one
+	 * @param \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass $one
 	 */
 	public function setOne($one)
 	{
@@ -43,7 +43,7 @@ class PropertyNotFoundKlass
 	}
 
 	/**
-	 * @return \NorthslopePL\Metassione\Tests\OnePropertyKlass
+	 * @return \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass
 	 */
 	public function getOne()
 	{

@@ -3,6 +3,12 @@ namespace NorthslopePL\Metassione\Tests;
 
 use NorthslopePL\Metassione\POPOObjectFiller;
 use NorthslopePL\Metassione\Tests\Blog\Blog;
+use NorthslopePL\Metassione\Tests\Examples\ArrayedKlass;
+use NorthslopePL\Metassione\Tests\Examples\EmptyKlass;
+use NorthslopePL\Metassione\Tests\Examples\OneObjectPropertyKlass;
+use NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass;
+use NorthslopePL\Metassione\Tests\Examples\PropertyNotFoundKlass;
+use NorthslopePL\Metassione\Tests\Examples\SimpleKlass;
 
 class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 {
@@ -91,7 +97,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		$simpleObject = new SimpleKlass();
 		$rawData = 'foobar';
 
-		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Raw data should be an object, but string was given. I was trying to fill object of class NorthslopePL\Metassione\Tests\SimpleKlass.');
+		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Raw data should be an object, but string was given. I was trying to fill object of class NorthslopePL\Metassione\Tests\Examples\SimpleKlass.');
 
 		$this->objectFiller->fillObjectWithRawData($simpleObject, $rawData);
 	}
@@ -102,7 +108,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		$rawData = new \stdClass();
 		$rawData->foo = 'bar';
 
-		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class "NorthslopePL\Metassione\Tests\Foo" does not exist for property NorthslopePL\Metassione\Tests\PropertyNotFoundKlass::$foo');
+		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class "NorthslopePL\Metassione\Tests\Examples\Foo" does not exist for property NorthslopePL\Metassione\Tests\Examples\PropertyNotFoundKlass::$foo');
 		$this->objectFiller->fillObjectWithRawData($targetObject, $rawData);
 	}
 
@@ -167,7 +173,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		}
 		$rawData->invalidSpecificationForObjects = array($object1, $object2);
 
-		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Raw data should be an object, but array was given. I was trying to fill object of class NorthslopePL\Metassione\Tests\OnePropertyKlass. Maybe you have forgotten about adding "array|" for property that holds this class NorthslopePL\Metassione\Tests\OnePropertyKlass');
+		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Raw data should be an object, but array was given. I was trying to fill object of class NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass. Maybe you have forgotten about adding "array|" for property that holds this class NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass');
 		$this->objectFiller->fillObjectWithRawData($targetObject, $rawData);
 	}
 
@@ -188,7 +194,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		$sourceData = new \stdClass();
 		$sourceData->one = (object)array('value' => 42);
 
-		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class "OnePropertyKlass" does not exist for property NorthslopePL\Metassione\Tests\PropertyNotFoundKlass::$one. Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\OnePropertyKlass)?');
+		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class "OnePropertyKlass" does not exist for property NorthslopePL\Metassione\Tests\Examples\PropertyNotFoundKlass::$one. Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\OnePropertyKlass)?');
 		$this->objectFiller->fillObjectWithRawData($targetObject, $sourceData);
 	}
 }

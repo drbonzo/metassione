@@ -1,5 +1,5 @@
 <?php
-namespace NorthslopePL\Metassione\Tests;
+namespace NorthslopePL\Metassione\Tests\Examples;
 
 class SimpleKlass
 {
