@@ -8,7 +8,7 @@ class PHPDocParser
 	const TYPE_OTHER = 'other';
 	const TYPE_UNKNOWN = 'unknown';
 
-	static private $basicTypes = ['string', 'integer', 'int', 'boolean', 'bool', 'float', 'double', 'void', 'mixed'];
+	static private $basicTypes = ['string', 'integer', 'int', 'boolean', 'bool', 'float', 'double', 'void', 'mixed', 'null'];
 
 	/**
 	 * Extracts proeprty type from its php doc comment
