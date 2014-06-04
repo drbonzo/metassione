@@ -73,7 +73,7 @@ COMMENT;
  */
 COMMENT;
 
-		$this->assertEquals(array(PHPDocParser::TYPE_OTHER, null), $this->parser->getPropertyTypeFromPHPDoc($comment));
+		$this->assertEquals(array(PHPDocParser::TYPE_ARRAY, null), $this->parser->getPropertyTypeFromPHPDoc($comment));
 	}
 
 	public function testCommentWithArrayOfObjectsSpecified()

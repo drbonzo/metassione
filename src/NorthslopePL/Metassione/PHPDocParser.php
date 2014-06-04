@@ -54,7 +54,14 @@ class PHPDocParser
 			}
 			else
 			{
-				return array(self::TYPE_OTHER, null);
+				if ($this->typeIsArray($typesSpecification))
+				{
+					return array(self::TYPE_ARRAY, null);
+				}
+				else
+				{
+					return array(self::TYPE_OTHER, null);
+				}
 			}
 		}
 		else
