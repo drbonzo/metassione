@@ -9,6 +9,11 @@ class Blog
 	private $name;
 
 	/**
+	 * @var \NorthslopePL\Metassione\Tests\Blog\Author
+	 */
+	private $author;
+
+	/**
 	 * @var array|\NorthslopePL\Metassione\Tests\Blog\Post[]
 	 */
 	private $posts;
@@ -43,6 +48,22 @@ class Blog
 	public function getPosts()
 	{
 		return $this->posts;
+	}
+
+	/**
+	 * @param \NorthslopePL\Metassione\Tests\Blog\Author $author
+	 */
+	public function setAuthor($author)
+	{
+		$this->author = $author;
+	}
+
+	/**
+	 * @return \NorthslopePL\Metassione\Tests\Blog\Author
+	 */
+	public function getAuthor()
+	{
+		return $this->author;
 	}
 
 }

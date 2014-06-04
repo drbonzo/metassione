@@ -1,6 +1,7 @@
 <?php
 namespace NorthslopePL\Metassione\Tests;
 
+use NorthslopePL\Metassione\Tests\Blog\Author;
 use NorthslopePL\Metassione\Tests\Blog\Blog;
 use NorthslopePL\Metassione\Tests\Blog\Comment;
 use NorthslopePL\Metassione\Tests\Blog\Post;
@@ -15,6 +16,9 @@ class TestBlogBuilder
 		$blog = new Blog();
 
 		$blog->setName('PHP Programmers blog');
+		$blogAuthor = new Author();
+		$blogAuthor->setName('Anonymous Blogger');
+		$blog->setAuthor($blogAuthor);
 
 		$post1 = $this->buildPost(1);
 		$post2 = $this->buildPost(2);
@@ -60,6 +64,10 @@ class TestBlogBuilder
 	{
 		$blog = new \stdClass();
 		$blog->name = 'PHP Programmers blog';
+
+		$blogAuthor = new \stdClass();
+		$blogAuthor->name = 'Anonymous Blogger';
+		$blog->author = $blogAuthor;
 
 		$post1 = new \stdClass();
 		{
