@@ -67,6 +67,8 @@ class POPOConverterTest extends \PHPUnit_Framework_TestCase
 		$objects = [$object6, $object7, $object8];
 
 		$arrayedObject->setObjects($objects);
+		$arrayedObject->setObjects2($objects);
+		$arrayedObject->setObjects3($objects);
 
 		// expected
 		$expectedObject = new \stdClass();
@@ -75,9 +77,20 @@ class POPOConverterTest extends \PHPUnit_Framework_TestCase
 		$expectedObject->objects[] = (object)['value' => 6];
 		$expectedObject->objects[] = (object)['value' => 7];
 		$expectedObject->objects[] = (object)['value' => 8];
+		$expectedObject->objects2 = [];
+		$expectedObject->objects2[] = (object)['value' => 6];
+		$expectedObject->objects2[] = (object)['value' => 7];
+		$expectedObject->objects2[] = (object)['value' => 8];
+		$expectedObject->objects3 = [];
+		$expectedObject->objects3[] = (object)['value' => 6];
+		$expectedObject->objects3[] = (object)['value' => 7];
+		$expectedObject->objects3[] = (object)['value' => 8];
+		$expectedObject->invalidSpecificationForObjects = null;
 
 		// result
 		$actual = $this->converter->convert($arrayedObject);
+
+		$this->assertEquals(print_r($expectedObject, true), print_r($actual, true));
 		$this->assertEquals($expectedObject, $actual);
 	}
 
