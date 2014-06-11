@@ -48,16 +48,13 @@ class POPOObjectFiller
 	{
 		try
 		{
-
-			if (!$targetObjectReflection->hasProperty($rawDataProperty->getName()))
+			$targetObjectProperty = $this->getPropertyFromObjectOrParentClasses($targetObjectReflection, $rawDataProperty->getName());
+			if ($targetObjectProperty)
 			{
-				return;
+				$newPropertyValue = $this->buildPropertyValue($rawDataProperty, $rawData, $targetObjectProperty);
+				$targetObjectProperty->setAccessible(true); // to access private/protected properties
+				$targetObjectProperty->setValue($targetObject, $newPropertyValue);
 			}
-
-			$targetObjectProperty = $targetObjectReflection->getProperty($rawDataProperty->getName());
-			$newPropertyValue = $this->buildPropertyValue($rawDataProperty, $rawData, $targetObjectProperty);
-			$targetObjectProperty->setAccessible(true); // to access private/protected properties
-			$targetObjectProperty->setValue($targetObject, $newPropertyValue);
 		}
 		catch (\ReflectionException $e)
 		{
@@ -168,5 +165,39 @@ class POPOObjectFiller
 
 		$classReflection = new \ReflectionClass($classname);
 		return $classReflection;
+	}
+
+	/**
+	 * @param \ReflectionObject $object
+	 * @param string $propertyName
+	 * @return null|\ReflectionProperty
+	 * null if property is not found
+	 *
+	 *
+	 * \ReflectionClass::hasProperty() checks only properties from current class and all nonprivate properties from parent classes.
+	 * So private properties from parent classes will not be found.
+	 *
+	 * So does getProperty().
+	 *
+	 * We have workaround for this problem, by checking parent classes for property with name $propertyName.
+	 *
+	 * http://www.php.net/manual/en/reflectionclass.hasproperty.php#94038
+	 * http://stackoverflow.com/questions/9913680/does-reflectionclassgetproperties-also-get-properties-of-the-parent
+	 */
+	private function getPropertyFromObjectOrParentClasses(\ReflectionObject $object, $propertyName)
+	{
+		$currentClassReflection = $object;
+
+		while ((bool)$currentClassReflection) // class without parent has null in getParentClass()
+		{
+			if ($currentClassReflection->hasProperty($propertyName))
+			{
+				return $currentClassReflection->getProperty($propertyName);
+			}
+
+			$currentClassReflection = $currentClassReflection->getParentClass();
+		}
+
+		return null;
 	}
 }

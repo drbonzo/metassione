@@ -4,6 +4,7 @@ namespace NorthslopePL\Metassione\Tests;
 use NorthslopePL\Metassione\POPOObjectFiller;
 use NorthslopePL\Metassione\Tests\Blog\Blog;
 use NorthslopePL\Metassione\Tests\Examples\ArrayedKlass;
+use NorthslopePL\Metassione\Tests\Examples\ChildKlass;
 use NorthslopePL\Metassione\Tests\Examples\EmptyKlass;
 use NorthslopePL\Metassione\Tests\Examples\OneObjectPropertyKlass;
 use NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass;
@@ -196,5 +197,25 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 
 		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class "OnePropertyKlass" does not exist for property NorthslopePL\Metassione\Tests\Examples\PropertyNotFoundKlass::$one. Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\OnePropertyKlass)?');
 		$this->objectFiller->fillObjectWithRawData($targetObject, $sourceData);
+	}
+
+	public function testFillingPropertiesOfParentClasses()
+	{
+		$sourceData = new \stdClass();
+		$sourceData->childProperty = (object)array('value' => 11);
+		$sourceData->parentProperty = (object)array('value' => 22);
+		$sourceData->grandparentProperty = (object)array('value' => 33);
+
+		$childObject = new ChildKlass();
+		$this->objectFiller->fillObjectWithRawData($childObject, $sourceData);
+
+		$this->assertInstanceOf('NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass', $childObject->getChildProperty());
+		$this->assertEquals(11, $childObject->getChildProperty()->getValue());
+
+		$this->assertInstanceOf('NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass', $childObject->getParentProperty());
+		$this->assertEquals(22, $childObject->getParentProperty()->getValue());
+
+		$this->assertInstanceOf('NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass', $childObject->getGrandparentProperty());
+		$this->assertEquals(33, $childObject->getGrandparentProperty()->getValue());
 	}
 }
