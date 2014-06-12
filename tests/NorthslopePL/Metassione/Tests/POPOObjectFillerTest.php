@@ -6,6 +6,7 @@ use NorthslopePL\Metassione\Tests\Blog\Blog;
 use NorthslopePL\Metassione\Tests\Examples\ArrayedKlass;
 use NorthslopePL\Metassione\Tests\Examples\ChildKlass;
 use NorthslopePL\Metassione\Tests\Examples\EmptyKlass;
+use NorthslopePL\Metassione\Tests\Examples\GrandparentKlass;
 use NorthslopePL\Metassione\Tests\Examples\OneObjectPropertyKlass;
 use NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass;
 use NorthslopePL\Metassione\Tests\Examples\PropertyNotFoundKlass;
@@ -228,5 +229,25 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(print_r($expectedObject, true), print_r($actualObject, true));
 		$this->assertEquals($expectedObject, $actualObject);
+	}
+
+	public function testFillingWithNullValueForSomeObjects()
+	{
+		$sourceData = new \stdClass();
+		$sourceData->grandparentProperty = (object)array('value' => 3);
+		$sourceData->grandparentProtectedProperty = null; // there should/can be an object
+
+		$grandparentObject = new GrandparentKlass();
+		$this->objectFiller->fillObjectWithRawData($grandparentObject, $sourceData);
+
+		$expectedObject = new GrandparentKlass();
+		$prop1 = new OnePropertyKlass();
+		$prop1->setValue(3);
+		$expectedObject->setGrandparentProperty($prop1);
+
+		$this->assertEquals(print_r($expectedObject, true), print_r($grandparentObject, true));
+		$this->assertEquals($expectedObject, $grandparentObject);
+
+		$this->assertNull($grandparentObject->getGrandparentProtectedProperty(), 'No data was given for this property - so set it to null');
 	}
 }
