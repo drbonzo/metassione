@@ -130,6 +130,7 @@ class POPOObjectFiller
 			{
 				// this is object but we dont know the class or this is a simple type
 				// @var array|AClassThatIsNotFound[]
+				$rawDataPropertyValue = is_array($rawDataPropertyValue) ? $rawDataPropertyValue : (array)$rawDataPropertyValue;
 				foreach ($rawDataPropertyValue as $rawDataPropertyValueItem)
 				{
 					$newValue = $rawDataPropertyValueItem;
