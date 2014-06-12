@@ -3,6 +3,7 @@ namespace NorthslopePL\Metassione\Tests;
 
 use NorthslopePL\Metassione\POPOConverter;
 use NorthslopePL\Metassione\Tests\Examples\ArrayedKlass;
+use NorthslopePL\Metassione\Tests\Examples\ChildKlass;
 use NorthslopePL\Metassione\Tests\Examples\EmptyKlass;
 use NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass;
 use NorthslopePL\Metassione\Tests\Examples\SimpleKlass;
@@ -105,6 +106,35 @@ class POPOConverterTest extends \PHPUnit_Framework_TestCase
 		$expectedObject = $blogBuilder->buildBlogAsStdClass();
 
 		$actual = $this->converter->convert($blog);
+		$this->assertEquals(print_r($expectedObject, true), print_r($actual, true));
+		$this->assertEquals($expectedObject, $actual);
+	}
+
+	public function testConvertingPrivatePropertiesFromParentClasses()
+	{
+		$childObject = new ChildKlass();
+		$prop1 = new OnePropertyKlass();
+		$prop1->setValue(1);
+		$prop2 = new OnePropertyKlass();
+		$prop2->setValue(2);
+		$prop3 = new OnePropertyKlass();
+		$prop3->setValue(3);
+		$prop4 = new OnePropertyKlass();
+		$prop4->setValue(4);
+
+		$childObject->setChildProperty($prop1);
+		$childObject->setParentProperty($prop2);
+		$childObject->setGrandparentProperty($prop3);
+		$childObject->setGrandparentProtectedProperty($prop4);
+
+		$expectedObject = new \stdClass();
+		$expectedObject->childProperty = (object)array('value' => 1);
+		$expectedObject->parentProperty = (object)array('value' => 2);
+		$expectedObject->grandparentProperty = (object)array('value' => 3);
+		$expectedObject->grandparentProtectedProperty = (object)array('value' => 4);
+
+		$actual = $this->converter->convert($childObject);
+
 		$this->assertEquals(print_r($expectedObject, true), print_r($actual, true));
 		$this->assertEquals($expectedObject, $actual);
 	}

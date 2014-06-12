@@ -195,6 +195,7 @@ class POPOObjectFiller
 				return $currentClassReflection->getProperty($propertyName);
 			}
 
+			// go to parent class
 			$currentClassReflection = $currentClassReflection->getParentClass();
 		}
 

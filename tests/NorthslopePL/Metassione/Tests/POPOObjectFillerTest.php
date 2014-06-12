@@ -202,20 +202,31 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 	public function testFillingPropertiesOfParentClasses()
 	{
 		$sourceData = new \stdClass();
-		$sourceData->childProperty = (object)array('value' => 11);
-		$sourceData->parentProperty = (object)array('value' => 22);
-		$sourceData->grandparentProperty = (object)array('value' => 33);
+		$sourceData->childProperty = (object)array('value' => 1);
+		$sourceData->parentProperty = (object)array('value' => 2);
+		$sourceData->grandparentProperty = (object)array('value' => 3);
+		$sourceData->grandparentProtectedProperty = (object)array('value' => 4);
 
-		$childObject = new ChildKlass();
-		$this->objectFiller->fillObjectWithRawData($childObject, $sourceData);
+		$actualObject = new ChildKlass();
+		$this->objectFiller->fillObjectWithRawData($actualObject, $sourceData);
 
-		$this->assertInstanceOf('NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass', $childObject->getChildProperty());
-		$this->assertEquals(11, $childObject->getChildProperty()->getValue());
 
-		$this->assertInstanceOf('NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass', $childObject->getParentProperty());
-		$this->assertEquals(22, $childObject->getParentProperty()->getValue());
+		$expectedObject = new ChildKlass();
+		$prop1 = new OnePropertyKlass();
+		$prop1->setValue(1);
+		$prop2 = new OnePropertyKlass();
+		$prop2->setValue(2);
+		$prop3 = new OnePropertyKlass();
+		$prop3->setValue(3);
+		$prop4 = new OnePropertyKlass();
+		$prop4->setValue(4);
 
-		$this->assertInstanceOf('NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass', $childObject->getGrandparentProperty());
-		$this->assertEquals(33, $childObject->getGrandparentProperty()->getValue());
+		$expectedObject->setChildProperty($prop1);
+		$expectedObject->setParentProperty($prop2);
+		$expectedObject->setGrandparentProperty($prop3);
+		$expectedObject->setGrandparentProtectedProperty($prop4);
+
+		$this->assertEquals(print_r($expectedObject, true), print_r($actualObject, true));
+		$this->assertEquals($expectedObject, $actualObject);
 	}
 }

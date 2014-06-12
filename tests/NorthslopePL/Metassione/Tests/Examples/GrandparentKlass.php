@@ -9,6 +9,11 @@ class GrandparentKlass
 	private $grandparentProperty;
 
 	/**
+	 * @var \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass
+	 */
+	protected $grandparentProtectedProperty;
+
+	/**
 	 * @param \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass $grandparentProperty
 	 */
 	public function setGrandparentProperty($grandparentProperty)
@@ -24,4 +29,19 @@ class GrandparentKlass
 		return $this->grandparentProperty;
 	}
 
+	/**
+	 * @param \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass $grandparentProtectedProperty
+	 */
+	public function setGrandparentProtectedProperty($grandparentProtectedProperty)
+	{
+		$this->grandparentProtectedProperty = $grandparentProtectedProperty;
+	}
+
+	/**
+	 * @return \NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass
+	 */
+	public function getGrandparentProtectedProperty()
+	{
+		return $this->grandparentProtectedProperty;
+	}
 }
