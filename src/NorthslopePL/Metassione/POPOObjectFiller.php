@@ -92,6 +92,13 @@ class POPOObjectFiller
 			// private $fooBar;
 			//
 			// so build object of this class and fill this object with data from $propertyValue
+			if ($rawDataPropertyValue === null)
+			{
+				// there is no data for given object
+				// use null instead of empty object
+				return null;
+			}
+
 			$newValue = $targetObjectPropertyClassReflection->newInstance();
 			$this->fillObjectWithRawData($newValue, $rawDataPropertyValue);
 
