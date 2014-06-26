@@ -119,7 +119,7 @@ class POPOObjectFiller
 
 				// optimization, take class reflection creation out of the loop. Its 2x faster 1.3s vs 3.3s for 1 000 000 iterations.
 				$targetObjectPropertyClassReflection = $this->getClassReflectionForClassName($classname, $targetObjectProperty);
-				foreach ($rawDataPropertyValue as $rawDataPropertyValueItem)
+				foreach ((array)$rawDataPropertyValue as $rawDataPropertyValueItem) // cast to array handles null values when expecting arrays
 				{
 					$newValue = $targetObjectPropertyClassReflection->newInstance();
 					$this->fillObjectWithRawData($newValue, $rawDataPropertyValueItem);
