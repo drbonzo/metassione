@@ -20,7 +20,7 @@ class PHPDocParser
 	 * [AT]var array|int[] => ['array', null ]
 	 * [AT]var array|SomeClass[] => ['array', 'SomeClass']
 	 * [AT]var SomeClass[]|array => ['array', 'SomeClass']
-	 *
+	 * [AT]var SomeClass[] => ['array', 'SomeClass']
 	 * @param string $phpdoc
 	 *
 	 * @return ObjectPropertyType
@@ -38,6 +38,32 @@ class PHPDocParser
 		if (preg_match($pattern, $phpdoc, $m))
 		{
 			$phpdocTypeSpecification = $m[1];
+		}
+		else
+		{
+			$phpdocTypeSpecification = '';
+		}
+
+		return $this->buildObjectPropertyTypeFromTypeSpecification($phpdocTypeSpecification);
+	}
+
+	/**
+	 * '[AT]return ANamespace\AKlass'
+	 *
+	 * @param string $phpdocTypeSpecification
+	 *
+	 * @return ObjectPropertyType
+	 */
+	private function buildObjectPropertyTypeFromTypeSpecification($phpdocTypeSpecification)
+	{
+		if ($phpdocTypeSpecification)
+		{
+			if ($phpdocTypeSpecification == 'void')
+			{
+				$objectPropertyType = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_NONE);
+				return $objectPropertyType;
+			}
+
 			$typesSpecification = explode('|', $phpdocTypeSpecification);
 
 			if ($this->typeIsArray($typesSpecification))
@@ -61,6 +87,26 @@ class PHPDocParser
 					return $objectPropertyType;
 				}
 			}
+		}
+		else
+		{
+			$objectPropertyType = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_UNKNOWN);
+			return $objectPropertyType;
+		}
+	}
+
+	/**
+	 * @param string $phpdoc
+	 *
+	 * @return ObjectPropertyType
+	 */
+	public function getReturnValueTypeFromMethodPhpdoc($phpdoc)
+	{
+		if (preg_match('#@return\s+(.+?)\\n#', $phpdoc, $matches))
+		{
+			$typeSpecification = $matches[1];
+			$objectPropertyType = $this->buildObjectPropertyTypeFromTypeSpecification($typeSpecification);
+			return $objectPropertyType;
 		}
 		else
 		{
