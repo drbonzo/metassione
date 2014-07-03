@@ -101,6 +101,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 
 		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Raw data should be an object, but string was given. I was trying to fill object of class NorthslopePL\Metassione\Tests\Examples\SimpleKlass.');
 
+		/** @noinspection PhpParamsInspection */
 		$this->objectFiller->fillObjectWithRawData($simpleObject, $rawData);
 	}
 
@@ -162,7 +163,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($expectedObject, $targetObject);
 	}
 
-	public function testFillingObjectWithIncorrectlyDocumentedArrayProperty()
+	public function testFillingObjectWithArrayPropertyDocumentedWithoutArrayKeyword()
 	{
 		$targetObject = new ArrayedKlass();
 
@@ -175,8 +176,19 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		}
 		$rawData->invalidSpecificationForObjects = array($object1, $object2);
 
-		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Raw data should be an object, but array was given. I was trying to fill object of class NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass. Maybe you have forgotten about adding "array|" for property that holds this class NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass');
 		$this->objectFiller->fillObjectWithRawData($targetObject, $rawData);
+
+		$expected = new ArrayedKlass();
+		$o1 = new OnePropertyKlass();
+		$o1->setValue(1);
+
+		$o2 = new OnePropertyKlass();
+		$o2->setValue(2);
+
+		$expected->setInvalidSpecificationForObjects(array($o1, $o2));
+
+		$this->assertEquals(print_r($expected, true), print_r($targetObject, true));
+		$this->assertEquals($expected, $targetObject);
 	}
 
 	public function testFillingObjectUsingDataWithPrivatePropertiesThrowsException()
@@ -186,6 +198,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		$sourceData->setValue(42);
 
 		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'exception \'ReflectionException\' with message '); // ...
+		/** @noinspection PhpParamsInspection */
 		$this->objectFiller->fillObjectWithRawData($targetObject, $sourceData);
 	}
 
