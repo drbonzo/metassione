@@ -23,50 +23,49 @@ class PHPDocParser
 	 *
 	 * @param string $phpdoc
 	 *
-	 * @return array|string[2]
-	 * 0 - type category, see self::TYPE_* constants
-	 * 1 - null or classname
+	 * @return ObjectPropertyType
 	 */
 	public function getPropertyTypeFromPHPDoc($phpdoc)
 	{
 		$phpdoc = trim($phpdoc);
 		if (empty($phpdoc))
 		{
-			return array(self::TYPE_UNKNOWN, null);
+			$objectPropertyType = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_UNKNOWN);
+			return $objectPropertyType;
 		}
 
 		$pattern = '#@var\\s*(.+?)\\s*\\n#m';
 		if (preg_match($pattern, $phpdoc, $m))
 		{
-			$typesSpecification = explode('|', $m[1]);
-			$classname = $this->findClassnameInTypesArrayForArray($typesSpecification);
+			$phpdocTypeSpecification = $m[1];
+			$typesSpecification = explode('|', $phpdocTypeSpecification);
 
-			if ($classname)
+			if ($this->typeIsArray($typesSpecification))
 			{
-				if ($this->typeIsArray($typesSpecification))
-				{
-					return array(self::TYPE_ARRAY, $classname);
-				}
-				else
-				{
-					return array(self::TYPE_OBJECT, $classname);
-				}
+				// array|Klass[], array|OtherKlass[]
+				// or
+				// array|int[], array|string[], array|float[]
+				$objectPropertyType = $this->buildObjectPropertyTypeForArray($typesSpecification);
+				return $objectPropertyType;
 			}
 			else
 			{
-				if ($this->typeIsArray($typesSpecification))
+				if (in_array($phpdocTypeSpecification, self::$basicTypes))
 				{
-					return array(self::TYPE_ARRAY, null);
+					$objectPropertyType = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_SIMPLE_TYPE, $phpdocTypeSpecification);
+					return $objectPropertyType;
 				}
 				else
 				{
-					return array(self::TYPE_OTHER, null);
+					$objectPropertyType = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_OBJECT, $phpdocTypeSpecification);
+					return $objectPropertyType;
 				}
 			}
 		}
 		else
 		{
-			return array(self::TYPE_UNKNOWN, null);
+			$objectPropertyType = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_UNKNOWN);
+			return $objectPropertyType;
 		}
 	}
 
@@ -82,14 +81,11 @@ class PHPDocParser
 	/**
 	 * @param array|string[] $typesSpecification
 	 *
-	 * @return string|null
-	 *
-	 * If string - then it is class name
-	 * If null - then it is a basic type
+	 * @return \NorthslopePL\Metassione\ObjectPropertyType
 	 *
 	 * @throws PHPDocParserException
 	 */
-	private function findClassnameInTypesArrayForArray($typesSpecification)
+	private function buildObjectPropertyTypeForArray($typesSpecification)
 	{
 		// @param array|Foobar[] $propertyName
 		// => ['array', 'Foobar[]']
@@ -106,10 +102,14 @@ class PHPDocParser
 
 			if (in_array($type, self::$basicTypes))
 			{
-				return null;
+				$objectPropertyType = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_ARRAY_OF_SIMPLE_TYPES, $type);
+				return $objectPropertyType;
 			}
-
-			return $type;
+			else
+			{
+				$objectPropertyType = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_ARRAY_OF_OBJECTS, $type);
+				return $objectPropertyType;
+			}
 		}
 
 		throw new PHPDocParserException('No type specified for property');

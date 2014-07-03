@@ -1,6 +1,7 @@
 <?php
 namespace NorthslopePL\Metassione\Tests;
 
+use NorthslopePL\Metassione\ObjectPropertyType;
 use NorthslopePL\Metassione\PHPDocParser;
 
 class PHPDocParserTest extends \PHPUnit_Framework_TestCase
@@ -17,7 +18,8 @@ class PHPDocParserTest extends \PHPUnit_Framework_TestCase
 
 	public function testEmptyCommentGivesNull()
 	{
-		$this->assertEquals(array(PHPDocParser::TYPE_UNKNOWN, null), $this->parser->getPropertyTypeFromPHPDoc(''));
+		$expected = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_UNKNOWN);
+		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc(''));
 	}
 
 	public function testCommentWithoutTypeSpecified()
@@ -28,7 +30,8 @@ class PHPDocParserTest extends \PHPUnit_Framework_TestCase
  */
 COMMENT;
 
-		$this->assertEquals(array(PHPDocParser::TYPE_UNKNOWN, null), $this->parser->getPropertyTypeFromPHPDoc($comment));
+		$expected = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_UNKNOWN);
+		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
 	}
 
 	public function testCommentWithBasicTypeSpecified()
@@ -39,7 +42,8 @@ COMMENT;
  */
 COMMENT;
 
-		$this->assertEquals(array(PHPDocParser::TYPE_OTHER, null), $this->parser->getPropertyTypeFromPHPDoc($comment));
+		$expected = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_SIMPLE_TYPE, 'integer');
+		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
 	}
 
 	public function testCommentWithClassnameSpecified()
@@ -50,7 +54,8 @@ COMMENT;
  */
 COMMENT;
 
-		$this->assertEquals(array(PHPDocParser::TYPE_OBJECT, 'NorthslopePL\\Metassione\\Tests\\SimpleKlass'), $this->parser->getPropertyTypeFromPHPDoc($comment));
+		$expected = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_OBJECT, 'NorthslopePL\\Metassione\\Tests\\SimpleKlass');
+		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
 	}
 
 	public function testCommentWithJustArraySpecifiedThrowsException()
@@ -62,7 +67,7 @@ COMMENT;
 COMMENT;
 
 		$this->setExpectedException('NorthslopePL\Metassione\PHPDocParserException');
-		$this->assertEquals(array(PHPDocParser::TYPE_UNKNOWN, null), $this->parser->getPropertyTypeFromPHPDoc($comment));
+		$this->parser->getPropertyTypeFromPHPDoc($comment);
 	}
 
 	public function testCommentWithArrayOfSimpleTypes()
@@ -73,7 +78,8 @@ COMMENT;
  */
 COMMENT;
 
-		$this->assertEquals(array(PHPDocParser::TYPE_ARRAY, null), $this->parser->getPropertyTypeFromPHPDoc($comment));
+		$expected = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_ARRAY_OF_SIMPLE_TYPES, 'int');
+		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
 	}
 
 	public function testCommentWithArrayOfObjectsSpecified()
@@ -84,7 +90,8 @@ COMMENT;
  */
 COMMENT;
 
-		$this->assertEquals(array(PHPDocParser::TYPE_ARRAY, 'NorthslopePL\\Metassione\\Tests\\SimpleKlass'), $this->parser->getPropertyTypeFromPHPDoc($comment));
+		$expected = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_ARRAY_OF_OBJECTS, 'NorthslopePL\\Metassione\\Tests\\SimpleKlass');
+		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
 	}
 
 	public function testCommentWithArrayOfObjectsSpecified_2()
@@ -95,6 +102,7 @@ COMMENT;
  */
 COMMENT;
 
-		$this->assertEquals(array(PHPDocParser::TYPE_ARRAY, 'NorthslopePL\\Metassione\\Tests\\SimpleKlass'), $this->parser->getPropertyTypeFromPHPDoc($comment));
+		$expected = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_ARRAY_OF_OBJECTS, 'NorthslopePL\\Metassione\\Tests\\SimpleKlass');
+		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
 	}
 }
