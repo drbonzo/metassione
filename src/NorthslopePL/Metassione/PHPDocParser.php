@@ -75,7 +75,22 @@ class PHPDocParser
 	 */
 	private function typeIsArray($typesSpecification)
 	{
-		return in_array('array', $typesSpecification);
+		foreach ($typesSpecification as $typeSpecification)
+		{
+			// @var array|SomeType[]
+			if ($typeSpecification == 'array')
+			{
+				return true;
+			}
+
+			// @var SomeType[] - without array| keyword
+			if (substr($typeSpecification, -2, 2) === '[]')
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

@@ -77,12 +77,11 @@ class POPOObjectFiller
 		$rawDataPropertyValue = $rawDataProperty->getValue($rawData);
 
 		$phpDocParser = new PHPDocParser();
-		list($mainType, $classname) = $phpDocParser->getPropertyTypeFromPHPDoc($targetObjectProperty->getDocComment());
-		/* @var $mainType string */
-		/* @var $classname string */
+		$objectPropertyType = $phpDocParser->getPropertyTypeFromPHPDoc($targetObjectProperty->getDocComment());
 
-		if ($mainType == PHPDocParser::TYPE_OBJECT)
+		if ($objectPropertyType->getGeneralType() == ObjectPropertyType::GENERAL_TYPE_OBJECT)
 		{
+			$classname = $objectPropertyType->getDataType();
 			$targetObjectPropertyClassReflection = $this->getClassReflectionForClassName($classname, $targetObjectProperty);
 			// this property is an object
 			//
@@ -104,38 +103,35 @@ class POPOObjectFiller
 
 			return $newValue;
 		}
-		else if ($mainType == PHPDocParser::TYPE_ARRAY)
+		else if ($objectPropertyType->getGeneralType() == ObjectPropertyType::GENERAL_TYPE_ARRAY_OF_OBJECTS)
 		{
 			$newValues = [];
-			if ($classname) // array|Foobar[]
-			{
-				// this property is an array of objects of given class ($classname)
-				//
-				// /**
-				//  * @var array|Foobar[]
-				//  */
-				// private $fooBars;
-				//
+			// optimization, take class reflection creation out of the loop. Its 2x faster 1.3s vs 3.3s for 1 000 000 iterations.
+			$classname = $objectPropertyType->getDataType();
+			$targetObjectPropertyClassReflection = $this->getClassReflectionForClassName($classname, $targetObjectProperty);
 
-				// optimization, take class reflection creation out of the loop. Its 2x faster 1.3s vs 3.3s for 1 000 000 iterations.
-				$targetObjectPropertyClassReflection = $this->getClassReflectionForClassName($classname, $targetObjectProperty);
-				foreach ((array)$rawDataPropertyValue as $rawDataPropertyValueItem) // cast to array handles null values when expecting arrays
-				{
-					$newValue = $targetObjectPropertyClassReflection->newInstance();
-					$this->fillObjectWithRawData($newValue, $rawDataPropertyValueItem);
-					$newValues[] = $newValue;
-				}
-			}
-			else // array|int[], array|string[], etc
+			$rawDataPropertyValue = is_array($rawDataPropertyValue) ? $rawDataPropertyValue : (array)$rawDataPropertyValue;
+
+			foreach ($rawDataPropertyValue as $rawDataPropertyValueItem) // cast to array handles null values when expecting arrays
 			{
-				// this is object but we dont know the class or this is a simple type
-				// @var array|AClassThatIsNotFound[]
-				$rawDataPropertyValue = is_array($rawDataPropertyValue) ? $rawDataPropertyValue : (array)$rawDataPropertyValue;
-				foreach ($rawDataPropertyValue as $rawDataPropertyValueItem)
-				{
-					$newValue = $rawDataPropertyValueItem;
-					$newValues[] = $newValue;
-				}
+				$newValue = $targetObjectPropertyClassReflection->newInstance();
+				$this->fillObjectWithRawData($newValue, $rawDataPropertyValueItem);
+				$newValues[] = $newValue;
+			}
+
+			return $newValues;
+		}
+		else if ($objectPropertyType->getGeneralType() == ObjectPropertyType::GENERAL_TYPE_ARRAY_OF_SIMPLE_TYPES)
+		{
+			$newValues = [];
+			// this is object but we dont know the class or this is a simple type
+			// @var array|int[]
+			// @var array|AClassThatIsNotFound[]
+			$rawDataPropertyValue = is_array($rawDataPropertyValue) ? $rawDataPropertyValue : (array)$rawDataPropertyValue;
+			foreach ($rawDataPropertyValue as $rawDataPropertyValueItem)
+			{
+				$newValue = $rawDataPropertyValueItem;
+				$newValues[] = $newValue;
 			}
 
 			return $newValues;
@@ -158,6 +154,8 @@ class POPOObjectFiller
 	 */
 	private function getClassReflectionForClassName($classname, \ReflectionProperty $targetObjectProperty)
 	{
+		$classname = ltrim($classname, '\\');
+
 		if (!class_exists($classname, true))
 		{
 			$message = sprintf('Class "%s" does not exist for property %s::$%s.', $classname, $targetObjectProperty->getDeclaringClass()->getName(), $targetObjectProperty->getName());

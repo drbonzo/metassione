@@ -94,6 +94,18 @@ COMMENT;
 		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
 	}
 
+	public function testCommentWithArrayOfObjectsSpecifiedWithoutArrayKeyword()
+	{
+		$comment = <<<COMMENT
+/**
+ * @var \NorthslopePL\Metassione\Tests\SimpleKlass[]
+ */
+COMMENT;
+
+		$expected = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_ARRAY_OF_OBJECTS, 'NorthslopePL\\Metassione\\Tests\\SimpleKlass');
+		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
+	}
+
 	public function testCommentWithArrayOfObjectsSpecified_2()
 	{
 		$comment = <<<COMMENT
