@@ -25,6 +25,11 @@ class ObjectPropertyType
 	private $dataType;
 
 	/**
+	 * @var string
+	 */
+	private $description;
+
+	/**
 	 * @param string $generalType
 	 * @param string $dataType
 	 */
@@ -66,5 +71,22 @@ class ObjectPropertyType
 	{
 		return $this->generalType;
 	}
+
+	/**
+	 * @param string $description
+	 */
+	public function setDescription($description)
+	{
+		$this->description = $description;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDescription()
+	{
+		return $this->description;
+	}
+
 
 }

@@ -44,7 +44,9 @@ class PHPDocParser
 			$phpdocTypeSpecification = '';
 		}
 
-		return $this->buildObjectPropertyTypeFromTypeSpecification($phpdocTypeSpecification);
+		$objectPropertyType = $this->buildObjectPropertyTypeFromTypeSpecification($phpdocTypeSpecification);
+		$this->injectPropertyDescription($objectPropertyType, $phpdoc);
+		return $objectPropertyType;
 	}
 
 	/**
@@ -106,6 +108,7 @@ class PHPDocParser
 		{
 			$typeSpecification = $matches[1];
 			$objectPropertyType = $this->buildObjectPropertyTypeFromTypeSpecification($typeSpecification);
+			$this->injectPropertyDescription($objectPropertyType, $phpdoc);
 			return $objectPropertyType;
 		}
 		else
@@ -174,5 +177,32 @@ class PHPDocParser
 		}
 
 		throw new PHPDocParserException('No type specified for property');
+	}
+
+	/**
+	 * @param ObjectPropertyType $objectPropertyType
+	 * @param string $phpdoc
+	 */
+	private function injectPropertyDescription(ObjectPropertyType $objectPropertyType, $phpdoc)
+	{
+		$descriptionLines = [];
+		foreach (explode("\n", $phpdoc) as $line)
+		{
+			// ' * .........'
+			if (preg_match('#^\\s*\\*\\s*(.+?)$#', $line, $matches))
+			{
+				$line = $matches[1];
+				$shouldSkipPhpdocDirectives = ($line{0} == '@' || $line{0} == '/'); // '/' - end of phpdoc
+				if ($shouldSkipPhpdocDirectives)
+				{
+					continue;
+				}
+
+				$descriptionLines[] = $line;
+			}
+		}
+
+		$description = join("\n", $descriptionLines);
+		$objectPropertyType->setDescription($description);
 	}
 }

@@ -58,6 +58,32 @@ COMMENT;
 		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
 	}
 
+	public function testCommentWithClassnameSpecifiedAndWithDescription()
+	{
+		$comment = <<<COMMENT
+	/**
+	 * This is property description.
+	 * It has few lines
+	 *
+	 * @see this should be skipped
+	 *
+	 * This line should be found in description too.
+	 * @var NorthslopePL\\Metassione\\Tests\\SimpleKlass
+	 */
+
+COMMENT;
+
+		$expectedDescription = "This is property description.
+It has few lines
+This line should be found in description too.";
+		$expected = new ObjectPropertyType(ObjectPropertyType::GENERAL_TYPE_OBJECT, 'NorthslopePL\\Metassione\\Tests\\SimpleKlass');
+		$expected->setDescription($expectedDescription);
+		$actual = $this->parser->getPropertyTypeFromPHPDoc($comment);
+
+		$this->assertEquals($expectedDescription, $actual->getDescription());
+		$this->assertEquals($expected, $this->parser->getPropertyTypeFromPHPDoc($comment));
+	}
+
 	public function testCommentWithJustArraySpecifiedThrowsException()
 	{
 		$comment = <<<COMMENT
