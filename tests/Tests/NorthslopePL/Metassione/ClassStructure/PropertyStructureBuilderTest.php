@@ -27,11 +27,12 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 	 * @dataProvider buildingPropertyDataProvider()
 	 * @param string $classname
 	 * @param string $propertyName
+	 * @param bool $typeIsKnown
 	 * @param bool $isArray
 	 * @param bool $isPrimitive
 	 * @param string $type
 	 */
-	public function testBuildingProperty($classname, $propertyName, $isArray, $isPrimitive, $type)
+	public function testBuildingProperty($classname, $propertyName, $typeIsKnown, $isArray, $isPrimitive, $type)
 	{
 		$reflectionClass = new \ReflectionObject($this->correctlyDefinedPropertiesKlass);
 		$reflectionProperty = $reflectionClass->getProperty($propertyName);
@@ -41,7 +42,14 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 		$expectedPropertyStructure = new PropertyStructure();
 		$expectedPropertyStructure->setName($propertyName);
 		$expectedPropertyStructure->setDefinedInClass($classname);
-		$expectedPropertyStructure->markAsTypeKnown(); // FIXME?
+		if ($typeIsKnown)
+		{
+			$expectedPropertyStructure->markAsTypeKnown();
+		}
+		else
+		{
+			$expectedPropertyStructure->markAsTypeUnknown();
+		}
 		$expectedPropertyStructure->setIsArray($isArray);
 		$expectedPropertyStructure->setIsPrimitive($isPrimitive);
 		$expectedPropertyStructure->setType($type);
@@ -56,20 +64,20 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 	{
 		$classname = 'Tests\NorthslopePL\Metassione\ExampleClasses\CorrectlyDefinedPropertiesKlass';
 		return [
-			[$classname, 'intProperty', false, true, 'int'],
-			[$classname, 'integerProperty', false, true, 'integer'],
-			[$classname, 'floatProperty', false, true, 'float'],
-			[$classname, 'doubleProperty', false, true, 'double'],
-			[$classname, 'boolProperty', false, true, 'bool'],
-			[$classname, 'booleanProperty', false, true, 'boolean'],
-			[$classname, 'stringProperty', false, true, 'string'],
-			[$classname, 'mixedProperty', false, true, 'mixed'],
-			[$classname, 'nullProperty', false, true, 'null'],
+			[$classname, 'intProperty', true, false, true, 'int'],
+			[$classname, 'integerProperty', true, false, true, 'integer'],
+			[$classname, 'floatProperty', true, false, true, 'float'],
+			[$classname, 'doubleProperty', true, false, true, 'double'],
+			[$classname, 'boolProperty', true, false, true, 'bool'],
+			[$classname, 'booleanProperty', true, false, true, 'boolean'],
+			[$classname, 'stringProperty', true, false, true, 'string'],
+			[$classname, 'mixedProperty', true, false, true, 'mixed'],
+			[$classname, 'nullProperty', true, false, true, 'null'],
 
-			[$classname, 'simpleKlassProperty', false, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass'],
+			[$classname, 'simpleKlassProperty', true, false, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass'],
 
-			[$classname, 'intArrayProperty', true, true, 'int'],
-			[$classname, 'simpleKlassArrayProperty', true, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass'],
+			[$classname, 'intArrayProperty', true, true, true, 'int'],
+			[$classname, 'simpleKlassArrayProperty', true, true, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass'],
 		];
 	}
 
