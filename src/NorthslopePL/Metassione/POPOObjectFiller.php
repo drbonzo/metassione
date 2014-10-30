@@ -13,15 +13,9 @@ class POPOObjectFiller
 	 */
 	private $reflectionCache;
 
-	/**
-	 * @var MetadataHelper
-	 */
-	private $metadataHelper;
-
 	public function __construct()
 	{
-		$this->metadataHelper = new MetadataHelper();
-		$this->reflectionCache = new ReflectionCache($this->metadataHelper);
+		$this->reflectionCache = new ReflectionCache(new MetadataHelper());
 	}
 
 	/**
@@ -66,7 +60,6 @@ class POPOObjectFiller
 		{
 			$this->processProperty($rawDataProperty, $rawData, $targetObject, $classStructure);
 		}
-
 	}
 
 	/**
@@ -96,7 +89,6 @@ class POPOObjectFiller
 			// TODO jeszcze wez ReflectionProperty z klasy lub parentow
 			// FIXME jak cacheować ReflectionProperty zeby go ciagle nie pobierac?
 
-			// $this->metadataHelper->getPropertyReflectionFromReflectionClassOrParentClasses(new \ReflectionClass($classStructure->getClassname()), $propertyName); // FIXME
 			$targetReflectionProperty = $this->reflectionCache->getReflectionPropertyForClassnameAndPropertyName($classStructure->getClassname(), $propertyName);
 			$targetReflectionProperty->setAccessible(true);
 			$targetReflectionProperty->setValue($targetObject, $newValue);
