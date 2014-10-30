@@ -46,9 +46,7 @@ class POPOConverter
 	{
 		$retvalObject = new \stdClass();
 
-		$reflectionObject = new \ReflectionObject($object);
-
-		foreach ($this->metadataHelper->getPropertyReflectionsFromObjectOrItsParentClasses($reflectionObject) as $property)
+		foreach ($this->metadataHelper->getPropertyReflectionsFromObjectOrItsParentClasses($object) as $property)
 		{
 			$property->setAccessible(true);
 			$propertyName = $property->getName();

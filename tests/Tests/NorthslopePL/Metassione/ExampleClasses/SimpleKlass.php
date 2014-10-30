@@ -4,66 +4,108 @@ namespace Tests\NorthslopePL\Metassione\ExampleClasses;
 class SimpleKlass
 {
 	/**
-	 * @var int
+	 * @var null
 	 */
-	private $count;
+	private $nullValue;
 
 	/**
-	 * @var string
+	 * @var bool
 	 */
-	private $name;
+	private $boolValue;
+
+	/**
+	 * @var int
+	 */
+	private $intValue;
 
 	/**
 	 * @var float
 	 */
-	private $value;
+	private $floatValue;
 
 	/**
-	 * @return int
+	 * @var string
 	 */
-	public function getCount()
+	private $stringValue;
+
+	/**
+	 * @param boolean $boolValue
+	 */
+	public function setBoolValue($boolValue)
 	{
-		return $this->count;
+		$this->boolValue = $boolValue;
 	}
 
 	/**
-	 * @param int $count
+	 * @return boolean
 	 */
-	public function setCount($count)
+	public function getBoolValue()
 	{
-		$this->count = $count;
+		return $this->boolValue;
 	}
 
 	/**
-	 * @return string
+	 * @param float $floatValue
 	 */
-	public function getName()
+	public function setFloatValue($floatValue)
 	{
-		return $this->name;
-	}
-
-	/**
-	 * @param string $name
-	 */
-	public function setName($name)
-	{
-		$this->name = $name;
+		$this->floatValue = $floatValue;
 	}
 
 	/**
 	 * @return float
 	 */
-	public function getValue()
+	public function getFloatValue()
 	{
-		return $this->value;
+		return $this->floatValue;
 	}
 
 	/**
-	 * @param float $value
+	 * @param int $intValue
 	 */
-	public function setValue($value)
+	public function setIntValue($intValue)
 	{
-		$this->value = $value;
+		$this->intValue = $intValue;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getIntValue()
+	{
+		return $this->intValue;
+	}
+
+	/**
+	 * @param null $nullValue
+	 */
+	public function setNullValue($nullValue)
+	{
+		$this->nullValue = $nullValue;
+	}
+
+	/**
+	 * @return null
+	 */
+	public function getNullValue()
+	{
+		return $this->nullValue;
+	}
+
+	/**
+	 * @param string $stringValue
+	 */
+	public function setStringValue($stringValue)
+	{
+		$this->stringValue = $stringValue;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getStringValue()
+	{
+		return $this->stringValue;
 	}
 
 }

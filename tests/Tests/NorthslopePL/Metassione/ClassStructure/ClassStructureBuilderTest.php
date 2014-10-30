@@ -29,12 +29,14 @@ class ClassStructureBuilderTest extends \PHPUnit_Framework_TestCase
 	public function testBuildingForFlatKlass()
 	{
 		$classStructure = $this->classStructureBuilder->buildClassStructure(SimpleKlass::class);
-		$this->assertCount(3, $classStructure->getPropertyStructures());
+		$this->assertCount(5, $classStructure->getPropertyStructures());
 		$this->assertEquals(SimpleKlass::class, $classStructure->getClassname());
 
-		$this->assertInstanceOf(PropertyStructure::class, $classStructure->getPropertyStructure('count'));
-		$this->assertInstanceOf(PropertyStructure::class, $classStructure->getPropertyStructure('name'));
-		$this->assertInstanceOf(PropertyStructure::class, $classStructure->getPropertyStructure('value'));
+		$this->assertInstanceOf(PropertyStructure::class, $classStructure->getPropertyStructure('nullValue'));
+		$this->assertInstanceOf(PropertyStructure::class, $classStructure->getPropertyStructure('boolValue'));
+		$this->assertInstanceOf(PropertyStructure::class, $classStructure->getPropertyStructure('intValue'));
+		$this->assertInstanceOf(PropertyStructure::class, $classStructure->getPropertyStructure('floatValue'));
+		$this->assertInstanceOf(PropertyStructure::class, $classStructure->getPropertyStructure('stringValue'));
 	}
 
 	public function testBuildingForClassWithDeepInheritance()
