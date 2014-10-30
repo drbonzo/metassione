@@ -93,6 +93,7 @@ class ReflectionCache
 			$this->instancesCache[$classname] = $instance;
 		}
 
-		return $this->instancesCache[$classname];
+		$newInstance = clone $this->instancesCache[$classname];
+		return $newInstance;
 	}
 }
