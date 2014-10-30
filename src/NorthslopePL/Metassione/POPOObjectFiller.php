@@ -2,7 +2,6 @@
 namespace NorthslopePL\Metassione;
 
 use NorthslopePL\Metassione\ClassStructure\ClassStructure;
-use NorthslopePL\Metassione\ClassStructure\ClassStructureBuilder;
 use NorthslopePL\Metassione\ClassStructure\ClassStructureException;
 use NorthslopePL\Metassione\ClassStructure\PropertyStructure;
 use NorthslopePL\Metassione\Metadata\MetadataHelper;
@@ -14,9 +13,15 @@ class POPOObjectFiller
 	 */
 	private $reflectionCache;
 
+	/**
+	 * @var MetadataHelper
+	 */
+	private $metadataHelper;
+
 	public function __construct()
 	{
 		$this->reflectionCache = new ReflectionCache();
+		$this->metadataHelper = new MetadataHelper();
 	}
 
 	/**
@@ -52,10 +57,9 @@ class POPOObjectFiller
 			}
 		}
 
-		// TODO This cannot be optimized, or can be changed to processing as array with key/values?
+		// TODO This cannot be optimized, or can be changed to processing as array with key/values? chyba nie mogę - na wypadek gdyby to nie był stdClass a dowolny obiekt
 		$rawDataReflection = new \ReflectionObject($rawData);
 
-		// FIXME dodać cache na tym poziomie
 		$classStructure = $this->reflectionCache->getClassStructureForClassname(get_class($targetObject));
 
 		foreach ($rawDataReflection->getProperties() as $rawDataProperty)
@@ -76,32 +80,30 @@ class POPOObjectFiller
 	 */
 	private function processProperty(\ReflectionProperty $rawDataProperty, $rawDataObject, $targetObject, ClassStructure $classStructure)
 	{
-		$propertyName = $rawDataProperty->getName();
-		if (!$classStructure->hasProperty($propertyName))
-		{
-			return;
-		}
-
-		$targetPropertyStructure = $classStructure->getPropertyStructure($propertyName);
 		try
 		{
-			// FIXME do przepisania
-			$rawValue = $rawDataProperty->getValue($rawDataObject);
+			$propertyName = $rawDataProperty->getName();
+			if (!$classStructure->hasProperty($propertyName))
+			{
+				return;
+			}
+
+			$targetPropertyStructure = $classStructure->getPropertyStructure($propertyName);
+			$rawValue = $rawDataProperty->getValue($rawDataObject); // we expect this to be public accessible
+			$newValue = $this->buildNewPropertyValue($rawValue, $targetPropertyStructure);
+
+			// TODO jeszcze wez ReflectionProperty z klasy lub parentow
+			// FIXME jak cacheować ReflectionProperty zeby go ciagle nie pobierac?
+
+			$targetReflectionProperty = $this->metadataHelper->getPropertyReflectionFromReflectionClassOrParentClasses(new \ReflectionClass($classStructure->getClassname()), $propertyName); // FIXME
+			$targetReflectionProperty->setAccessible(true);
+			$targetReflectionProperty->setValue($targetObject, $newValue);
 		}
 		catch (\ReflectionException $e)
 		{
 			throw new ObjectFillingException($e);
 		}
 
-		$newValue = $this->buildNewPropertyValue($rawValue, $targetPropertyStructure);
-
-		// TODO jeszcze wez ReflectionProperty z klasy lub parentow
-		// FIXME jak cacheować ReflectionProperty zeby go ciagle nie pobierac?
-
-		$metadataHelper = new MetadataHelper();
-		$targetReflectionProperty = $metadataHelper->getPropertyReflectionFromReflectionClassOrParentClasses(new \ReflectionClass($classStructure->getClassname()), $propertyName); // FIXME
-		$targetReflectionProperty->setAccessible(true);
-		$targetReflectionProperty->setValue($targetObject, $newValue);
 	}
 
 
