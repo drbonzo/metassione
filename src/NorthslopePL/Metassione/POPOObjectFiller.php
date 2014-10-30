@@ -75,7 +75,7 @@ class POPOObjectFiller
 		$targetPropertyStructure = $classStructure->getPropertyStructure($propertyName);
 		try
 		{
-// FIXME do przepisania
+			// FIXME do przepisania
 			$rawValue = $rawDataProperty->getValue($rawDataObject);
 		}
 		catch (\ReflectionException $e)
@@ -98,50 +98,22 @@ class POPOObjectFiller
 	/**
 	 * @param mixed $rawValue
 	 * @param PropertyStructure $targetPropertyStructure
+	 *
 	 * @return mixed
+	 *
 	 * @throws ObjectFillingException
 	 */
 	private function buildNewPropertyValue($rawValue, PropertyStructure $targetPropertyStructure)
 	{
-		// FIXME move to methods!!!
 		if ($targetPropertyStructure->getIsArray())
 		{
 			if ($targetPropertyStructure->getIsObject())
 			{
-
-				// array of objects
-				//FIXME
-				$newValues = [];
-
-				// optimization, take class reflection creation out of the loop. Its 2x faster 1.3s vs 3.3s for 1 000 000 iterations.
-				$classname = $targetPropertyStructure->getType();
-
-				$rawValue = is_array($rawValue) ? $rawValue : (array)$rawValue;
-
-				foreach ($rawValue as $rawValueItem) // cast to array handles null values when expecting arrays
-				{
-					$newValueElement = $this->buildNewInstanceOfClass($classname);
-					$this->processObject($newValueElement, $rawValueItem);
-					$newValues[] = $newValueElement;
-				}
-
-				return $newValues;
+				return $this->buildNewPropertyValue_ForArrayOfObjects($rawValue, $targetPropertyStructure);
 			}
 			else
 			{
-				// array of primitive types
-
-				$newValues = [];
-				// this is object but we dont know the class or this is a simple type
-				// @var array|int[]
-				// @var array|AClassThatIsNotFound[]
-				$rawValue = is_array($rawValue) ? $rawValue : (array)$rawValue;
-				foreach ($rawValue as $rawValueItem)
-				{
-					$newValues[] = $rawValueItem;
-				}
-
-				return $newValues;
+				return $this->buildNewPropertyValue_ForArrayOfPrimitives($rawValue, $targetPropertyStructure);
 			}
 		}
 		else
@@ -152,32 +124,94 @@ class POPOObjectFiller
 			{
 				// single object
 
-				if ($rawValue === null)
-				{
-					return null;
-				}
-				else
-				{
-					// this property is an object
-					//
-					// /**
-					//  * @var Foobar
-					//  */
-					// private $fooBar;
-					//
-					// so build object of this class and fill this object with data from $propertyValue
-					$propertyClassname = $targetPropertyStructure->getType();
-					$newValue = $this->buildNewInstanceOfClass($propertyClassname);
-					$this->processObject($newValue, $rawValue);
-
-					return $newValue;
-				}
+				return $this->buildNewPropertyValue_ForObject($rawValue, $targetPropertyStructure);
 			}
 			else
 			{
 				// other value
 				return $rawValue;
 			}
+		}
+	}
+
+	/**
+	 * @param mixed $rawValue
+	 * @param PropertyStructure $targetPropertyStructure
+	 * @return array|object[]
+	 *
+	 * @throws ObjectFillingException
+	 */
+	private function buildNewPropertyValue_ForArrayOfObjects($rawValue, PropertyStructure $targetPropertyStructure)
+	{
+		// array of objects
+		$newValues = [];
+
+		// optimization, take class reflection creation out of the loop. Its 2x faster 1.3s vs 3.3s for 1 000 000 iterations.
+		$classname = $targetPropertyStructure->getType();
+
+		$rawValue = is_array($rawValue) ? $rawValue : (array)$rawValue;
+
+		foreach ($rawValue as $rawValueItem) // cast to array handles null values when expecting arrays
+		{
+			$newValueElement = $this->buildNewInstanceOfClass($classname);
+			$this->processObject($newValueElement, $rawValueItem);
+			$newValues[] = $newValueElement;
+		}
+
+		return $newValues;
+	}
+
+	/**
+	 * @param mixed $rawValue
+	 * @param PropertyStructure $targetPropertyStructure
+	 * @return array|mixed[]
+	 *
+	 * @throws ObjectFillingException
+	 */
+	private function buildNewPropertyValue_ForArrayOfPrimitives($rawValue, PropertyStructure $targetPropertyStructure)
+	{
+		// array of primitive types
+		$newValues = [];
+		// this is object but we dont know the class or this is a simple type
+		// @var array|int[]
+		// @var array|AClassThatIsNotFound[]
+		$rawValue = is_array($rawValue) ? $rawValue : (array)$rawValue;
+		foreach ($rawValue as $rawValueItem)
+		{
+			$newValues[] = $rawValueItem;
+		}
+
+		return $newValues;
+	}
+
+	/**
+	 * @param mixed $rawValue
+	 * @param PropertyStructure $targetPropertyStructure
+	 * @return object|null
+	 *
+	 * @throws ObjectFillingException
+	 */
+	private function buildNewPropertyValue_ForObject($rawValue, PropertyStructure $targetPropertyStructure)
+	{
+		if ($rawValue === null)
+		{
+			return null;
+		}
+		else
+		{
+			// this property is an object
+			//
+			// /**
+			//  * @var Foobar
+			//  */
+			// private $fooBar;
+			//
+			// so build object of this class and fill this object with data from $propertyValue
+			$propertyClassname = $targetPropertyStructure->getType();
+			$newValue = $this->buildNewInstanceOfClass($propertyClassname);
+			$this->processObject($newValue, $rawValue);
+
+			return $newValue;
 		}
 	}
 
@@ -200,4 +234,5 @@ class POPOObjectFiller
 
 		return new $classname(); // FIXME cache + reflection?
 	}
+
 }
