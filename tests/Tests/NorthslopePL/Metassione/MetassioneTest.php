@@ -25,11 +25,19 @@ class MetassioneTest extends \PHPUnit_Framework_TestCase
 	public function testFillingPOPO()
 	{
 		$rawData = new \stdClass();
-		$rawData->name = 'foobar';
+		$rawData->nullValue = null;
+		$rawData->boolValue = true;
+		$rawData->intValue = 123;
+		$rawData->floatValue = 12.95;
+		$rawData->stringValue = 'foobar';
 
 		$simpleObject = new SimpleKlass();
 		$this->metassione->fillObjectWithRawData($simpleObject, $rawData);
 
+		$this->assertNull($simpleObject->getNullValue());
+		$this->assertTrue($simpleObject->getBoolValue());
+		$this->assertEquals(123, $simpleObject->getIntValue());
+		$this->assertEquals(12.95, $simpleObject->getFloatValue());
 		$this->assertEquals('foobar', $simpleObject->getStringValue());
 	}
 }
