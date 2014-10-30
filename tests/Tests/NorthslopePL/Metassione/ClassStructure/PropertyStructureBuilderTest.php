@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\NorthslopePL\Metassione\ClassStructure;
 
 use NorthslopePL\Metassione\ClassStructure\PropertyStructure;
@@ -24,21 +23,39 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 		$this->propertyStructureBuilder = new PropertyStructureBuilder();
 	}
 
-	public function testBuildingIntProperty()
+	/**
+	 * @dataProvider buildingPropertiesDataProvider()
+	 * @param string $classname
+	 * @param string $propertyName
+	 * @param bool $isArray
+	 * @param bool $isPrimitive
+	 * @param string $type
+	 */
+	public function testBuildingIntProperty($classname, $propertyName, $isArray, $isPrimitive, $type)
 	{
 		$reflectionClass = new \ReflectionObject($this->correctlyDefinedPropertiesKlass);
-		$reflectionProperty = $reflectionClass->getProperty('intProperty');
+		$reflectionProperty = $reflectionClass->getProperty($propertyName);
 
 		$actualPropertyStructure = $this->propertyStructureBuilder->buildPropertyStructure($reflectionProperty);
 
 		$expectedPropertyStructure = new PropertyStructure();
-		$expectedPropertyStructure->setName('intProperty');
-		$expectedPropertyStructure->setIsTypeKnown(true);
-		$expectedPropertyStructure->setIsArray(false);
-		$expectedPropertyStructure->setIsPrimitive(true);
-		$expectedPropertyStructure->setType('int');
-		$expectedPropertyStructure->setDefinedInClass('Tests\NorthslopePL\Metassione\ExampleClasses\CorrectlyDefinedPropertiesKlass');
+		$expectedPropertyStructure->setName($propertyName);
+		$expectedPropertyStructure->setDefinedInClass($classname);
+		$expectedPropertyStructure->markAsTypeKnown(); // FIXME?
+		$expectedPropertyStructure->setIsArray($isArray);
+		$expectedPropertyStructure->setIsPrimitive($isPrimitive);
+		$expectedPropertyStructure->setType($type);
 
 		$this->assertEquals($expectedPropertyStructure, $actualPropertyStructure);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function buildingPropertiesDataProvider()
+	{
+		return [
+			['Tests\NorthslopePL\Metassione\ExampleClasses\CorrectlyDefinedPropertiesKlass', 'intProperty', false, true, 'int']
+		];
 	}
 }
