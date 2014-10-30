@@ -4,7 +4,6 @@ namespace NorthslopePL\Metassione;
 use NorthslopePL\Metassione\ClassStructure\ClassStructure;
 use NorthslopePL\Metassione\ClassStructure\ClassStructureException;
 use NorthslopePL\Metassione\ClassStructure\PropertyStructure;
-use NorthslopePL\Metassione\Metadata\MetadataHelper;
 
 class POPOObjectFiller
 {
@@ -13,9 +12,9 @@ class POPOObjectFiller
 	 */
 	private $reflectionCache;
 
-	public function __construct()
+	public function __construct(ReflectionCache $reflectionCache)
 	{
-		$this->reflectionCache = new ReflectionCache(new MetadataHelper());
+		$this->reflectionCache = $reflectionCache;
 	}
 
 	/**

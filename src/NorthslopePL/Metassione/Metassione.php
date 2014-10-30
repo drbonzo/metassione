@@ -3,6 +3,7 @@ namespace NorthslopePL\Metassione;
 
 use NorthslopePL\Metassione\ClassStructure\ClassStructureProvider;
 use NorthslopePL\Metassione\ClassStructure\SimpleClassStructureProvider;
+use NorthslopePL\Metassione\Metadata\MetadataHelper;
 
 class Metassione
 {
@@ -24,7 +25,9 @@ class Metassione
 	 */
 	public function fillObjectWithRawData($targetObject, \stdClass $rawData)
 	{
-		$filler = new POPOObjectFiller();
+		$metadataHelper = new MetadataHelper();
+		$reflectionCache = new ReflectionCache($metadataHelper);
+		$filler = new POPOObjectFiller($reflectionCache);
 		$filler->fillObjectWithRawData($targetObject, $rawData);
 	}
 }
