@@ -20,8 +20,8 @@ class POPOObjectFiller
 
 	public function __construct()
 	{
-		$this->reflectionCache = new ReflectionCache();
 		$this->metadataHelper = new MetadataHelper();
+		$this->reflectionCache = new ReflectionCache($this->metadataHelper);
 	}
 
 	/**
@@ -88,14 +88,16 @@ class POPOObjectFiller
 				return;
 			}
 
+			$rawValue = $rawDataProperty->getValue($rawDataObject); // we expect this to be public accessible, else ReflectionException
+
 			$targetPropertyStructure = $classStructure->getPropertyStructure($propertyName);
-			$rawValue = $rawDataProperty->getValue($rawDataObject); // we expect this to be public accessible
 			$newValue = $this->buildNewPropertyValue($rawValue, $targetPropertyStructure);
 
 			// TODO jeszcze wez ReflectionProperty z klasy lub parentow
 			// FIXME jak cacheować ReflectionProperty zeby go ciagle nie pobierac?
 
-			$targetReflectionProperty = $this->metadataHelper->getPropertyReflectionFromReflectionClassOrParentClasses(new \ReflectionClass($classStructure->getClassname()), $propertyName); // FIXME
+			// $this->metadataHelper->getPropertyReflectionFromReflectionClassOrParentClasses(new \ReflectionClass($classStructure->getClassname()), $propertyName); // FIXME
+			$targetReflectionProperty = $this->reflectionCache->getReflectionPropertyForClassnameAndPropertyName($classStructure->getClassname(), $propertyName);
 			$targetReflectionProperty->setAccessible(true);
 			$targetReflectionProperty->setValue($targetObject, $newValue);
 		}
