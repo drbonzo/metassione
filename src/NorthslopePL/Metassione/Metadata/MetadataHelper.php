@@ -5,6 +5,17 @@ class MetadataHelper
 {
 	/**
 	 * @param object $object
+	 * @return \array[]|\ReflectionProperty[]
+	 */
+	public function getPropertyReflectionsFromObjectOrItsParentClasses($object)
+	{
+		$reflectionObject = new \ReflectionObject($object);
+		return $this->getPropertyReflectionsFromReflectionObjectOrItsParentClasses($reflectionObject);
+	}
+
+	/**
+	 * @param \ReflectionClass $reflectionClass
+	 *
 	 * @return array[]|\ReflectionProperty[]
 	 *
 	 * \ReflectionClass::getProperties() checks only properties from current class and all nonprivate properties from parent classes.
@@ -15,11 +26,10 @@ class MetadataHelper
 	 * http://www.php.net/manual/en/reflectionclass.hasproperty.php#94038
 	 * http://stackoverflow.com/questions/9913680/does-reflectionclassgetproperties-also-get-properties-of-the-parent
 	 */
-	public function getPropertyReflectionsFromObjectOrItsParentClasses($object)
+	public function getPropertyReflectionsFromReflectionClassOrItsParentClasses(\ReflectionClass $reflectionClass)
 	{
-		$reflectionObject = new \ReflectionObject($object);
 		$allProperties = array();
-		$currentClassReflection = $reflectionObject;
+		$currentClassReflection = $reflectionClass;
 
 		while ((bool)$currentClassReflection) // class without parent has null in getParentClass()
 		{
@@ -40,6 +50,15 @@ class MetadataHelper
 		}
 
 		return $allProperties;
+	}
+
+	/**
+	 * @param \ReflectionObject $reflectionObject
+	 * @return \array[]|\ReflectionProperty[]
+	 */
+	public function getPropertyReflectionsFromReflectionObjectOrItsParentClasses(\ReflectionObject $reflectionObject)
+	{
+		return $this->getPropertyReflectionsFromReflectionClassOrItsParentClasses($reflectionObject);
 	}
 
 }

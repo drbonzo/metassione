@@ -40,4 +40,18 @@ class MetadataHelperTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('grandparentProperty', $properties[2]->getName());
 		$this->assertEquals('grandparentProtectedProperty', $properties[3]->getName());
 	}
+
+	public function testDifferentMethodsToGetReflectionProperties()
+	{
+		$classname = GrandparentKlass::class;
+		$object = new $classname();
+
+		$reflectionProperty_viaReflectionClass = $this->metadataHelper->getPropertyReflectionsFromReflectionClassOrItsParentClasses(new \ReflectionClass($classname));
+		$reflectionProperty_viaReflectionObject = $this->metadataHelper->getPropertyReflectionsFromReflectionObjectOrItsParentClasses(new \ReflectionObject($object));
+		$reflectionProperty_viaObject = $this->metadataHelper->getPropertyReflectionsFromObjectOrItsParentClasses($object);
+
+		$this->assertEquals($reflectionProperty_viaReflectionClass, $reflectionProperty_viaReflectionObject);
+		$this->assertEquals($reflectionProperty_viaReflectionClass, $reflectionProperty_viaObject);
+		$this->assertEquals($reflectionProperty_viaObject, $reflectionProperty_viaReflectionObject);
+	}
 }
