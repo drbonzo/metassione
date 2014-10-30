@@ -3,6 +3,8 @@ namespace NorthslopePL\Metassione;
 
 use NorthslopePL\Metassione\ClassStructure\ClassStructure;
 use NorthslopePL\Metassione\ClassStructure\ClassStructureBuilder;
+use NorthslopePL\Metassione\ClassStructure\ClassStructureException;
+use NorthslopePL\Metassione\ClassStructure\PropertyStructure;
 use NorthslopePL\Metassione\Metadata\MetadataHelper;
 
 class POPOObjectFiller
@@ -17,7 +19,6 @@ class POPOObjectFiller
 	{
 		$this->processObject($targetObject, $rawData);
 	}
-
 
 	/**
 	 * @param object $targetObject
@@ -59,6 +60,9 @@ class POPOObjectFiller
 	 * @param \stdClass $rawDataObject
 	 * @param object $targetObject
 	 * @param ClassStructure $classStructure
+	 *
+	 * @throws ClassStructureException
+	 * @throws ObjectFillingException
 	 */
 	private function processProperty(\ReflectionProperty $rawDataProperty, $rawDataObject, $targetObject, ClassStructure $classStructure)
 	{
@@ -79,11 +83,32 @@ class POPOObjectFiller
 			throw new ObjectFillingException($e);
 		}
 
+		$newValue = $this->buildNewPropertyValue($rawValue, $targetPropertyStructure);
+
+		// TODO jeszcze wez ReflectionProperty z klasy lub parentow
+		// FIXME jak cacheować ReflectionProperty zeby go ciagle nie pobierac?
+
+		$metadataHelper = new MetadataHelper();
+		$targetReflectionProperty = $metadataHelper->getPropertyReflectionFromReflectionClassOrParentClasses(new \ReflectionClass($classStructure->getClassname()), $propertyName); // FIXME
+		$targetReflectionProperty->setAccessible(true);
+		$targetReflectionProperty->setValue($targetObject, $newValue);
+	}
+
+
+	/**
+	 * @param mixed $rawValue
+	 * @param PropertyStructure $targetPropertyStructure
+	 * @return mixed
+	 * @throws ObjectFillingException
+	 */
+	private function buildNewPropertyValue($rawValue, PropertyStructure $targetPropertyStructure)
+	{
 		// FIXME move to methods!!!
 		if ($targetPropertyStructure->getIsArray())
 		{
 			if ($targetPropertyStructure->getIsObject())
 			{
+
 				// array of objects
 				//FIXME
 				$newValues = [];
@@ -100,7 +125,7 @@ class POPOObjectFiller
 					$newValues[] = $newValueElement;
 				}
 
-				$newValue = $newValues;
+				return $newValues;
 			}
 			else
 			{
@@ -116,7 +141,7 @@ class POPOObjectFiller
 					$newValues[] = $rawValueItem;
 				}
 
-				$newValue = $newValues;
+				return $newValues;
 			}
 		}
 		else
@@ -129,7 +154,7 @@ class POPOObjectFiller
 
 				if ($rawValue === null)
 				{
-					$newValue = null;
+					return null;
 				}
 				else
 				{
@@ -144,22 +169,16 @@ class POPOObjectFiller
 					$propertyClassname = $targetPropertyStructure->getType();
 					$newValue = $this->buildNewInstanceOfClass($propertyClassname);
 					$this->processObject($newValue, $rawValue);
+
+					return $newValue;
 				}
 			}
 			else
 			{
 				// other value
-				$newValue = $rawValue;
+				return $rawValue;
 			}
 		}
-
-		// TODO jeszcze wez ReflectionProperty z klasy lub parentow
-		// FIXME jak cacheować ReflectionProperty zeby go ciagle nie pobierac?
-
-		$metadataHelper = new MetadataHelper();
-		$targetReflectionProperty = $metadataHelper->getPropertyReflectionFromReflectionClassOrParentClasses(new \ReflectionClass($classStructure->getClassname()), $propertyName); // FIXME
-		$targetReflectionProperty->setAccessible(true);
-		$targetReflectionProperty->setValue($targetObject, $newValue);
 	}
 
 	// FIXME cache!!! albo RC albo instancji
