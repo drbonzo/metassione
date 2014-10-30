@@ -54,6 +54,16 @@ class CorrectlyDefinedPropertiesKlass
 	private $simpleKlassProperty;
 
 	/**
+	 * @var int[]
+	 */
+	private $intArrayProperty;
+
+	/**
+	 * @var \Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass[]
+	 */
+	private $simpleKlassArrayProperty;
+
+	/**
 	 * @return boolean
 	 */
 	public function isBoolProperty()
@@ -213,5 +223,36 @@ class CorrectlyDefinedPropertiesKlass
 		$this->simpleKlassProperty = $simpleKlassProperty;
 	}
 
+	/**
+	 * @return \int[]
+	 */
+	public function getIntArrayProperty()
+	{
+		return $this->intArrayProperty;
+	}
+
+	/**
+	 * @param \int[] $intArrayProperty
+	 */
+	public function setIntArrayProperty($intArrayProperty)
+	{
+		$this->intArrayProperty = $intArrayProperty;
+	}
+
+	/**
+	 * @return SimpleKlass[]
+	 */
+	public function getSimpleKlassArrayProperty()
+	{
+		return $this->simpleKlassArrayProperty;
+	}
+
+	/**
+	 * @param SimpleKlass[] $simpleKlassArrayProperty
+	 */
+	public function setSimpleKlassArrayProperty($simpleKlassArrayProperty)
+	{
+		$this->simpleKlassArrayProperty = $simpleKlassArrayProperty;
+	}
 
 }

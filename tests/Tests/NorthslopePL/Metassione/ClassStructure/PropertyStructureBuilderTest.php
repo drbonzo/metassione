@@ -66,10 +66,11 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 			[$classname, 'mixedProperty', false, true, 'mixed'],
 			[$classname, 'nullProperty', false, true, 'null'],
 
-			[$classname, 'simpleKlassProperty', false, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass']
+			[$classname, 'simpleKlassProperty', false, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass'],
+
+			[$classname, 'intArrayProperty', true, true, 'int'],
+			[$classname, 'simpleKlassArrayProperty', true, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass'],
 		];
 	}
-
-	// FIXME array: int, object
 
 }
