@@ -1,8 +1,6 @@
 <?php
 namespace NorthslopePL\Metassione\ClassStructure;
 
-use NorthslopePL\Metassione\ObjectFillingException;
-
 class ClassStructure
 {
 	/**
@@ -57,9 +55,9 @@ class ClassStructure
 	}
 
 	/**
-	 * @param $name
+	 * @param string $name
 	 * @return PropertyStructure
-	 * @throws ObjectFillingException
+	 * @throws ClassStructureException
 	 */
 	public function getPropertyStructure($name)
 	{
@@ -69,7 +67,7 @@ class ClassStructure
 		}
 		else
 		{
-			throw new ObjectFillingException(sprintf("Property '%s' not found for class '%s'", $name, $this->classname));
+			throw new ClassStructureException(sprintf("Property '%s' not found for class '%s'", $name, $this->classname));
 		}
 	}
 
