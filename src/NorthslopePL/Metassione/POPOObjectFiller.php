@@ -10,6 +10,16 @@ use NorthslopePL\Metassione\Metadata\MetadataHelper;
 class POPOObjectFiller
 {
 	/**
+	 * @var ReflectionCache
+	 */
+	private $reflectionCache;
+
+	public function __construct()
+	{
+		$this->reflectionCache = new ReflectionCache();
+	}
+
+	/**
 	 * @param object $targetObject
 	 * @param \stdClass $rawData
 	 *
@@ -42,11 +52,11 @@ class POPOObjectFiller
 			}
 		}
 
+		// TODO This cannot be optimized, or can be changed to processing as array with key/values?
 		$rawDataReflection = new \ReflectionObject($rawData);
 
 		// FIXME dodać cache na tym poziomie
-		$classStructureBuilder = new ClassStructureBuilder();
-		$classStructure = $classStructureBuilder->buildClassStructure(get_class($targetObject));
+		$classStructure = $this->reflectionCache->getClassStructureForClassname(get_class($targetObject));
 
 		foreach ($rawDataReflection->getProperties() as $rawDataProperty)
 		{
