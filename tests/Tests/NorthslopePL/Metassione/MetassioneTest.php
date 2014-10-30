@@ -30,6 +30,6 @@ class MetassioneTest extends \PHPUnit_Framework_TestCase
 		$simpleObject = new SimpleKlass();
 		$this->metassione->fillObjectWithRawData($simpleObject, $rawData);
 
-		$this->assertEquals('foobar', $simpleObject->getName());
+		$this->assertEquals('foobar', $simpleObject->getStringValue());
 	}
 }
