@@ -1,9 +1,9 @@
 <?php
 namespace Tests\NorthslopePL\Metassione;
 
+use NorthslopePL\Metassione\InMemoryReflectionCache;
 use NorthslopePL\Metassione\Metadata\MetadataHelper;
 use NorthslopePL\Metassione\POPOObjectFiller;
-use NorthslopePL\Metassione\ReflectionCache;
 use Tests\NorthslopePL\Metassione\ExampleClasses\Blog\Blog;
 use Tests\NorthslopePL\Metassione\ExampleClasses\ArrayedKlass;
 use Tests\NorthslopePL\Metassione\ExampleClasses\Blog\TestBlogBuilder;
@@ -25,7 +25,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$metadataHelper = new MetadataHelper();
-		$reflectionCache = new ReflectionCache($metadataHelper);
+		$reflectionCache = new InMemoryReflectionCache($metadataHelper);
 		$this->objectFiller = new POPOObjectFiller($reflectionCache);
 	}
 

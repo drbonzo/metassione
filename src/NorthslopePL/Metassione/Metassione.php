@@ -1,8 +1,6 @@
 <?php
 namespace NorthslopePL\Metassione;
 
-use NorthslopePL\Metassione\ClassStructure\ClassStructureProvider;
-use NorthslopePL\Metassione\ClassStructure\SimpleClassStructureProvider;
 use NorthslopePL\Metassione\Metadata\MetadataHelper;
 
 class Metassione
@@ -21,12 +19,16 @@ class Metassione
 	 * @param object $targetObject POJO
 	 * @param \stdClass $rawData
 	 *
-	 * @throws ObjectFillingException
+	 * @param ReflectionCache $reflectionCache
 	 */
-	public function fillObjectWithRawData($targetObject, \stdClass $rawData)
+	public function fillObjectWithRawData($targetObject, \stdClass $rawData, ReflectionCache $reflectionCache = null)
 	{
-		$metadataHelper = new MetadataHelper();
-		$reflectionCache = new ReflectionCache($metadataHelper);
+		if ($reflectionCache === null)
+		{
+			$metadataHelper = new MetadataHelper();
+			$reflectionCache = new InMemoryReflectionCache($metadataHelper);
+		}
+
 		$filler = new POPOObjectFiller($reflectionCache);
 		$filler->fillObjectWithRawData($targetObject, $rawData);
 	}
