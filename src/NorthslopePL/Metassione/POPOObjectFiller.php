@@ -3,6 +3,7 @@ namespace NorthslopePL\Metassione;
 
 use NorthslopePL\Metassione\ClassStructure\ClassStructure;
 use NorthslopePL\Metassione\ClassStructure\ClassStructureBuilder;
+use NorthslopePL\Metassione\Metadata\MetadataHelper;
 
 class POPOObjectFiller
 {
@@ -68,7 +69,15 @@ class POPOObjectFiller
 		}
 
 		$targetPropertyStructure = $classStructure->getPropertyStructure($propertyName);
-		$rawValue = $rawDataProperty->getValue($rawDataObject);
+		try
+		{
+// FIXME do przepisania
+			$rawValue = $rawDataProperty->getValue($rawDataObject);
+		}
+		catch (\ReflectionException $e)
+		{
+			throw new ObjectFillingException($e);
+		}
 
 		// FIXME move to methods!!!
 		if ($targetPropertyStructure->getIsArray())
@@ -147,7 +156,8 @@ class POPOObjectFiller
 		// TODO jeszcze wez ReflectionProperty z klasy lub parentow
 		// FIXME jak cacheować ReflectionProperty zeby go ciagle nie pobierac?
 
-		$targetReflectionProperty = new \ReflectionProperty($classStructure->getClassname(), $propertyName);
+		$metadataHelper = new MetadataHelper();
+		$targetReflectionProperty = $metadataHelper->getPropertyReflectionFromReflectionClassOrParentClasses(new \ReflectionClass($classStructure->getClassname()), $propertyName); // FIXME
 		$targetReflectionProperty->setAccessible(true);
 		$targetReflectionProperty->setValue($targetObject, $newValue);
 	}

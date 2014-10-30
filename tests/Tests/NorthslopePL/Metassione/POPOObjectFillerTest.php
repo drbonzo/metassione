@@ -119,7 +119,6 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 
 	public function testFillingArrays()
 	{
-		$this->markTestIncomplete();
 		$targetObject = new ArrayedKlass();
 		$rawData = new \stdClass();
 
@@ -196,7 +195,6 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 
 	public function testFillingObjectUsingDataWithPrivatePropertiesThrowsException()
 	{
-		$this->markTestIncomplete();
 		$targetObject = new OnePropertyKlass();
 		$sourceData = new OnePropertyKlass();
 		$sourceData->setValue(42);
@@ -208,19 +206,18 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 
 	public function testUsingUnqalifiedClassname()
 	{
-		$this->markTestIncomplete();
 		$targetObject = new PropertyNotFoundKlass();
 
 		$sourceData = new \stdClass();
 		$sourceData->one = (object)array('value' => 42);
 
-		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class "OnePropertyKlass" does not exist for property Tests\NorthslopePL\Metassione\Examples\PropertyNotFoundKlass::$one. Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\OnePropertyKlass)?');
+		// FIXME ? $this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class "OnePropertyKlass" does not exist for property Tests\NorthslopePL\Metassione\Examples\PropertyNotFoundKlass::$one. Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\OnePropertyKlass)?');
+		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class not found: OnePropertyKlass');
 		$this->objectFiller->fillObjectWithRawData($targetObject, $sourceData);
 	}
 
 	public function testFillingPropertiesOfParentClasses()
 	{
-		$this->markTestIncomplete();
 		$sourceData = new \stdClass();
 		$sourceData->childProperty = (object)array('value' => 1);
 		$sourceData->parentProperty = (object)array('value' => 2);

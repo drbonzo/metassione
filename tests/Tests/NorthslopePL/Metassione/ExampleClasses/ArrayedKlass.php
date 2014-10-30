@@ -23,7 +23,9 @@ class ArrayedKlass
 	/**
 	 * Without [] at the end
 	 *
-	 * @var \Tests\NorthslopePL\Metassione\ExampleClasses\OnePropertyKlass
+	 * DO NOT remove 'array|' or tests will fail
+	 *
+	 * @var array|\Tests\NorthslopePL\Metassione\ExampleClasses\OnePropertyKlass
 	 */
 	private $objects3;
 

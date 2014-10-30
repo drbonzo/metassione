@@ -3,6 +3,8 @@ namespace NorthslopePL\Metassione\Metadata;
 
 class MetadataHelper
 {
+	// WTF sprawdz uzycia tego kodu - kazdej metody - czy ma sens kazde jego uzycie, czy dobrze ze uzywam object/RC/RO?
+
 	/**
 	 * @param object $object
 	 * @return \array[]|\ReflectionProperty[]
@@ -61,4 +63,26 @@ class MetadataHelper
 		return $this->getPropertyReflectionsFromReflectionClassOrItsParentClasses($reflectionObject);
 	}
 
+	/**
+	 * @param \ReflectionClass $object
+	 * @param string $propertyName
+	 * @return null|\ReflectionProperty
+	 */
+	public function getPropertyReflectionFromReflectionClassOrParentClasses(\ReflectionClass $object, $propertyName)
+	{
+		$currentClassReflection = $object;
+
+		while ((bool)$currentClassReflection) // class without parent has null in getParentClass()
+		{
+			if ($currentClassReflection->hasProperty($propertyName))
+			{
+				return $currentClassReflection->getProperty($propertyName);
+			}
+
+			// go to parent class
+			$currentClassReflection = $currentClassReflection->getParentClass();
+		}
+
+		return null;
+	}
 }
