@@ -49,6 +49,11 @@ class CorrectlyDefinedPropertiesKlass
 	private $nullProperty;
 
 	/**
+	 * @var \Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass
+	 */
+	private $simpleKlassProperty;
+
+	/**
 	 * @return boolean
 	 */
 	public function isBoolProperty()
@@ -190,6 +195,22 @@ class CorrectlyDefinedPropertiesKlass
 	public function setStringProperty($stringProperty)
 	{
 		$this->stringProperty = $stringProperty;
+	}
+
+	/**
+	 * @return SimpleKlass
+	 */
+	public function getSimpleKlassProperty()
+	{
+		return $this->simpleKlassProperty;
+	}
+
+	/**
+	 * @param SimpleKlass $simpleKlassProperty
+	 */
+	public function setSimpleKlassProperty($simpleKlassProperty)
+	{
+		$this->simpleKlassProperty = $simpleKlassProperty;
 	}
 
 

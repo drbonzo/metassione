@@ -24,14 +24,14 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @dataProvider buildingPrimitivePropertyDataProvider()
+	 * @dataProvider buildingPropertyDataProvider()
 	 * @param string $classname
 	 * @param string $propertyName
 	 * @param bool $isArray
 	 * @param bool $isPrimitive
 	 * @param string $type
 	 */
-	public function testBuildingPrimitiveProperty($classname, $propertyName, $isArray, $isPrimitive, $type)
+	public function testBuildingProperty($classname, $propertyName, $isArray, $isPrimitive, $type)
 	{
 		$reflectionClass = new \ReflectionObject($this->correctlyDefinedPropertiesKlass);
 		$reflectionProperty = $reflectionClass->getProperty($propertyName);
@@ -52,7 +52,7 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return array
 	 */
-	public function buildingPrimitivePropertyDataProvider()
+	public function buildingPropertyDataProvider()
 	{
 		$classname = 'Tests\NorthslopePL\Metassione\ExampleClasses\CorrectlyDefinedPropertiesKlass';
 		return [
@@ -65,6 +65,11 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 			[$classname, 'stringProperty', false, true, 'string'],
 			[$classname, 'mixedProperty', false, true, 'mixed'],
 			[$classname, 'nullProperty', false, true, 'null'],
+
+			[$classname, 'simpleKlassProperty', false, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass']
 		];
 	}
+
+	// FIXME array: int, object
+
 }

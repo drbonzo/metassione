@@ -102,9 +102,14 @@ class PropertyStructureBuilder
 				}
 				else
 				{
+					// in phpdoc we specify class with full namespace:
+					// \Foo\Bar\Baz
+					// but real class name is just:
+					// Foo\Bar\Baz
+					$classname = ltrim($phpdocTypeSpecification, '\\');
 					$propertyStructure->setIsArray(false);
 					$propertyStructure->setIsPrimitive(false);
-					$propertyStructure->setType($phpdocTypeSpecification);
+					$propertyStructure->setType($classname);
 				}
 			}
 		}
