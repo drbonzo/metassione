@@ -24,14 +24,14 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @dataProvider buildingPropertiesDataProvider()
+	 * @dataProvider buildingPrimitivePropertyDataProvider()
 	 * @param string $classname
 	 * @param string $propertyName
 	 * @param bool $isArray
 	 * @param bool $isPrimitive
 	 * @param string $type
 	 */
-	public function testBuildingIntProperty($classname, $propertyName, $isArray, $isPrimitive, $type)
+	public function testBuildingPrimitiveProperty($classname, $propertyName, $isArray, $isPrimitive, $type)
 	{
 		$reflectionClass = new \ReflectionObject($this->correctlyDefinedPropertiesKlass);
 		$reflectionProperty = $reflectionClass->getProperty($propertyName);
@@ -52,10 +52,19 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return array
 	 */
-	public function buildingPropertiesDataProvider()
+	public function buildingPrimitivePropertyDataProvider()
 	{
+		$classname = 'Tests\NorthslopePL\Metassione\ExampleClasses\CorrectlyDefinedPropertiesKlass';
 		return [
-			['Tests\NorthslopePL\Metassione\ExampleClasses\CorrectlyDefinedPropertiesKlass', 'intProperty', false, true, 'int']
+			[$classname, 'intProperty', false, true, 'int'],
+			[$classname, 'integerProperty', false, true, 'integer'],
+			[$classname, 'floatProperty', false, true, 'float'],
+			[$classname, 'doubleProperty', false, true, 'double'],
+			[$classname, 'boolProperty', false, true, 'bool'],
+			[$classname, 'booleanProperty', false, true, 'boolean'],
+			[$classname, 'stringProperty', false, true, 'string'],
+			[$classname, 'mixedProperty', false, true, 'mixed'],
+			[$classname, 'nullProperty', false, true, 'null'],
 		];
 	}
 }
