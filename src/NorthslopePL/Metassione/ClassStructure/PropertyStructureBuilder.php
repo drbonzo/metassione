@@ -70,17 +70,15 @@ class PropertyStructureBuilder
 	{
 		if ($phpdocTypeSpecification)
 		{
-			$propertyStructure->markAsTypeKnown();
 
 			if ($phpdocTypeSpecification == 'void')
 			{
-				$propertyStructure->setIsArray(false);
-				$propertyStructure->setIsPrimitive(true);
-				$propertyStructure->setType('void');
+				$propertyStructure->markAsTypeUnknown();
 
 				return;
 			}
 
+			$propertyStructure->markAsTypeKnown();
 			$typesSpecification = explode('|', $phpdocTypeSpecification);
 
 			if ($this->typeIsArray($typesSpecification))
@@ -135,6 +133,17 @@ class PropertyStructureBuilder
 			}
 		}
 
+		// Fallback for 'array'
+		// This is checked only if there is no 'Klass[]' in @var
+		// This fallback will just tell that this is an array of unknown type
+		foreach ($typesSpecification as $typeSpecification)
+		{
+			if ($typeSpecification == 'array')
+			{
+				return true;
+			}
+		}
+
 		return false;
 	}
 
@@ -178,6 +187,11 @@ class PropertyStructureBuilder
 			}
 		}
 
+		// we have not found
+		// int[], bool[], etc
+		// nor
+		// Klass[]
+		// so this is an array of unknown type
 		$propertyStructure->setIsArray(true);
 		$propertyStructure->setIsPrimitive(true);
 		$propertyStructure->setType('mixed');

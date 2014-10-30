@@ -78,6 +78,8 @@ class PropertyStructureBuilderTest extends \PHPUnit_Framework_TestCase
 
 			[$classname, 'intArrayProperty', true, true, true, 'int'],
 			[$classname, 'simpleKlassArrayProperty', true, true, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass'],
+			[$classname, 'intArray2Property', true, true, true, 'int'],
+			[$classname, 'simpleKlassArray2Property', true, true, false, 'Tests\NorthslopePL\Metassione\ExampleClasses\SimpleKlass'],
 		];
 	}
 
