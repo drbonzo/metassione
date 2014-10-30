@@ -23,6 +23,11 @@ class ReflectionCache
 	 */
 	private $reflectionPropertyCache = [];
 
+	/**
+	 * @var object[]
+	 */
+	private $instancesCache = [];
+
 	public function __construct(MetadataHelper $metadataHelper)
 	{
 		$this->metadataHelper = $metadataHelper;
@@ -59,5 +64,35 @@ class ReflectionCache
 		}
 
 		return $this->reflectionPropertyCache[$hash];
+	}
+
+	/**
+	 * @param string $classname
+	 * @return object
+	 * @throws ObjectFillingException
+	 */
+	public function buildNewInstanceOfClass($classname)
+	{
+		$classname = ltrim($classname, '\\');
+
+		if (!isset($this->instancesCache[$classname]))
+		{
+			if (!class_exists($classname, true))
+			{
+//			$message = sprintf('Class "%s" does not exist for property %s::$%s.', $classname, $targetObjectProperty->getDeclaringClass()->getName(), $targetObjectProperty->getName());
+//			$namespaceNotDetectedInClassname = (strpos($classname, '\\') === false);
+//			if ($namespaceNotDetectedInClassname)
+//			{
+//				$message .= sprintf(' Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\%s)?', $classname);
+//			}
+
+				throw new ObjectFillingException(sprintf("Class not found: %s", $classname));
+			}
+
+			$instance = new $classname(); // FIXME cache + reflection?
+			$this->instancesCache[$classname] = $instance;
+		}
+
+		return $this->instancesCache[$classname];
 	}
 }

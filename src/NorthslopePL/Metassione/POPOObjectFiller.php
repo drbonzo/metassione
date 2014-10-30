@@ -221,24 +221,14 @@ class POPOObjectFiller
 		}
 	}
 
-	// FIXME cache!!! albo RC albo instancji
+	/**
+	 * @param string $classname
+	 * @return object
+	 * @throws ObjectFillingException
+	 */
 	private function buildNewInstanceOfClass($classname)
 	{
-		$classname = ltrim($classname, '\\');
-
-		if (!class_exists($classname, true))
-		{
-//			$message = sprintf('Class "%s" does not exist for property %s::$%s.', $classname, $targetObjectProperty->getDeclaringClass()->getName(), $targetObjectProperty->getName());
-//			$namespaceNotDetectedInClassname = (strpos($classname, '\\') === false);
-//			if ($namespaceNotDetectedInClassname)
-//			{
-//				$message .= sprintf(' Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\%s)?', $classname);
-//			}
-
-			throw new ObjectFillingException(sprintf("Class not found: %s", $classname));
-		}
-
-		return new $classname(); // FIXME cache + reflection?
+		return $this->reflectionCache->buildNewInstanceOfClass($classname);
 	}
 
 }
