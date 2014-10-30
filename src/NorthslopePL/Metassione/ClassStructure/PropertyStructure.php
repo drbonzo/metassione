@@ -23,19 +23,19 @@ class PropertyStructure
 	/**
 	 * @var bool
 	 */
-	private $isArray;
+	private $isArray = false;
 
 	/**
 	 * if TRUE - then `type` contains value of: 'string', 'int', 'integer', 'float', 'double', 'bool', etc.
 	 * if FALSE - then `type` contains value of classname
 	 * @var bool
 	 */
-	private $isPrimitive;
+	private $isPrimitive = true;
 
 	/**
 	 * @var string
 	 */
-	private $type;
+	private $type = 'mixed';
 
 	/**
 	 * @return string
@@ -56,7 +56,7 @@ class PropertyStructure
 	/**
 	 * @return boolean
 	 */
-	public function isIsArray()
+	public function getIsArray()
 	{
 		return $this->isArray;
 	}
@@ -72,17 +72,27 @@ class PropertyStructure
 	/**
 	 * @return boolean
 	 */
-	public function isIsPrimitive()
+	public function getIsPrimitive()
 	{
 		return $this->isPrimitive;
 	}
 
 	/**
+	 * true - yes, 'int', 'float', 'string', 'bool', etc.
+	 * false - no, it is an object
 	 * @param boolean $isPrimitive
 	 */
 	public function setIsPrimitive($isPrimitive)
 	{
 		$this->isPrimitive = $isPrimitive;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getIsObject()
+	{
+		return !$this->getIsPrimitive();
 	}
 
 	/**
@@ -120,7 +130,7 @@ class PropertyStructure
 	/**
 	 * @return boolean
 	 */
-	public function isIsTypeKnown()
+	public function getIsTypeKnown()
 	{
 		return $this->isTypeKnown;
 	}
@@ -128,9 +138,22 @@ class PropertyStructure
 	/**
 	 * @param boolean $isTypeKnown
 	 */
-	public function setIsTypeKnown($isTypeKnown)
+	private function setIsTypeKnown($isTypeKnown)
 	{
 		$this->isTypeKnown = $isTypeKnown;
+	}
+
+	public function markAsTypeUnknown()
+	{
+		$this->setIsTypeKnown(false);
+		$this->isArray = false;
+		$this->isPrimitive = true;
+		$this->type = null;
+	}
+
+	public function markAsTypeKnown()
+	{
+		$this->setIsTypeKnown(true);
 	}
 
 }
