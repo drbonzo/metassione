@@ -1,5 +1,5 @@
 <?php
-namespace Test\NorthslopePL\Metassione\Metadata;
+namespace Tests\NorthslopePL\Metassione\Metadata;
 
 use NorthslopePL\Metassione\Metadata\MetadataHelper;
 use Tests\NorthslopePL\Metassione\ExampleClasses\ChildKlass;

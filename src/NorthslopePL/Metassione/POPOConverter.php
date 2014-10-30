@@ -1,8 +1,20 @@
 <?php
 namespace NorthslopePL\Metassione;
 
+use NorthslopePL\Metassione\Metadata\MetadataHelper;
+
 class POPOConverter
 {
+	/**
+	 * @var MetadataHelper
+	 */
+	private $metadataHelper;
+
+	public function __construct()
+	{
+		$this->metadataHelper = new MetadataHelper();
+	}
+
 	/**
 	 * @param object|array $value
 	 *
@@ -36,7 +48,7 @@ class POPOConverter
 
 		$reflectionObject = new \ReflectionObject($object);
 
-		foreach ($this->getPropertiesFromObjectOrParentClasses($reflectionObject) as $property)
+		foreach ($this->metadataHelper->getPropertyReflectionsFromObjectOrItsParentClasses($reflectionObject) as $property)
 		{
 			$property->setAccessible(true);
 			$propertyName = $property->getName();
@@ -59,43 +71,5 @@ class POPOConverter
 		}
 
 		return $retvalObject;
-	}
-
-	/**
-	 * @param \ReflectionObject $object
-	 * @return array[]|\ReflectionProperty[]
-	 *
-	 * \ReflectionClass::getProperties() checks only properties from current class and all nonprivate properties from parent classes.
-	 * So private properties from parent classes will not be found.
-	 *
-	 * We have workaround for this problem, by checking parent classes directly for their properties
-	 *
-	 * http://www.php.net/manual/en/reflectionclass.hasproperty.php#94038
-	 * http://stackoverflow.com/questions/9913680/does-reflectionclassgetproperties-also-get-properties-of-the-parent
-	 */
-	private function getPropertiesFromObjectOrParentClasses(\ReflectionObject $object)
-	{
-		$allProperties = array();
-		$currentClassReflection = $object;
-
-		while ((bool)$currentClassReflection) // class without parent has null in getParentClass()
-		{
-			$properties = $currentClassReflection->getProperties();
-
-			foreach ($properties as $property)
-			{
-				// add only properties defined in current class
-				// properties added in parent classes will be added later
-				if ($property->getDeclaringClass()->getName() == $currentClassReflection->getName())
-				{
-					$allProperties[] = $property;
-				}
-			}
-
-			// go to parent class
-			$currentClassReflection = $currentClassReflection->getParentClass();
-		}
-
-		return $allProperties;
 	}
 }

@@ -15,7 +15,7 @@ class MetadataHelper
 	 * http://www.php.net/manual/en/reflectionclass.hasproperty.php#94038
 	 * http://stackoverflow.com/questions/9913680/does-reflectionclassgetproperties-also-get-properties-of-the-parent
 	 */
-	public function getPropertyReflectionsFromObjectOrItsParentClasses($object) // TODO DRY POPOConverter
+	public function getPropertyReflectionsFromObjectOrItsParentClasses($object)
 	{
 		$reflectionObject = new \ReflectionObject($object);
 		$allProperties = array();
