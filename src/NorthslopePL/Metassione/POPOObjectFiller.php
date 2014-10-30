@@ -8,4 +8,7 @@ use NorthslopePL\Metassione\ClassStructure\SimpleClassStructureProvider;
 
 class POPOObjectFiller
 {
+	public function fillObjectWithRawData($targetObject, $rawData)
+	{
+	}
 }

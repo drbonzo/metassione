@@ -19,17 +19,12 @@ class Metassione
 	/**
 	 * @param object $targetObject POJO
 	 * @param \stdClass $rawData
-	 * @param ClassStructureProvider $classStructureProvider optional
 	 *
 	 * @throws ObjectFillingException
 	 */
-	public function fillObjectWithRawData($targetObject, \stdClass $rawData, ClassStructureProvider $classStructureProvider = null)
+	public function fillObjectWithRawData($targetObject, \stdClass $rawData)
 	{
-		if ($classStructureProvider === null)
-		{
-			$classStructureProvider = new SimpleClassStructureProvider();
-		}
-		$filler = new POPOObjectFiller($classStructureProvider);
+		$filler = new POPOObjectFiller();
 		$filler->fillObjectWithRawData($targetObject, $rawData);
 	}
 }
