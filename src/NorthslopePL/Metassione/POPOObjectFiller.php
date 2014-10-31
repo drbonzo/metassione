@@ -134,7 +134,7 @@ class POPOObjectFiller
 			else
 			{
 				// other value
-				return $rawValue;
+				return $this->buildNewPropertyValue_ForPrimitive($rawValue, $targetPropertyStructure);
 			}
 		}
 	}
@@ -218,6 +218,16 @@ class POPOObjectFiller
 
 			return $newValue;
 		}
+	}
+
+	/**
+	 * @param $rawValue
+	 * @param $targetPropertyStructure
+	 * @return mixed
+	 */
+	private function buildNewPropertyValue_ForPrimitive($rawValue, $targetPropertyStructure)
+	{
+		return $rawValue;
 	}
 
 	/**
