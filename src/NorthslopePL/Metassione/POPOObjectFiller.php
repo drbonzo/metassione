@@ -12,9 +12,15 @@ class POPOObjectFiller
 	 */
 	private $reflectionCache;
 
+	/**
+	 * @var Logger
+	 */
+	private $logger;
+
 	public function __construct(ReflectionCache $reflectionCache)
 	{
 		$this->reflectionCache = $reflectionCache;
+		$this->logger = new Logger();
 	}
 
 	/**
@@ -26,6 +32,9 @@ class POPOObjectFiller
 	public function fillObjectWithRawData($targetObject, $rawData)
 	{
 		$this->processObject($targetObject, $rawData);
+
+		$this->logger->endTimer();
+//		$this->printTimes();
 	}
 
 	/**
@@ -36,6 +45,7 @@ class POPOObjectFiller
 	 */
 	private function processObject($targetObject, $rawData)
 	{
+		$this->logger->startTimer(get_class($targetObject));
 		if (!is_object($rawData))
 		{
 			$message = sprintf('Raw data should be an object, but %s was given. I was trying to fill object of class %s.', gettype($rawData), get_class($targetObject));
@@ -59,6 +69,8 @@ class POPOObjectFiller
 		{
 			$this->processProperty($rawDataProperty, $rawData, $targetObject, $classStructure);
 		}
+
+		$this->logger->endTimer();
 	}
 
 	/**
@@ -240,4 +252,9 @@ class POPOObjectFiller
 		return $this->reflectionCache->buildNewInstanceOfClass($classname);
 	}
 
+	public function printTimes()
+	{
+		$timerPrinter = new TimerPrinter();
+		$timerPrinter->printTimer($this->logger->getRootTimer());
+	}
 }
