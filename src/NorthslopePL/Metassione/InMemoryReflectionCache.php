@@ -89,7 +89,8 @@ class InMemoryReflectionCache implements ReflectionCache
 				throw new ObjectFillingException(sprintf("Class not found: %s", $classname));
 			}
 
-			$instance = new $classname(); // FIXME cache + reflection?
+			$reflectionClass = new \ReflectionClass($classname);
+			$instance = $reflectionClass->newInstanceWithoutConstructor(); // we dont want to run code inside constructor!!!
 			$this->instancesCache[$classname] = $instance;
 		}
 
