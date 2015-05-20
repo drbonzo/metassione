@@ -10,6 +10,7 @@ use NorthslopePL\Metassione\Tests\Examples\GrandparentKlass;
 use NorthslopePL\Metassione\Tests\Examples\OneObjectPropertyKlass;
 use NorthslopePL\Metassione\Tests\Examples\OnePropertyKlass;
 use NorthslopePL\Metassione\Tests\Examples\PropertyNotFoundKlass;
+use NorthslopePL\Metassione\Tests\Examples\PropertyWithoutFullClassname;
 use NorthslopePL\Metassione\Tests\Examples\SimpleKlass;
 
 class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
@@ -209,7 +210,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		$sourceData = new \stdClass();
 		$sourceData->one = (object)array('value' => 42);
 
-		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class "OnePropertyKlass" does not exist for property NorthslopePL\Metassione\Tests\Examples\PropertyNotFoundKlass::$one. Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\OnePropertyKlass)?');
+		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Class "OtherOnePropertyKlass" does not exist for property NorthslopePL\Metassione\Tests\Examples\PropertyNotFoundKlass::$one. Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\OtherOnePropertyKlass)?');
 		$this->objectFiller->fillObjectWithRawData($targetObject, $sourceData);
 	}
 
@@ -262,5 +263,49 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($expectedObject, $grandparentObject);
 
 		$this->assertNull($grandparentObject->getGrandparentProtectedProperty(), 'No data was given for this property - so set it to null');
+	}
+
+	public function testPropertyWithoutFullClassname()
+	{
+		$sourceData = new \stdClass();
+		$sourceData->child = new \stdClass();
+		$sourceData->child->childProperty = new \stdClass();
+		$sourceData->child->childProperty->value = 'child-prop';
+
+		$simpleKlass_1 = new \stdClass();
+		$simpleKlass_1->intValue = 123;
+		$simpleKlass_1->stringValue = 'foo';
+
+		$simpleKlass_2 = new \stdClass();
+		$simpleKlass_2->intValue = 456;
+		$simpleKlass_2->stringValue = 'bar';
+
+		$sourceData->simpleKlasses = [$simpleKlass_1, $simpleKlass_2];
+
+		$targetObject = new PropertyWithoutFullClassname();
+		$this->objectFiller->fillObjectWithRawData($targetObject, $sourceData);
+
+		$expectedObject = new PropertyWithoutFullClassname();
+		$prop1 = new ChildKlass();
+		$prop1_1 = new OnePropertyKlass();
+		$prop1_1->setValue('child-prop');
+		$prop1->setChildProperty($prop1_1);
+		$expectedObject->setChild($prop1);
+
+		$prop2 = [];
+		$prop2_1 = new SimpleKlass();
+		$prop2_1->setIntValue(123);
+		$prop2_1->setStringValue('foo');
+
+		$prop2_2 = new SimpleKlass();
+		$prop2_2->setIntValue(456);
+		$prop2_2->setStringValue('bar');
+
+		$prop2[] = $prop2_1;
+		$prop2[] = $prop2_2;
+		$expectedObject->setSimpleKlasses($prop2);
+
+		$this->assertEquals(print_r($expectedObject, true), print_r($targetObject, true));
+		$this->assertEquals($expectedObject, $targetObject);
 	}
 }

@@ -3,7 +3,9 @@ metassione
 
 Allows to convert POPO to stdClass, and stdClass to POPO.
 
-POPO = Plain Old PHP Object
+Why? json_encode() does not handle private properties. So you need to have all properties public or use `metassione`. 
+
+**POPO** = Plain Old PHP Object
 
 # POPO to stdClass
 
@@ -152,10 +154,106 @@ Which is equal to our starting `$post` object.
 
 To make Metassione work, you need to add typehinting and phpdocs to your classes.
 
-## properties
+Example:
 
-- int/string/float/bool
-- class
-- array
-- array of class
-- **TODO**
+	<?php
+	namespace NorthslopePL\Metassione\Tests\Examples;
+	
+	class PropertyWithoutFullClassname
+	{
+		/**
+		 * Fully qualified class name - same namespace
+		 *
+		 * @var \NorthslopePL\Metassione\Tests\Examples\ChildKlass
+		 */
+		private $firstChild;
+
+		/**
+		 * Class from the same namespace as current file.
+		 * This is the same as '\NorthslopePL\Metassione\Tests\Examples\ChildKlass'
+		 *
+		 * @var ChildKlass
+		 */
+		private $secondChild;
+
+		/**
+		 * Fully qualified class name - other namespace
+		 *
+		 * @var \Other\Lib\ChildKlass
+		 */
+		private $thirdChild;
+		
+		/**
+		 * Not fully qualified class name - from global namespace
+		 * @var SomeClassWithoutNamespace
+		 */
+		private $fourthChild;
+	}
+	?>
+
+See **0.4.0 - Properties without full class name may be used**
+
+## available property types
+
+- basic types
+	- `int`
+	- `string`
+	- `float`
+	- `bool`
+- arrays of basic types
+	- `int[]`
+	- `string[]`
+	- `float[]`
+	- `bool[]`
+- classes
+	- `FirstClass`
+	- `OtherClass`
+	- `\Foo\Bar\AnotherClass`
+- array of classes
+	- `FirstClass[]`
+	- `OtherClass[]`
+	- `\Foo\Bar\AnotherClass[]`
+
+# Changelog
+
+## 0.4.0 
+
+### Properties without full class name may be used.
+
+Example:
+
+	<?php
+	namespace NorthslopePL\Metassione\Tests\Examples;
+	
+	class PropertyWithoutFullClassname
+	{
+		/**
+		 * @var \NorthslopePL\Metassione\Tests\Examples\ChildKlass
+		 */
+		private $firstChild;
+
+		/**
+		 * @var ChildKlass
+		 */
+		private $secondChild;
+
+		/**
+		 * @var \Other\Lib\ChildKlass
+		 */
+		private $thirdChild;
+	}
+	?>
+	
+- `$firstChild` - has full classname specified. That classname will be used
+- `$secondChild` 
+	- has juz `ChildKlass` specified. Attempt to load `NorthslopePL\Metassione\Tests\Examples\ChildKlass` will be made.
+	- if `\ChildKlass` is found - it will be used
+	- if not, then `NorthslopePL\Metassione\Tests\Examples\ChildKlass` will be used if found
+	- else exception will be thrown
+- `$thirdChild` - has full classname specified. That classname will be used.
+
+
+This feature **will not work** with:
+
+- with `use` (`use \Foo\Bar; ... @var Bar`)
+- namespace aliases

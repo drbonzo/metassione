@@ -158,15 +158,23 @@ class POPOObjectFiller
 
 		if (!class_exists($classname, true))
 		{
-			$message = sprintf('Class "%s" does not exist for property %s::$%s.', $classname, $targetObjectProperty->getDeclaringClass()->getName(), $targetObjectProperty->getName());
-
-			$namespaceNotDetectedInClassname = (strpos($classname, '\\') === false);
-			if ($namespaceNotDetectedInClassname)
+			$classnameWithNamespaceAdded = $targetObjectProperty->getDeclaringClass()->getNamespaceName() . '\\' . $classname;
+			if (class_exists($classnameWithNamespaceAdded, true))
 			{
-				$message .= sprintf(' Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\%s)?', $classname);
+				$classname = $classnameWithNamespaceAdded;
 			}
+			else
+			{
+				$message = sprintf('Class "%s" does not exist for property %s::$%s.', $classname, $targetObjectProperty->getDeclaringClass()->getName(), $targetObjectProperty->getName());
 
-			throw new ObjectFillingException($message);
+				$namespaceNotDetectedInClassname = (strpos($classname, '\\') === false);
+				if ($namespaceNotDetectedInClassname)
+				{
+					$message .= sprintf(' Maybe you have forgotten to use fully qualified class name (with namespace, example: \Foo\Bar\%s)?', $classname);
+				}
+
+				throw new ObjectFillingException($message);
+			}
 		}
 
 		$classReflection = new \ReflectionClass($classname);

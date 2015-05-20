@@ -1,6 +1,8 @@
 <?php
 namespace NorthslopePL\Metassione\Tests\Examples;
 
+use NorthslopePL\Metassione\Tests\OtherExamples\OtherOnePropertyKlass;
+
 class PropertyNotFoundKlass
 {
 	/**
@@ -12,9 +14,11 @@ class PropertyNotFoundKlass
 
 
 	/**
-	 * Unqualified class name
+	 * Unqualified class name.
+	 * This class exists, it is loaded via 'use ...OtherOnePropertyKlass'
+	 * but this is not supported. This will be handled as 'class not found'
 	 *
-	 * @var OnePropertyKlass
+	 * @var OtherOnePropertyKlass
 	 */
 	private $one;
 
