@@ -216,6 +216,12 @@ See **0.4.0 - Properties without full class name may be used**
 
 # Changelog
 
+## 2.0.0
+
+- Metassione::fillObjectWithRawData($targetObject, stdClass $rawData) returns $targetObject
+	- This allows you to write: $myObject = $metassione->fillObjectWithRawData(new MyKlass(), $rawData);
+	- without storing new MyKlass() in temporary variable
+
 ## 0.4.0 
 
 ### Properties without full class name may be used.
