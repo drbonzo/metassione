@@ -5,6 +5,7 @@ use NorthslopePL\Metassione2\Metadata\ClassDefinition;
 use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
 use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione2\Metadata\PropertyDefinition;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesWithNullsKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\EmptyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesKlass;
 use PHPUnit_Framework_TestCase;
@@ -50,4 +51,23 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new PropertyDefinition('nullValue', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['nullValue']);
 	}
 
+	public function testClassWithNullableBasicTypeProperties()
+	{
+		$classDefinition = $this->builder->buildFromClass(BasicTypesWithNullsKlass::class);
+		$this->assertEquals(BasicTypesWithNullsKlass::class, $classDefinition->name);
+		$this->assertEquals('NorthslopePL\Metassione2\Tests\Fixtures\Klasses', $classDefinition->namespace);
+
+		$this->assertCount(10, $classDefinition->properties);
+
+		$this->assertEquals(new PropertyDefinition('stringValue', true, false, false, PropertyDefinition::BASIC_TYPE_STRING, true), $classDefinition->properties['stringValue']);
+		$this->assertEquals(new PropertyDefinition('integerValue', true, false, false, PropertyDefinition::BASIC_TYPE_INTEGER, true), $classDefinition->properties['integerValue']);
+		$this->assertEquals(new PropertyDefinition('intValue', true, false, false, PropertyDefinition::BASIC_TYPE_INT, true), $classDefinition->properties['intValue']);
+		$this->assertEquals(new PropertyDefinition('floatValue', true, false, false, PropertyDefinition::BASIC_TYPE_FLOAT, true), $classDefinition->properties['floatValue']);
+		$this->assertEquals(new PropertyDefinition('doubleValue', true, false, false, PropertyDefinition::BASIC_TYPE_DOUBLE, true), $classDefinition->properties['doubleValue']);
+		$this->assertEquals(new PropertyDefinition('booleanValue', true, false, false, PropertyDefinition::BASIC_TYPE_BOOLEAN, true), $classDefinition->properties['booleanValue']);
+		$this->assertEquals(new PropertyDefinition('boolValue', true, false, false, PropertyDefinition::BASIC_TYPE_BOOL, true), $classDefinition->properties['boolValue']);
+		$this->assertEquals(new PropertyDefinition('voidValue', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['voidValue']);
+		$this->assertEquals(new PropertyDefinition('mixedValue', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['mixedValue']);
+		$this->assertEquals(new PropertyDefinition('nullValue', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['nullValue']);
+	}
 }

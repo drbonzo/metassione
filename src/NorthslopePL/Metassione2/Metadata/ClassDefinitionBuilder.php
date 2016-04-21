@@ -67,13 +67,15 @@ class ClassDefinitionBuilder
 			$phpdocTypeSpecification = null;
 		}
 
-		if ($this->propertyTypeIsUndefined($phpdocTypeSpecification)) {
+
+		$typeSpecifications = explode('|', $phpdocTypeSpecification);
+		$firstConcreteTypeSpecification = $this->extractConcreteTypeSpecification($typeSpecifications);
+
+		if ($this->propertyTypeIsUndefined($firstConcreteTypeSpecification)) {
 			return new PropertyDefinition($reflectionProperty->getName(), false, false, false, 'null', true);
 		}
 
-		$typeSpecifications = explode('|', $phpdocTypeSpecification);
 		$typeIsNullable = $this->isNullable($typeSpecifications);
-		$firstConcreteTypeSpecification = $this->extractConcreteTypeSpecification($typeSpecifications);
 
 		// only first defined type is taken
 		if ($this->typeIsArray($typeSpecifications)) {
@@ -169,7 +171,9 @@ class ClassDefinitionBuilder
 			}
 		}
 
-		return null; // FIXME exception? DRY this with propertyTypeIsUndefined()
+		// @var void|null
+		// etc.
+		return PropertyDefinition::BASIC_TYPE_NULL;
 	}
 
 	/**
