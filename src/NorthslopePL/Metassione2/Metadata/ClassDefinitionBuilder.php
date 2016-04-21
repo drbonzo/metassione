@@ -4,7 +4,7 @@ namespace NorthslopePL\Metassione2\Metadata;
 use ReflectionClass;
 use ReflectionProperty;
 
-class ClassDefinitionBuilder
+class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 {
 	/**
 	 * @var ClassPropertyFinder
