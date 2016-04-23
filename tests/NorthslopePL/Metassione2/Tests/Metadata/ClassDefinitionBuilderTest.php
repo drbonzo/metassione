@@ -5,9 +5,12 @@ use NorthslopePL\Metassione2\Metadata\ClassDefinition;
 use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
 use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione2\Metadata\PropertyDefinition;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ArrayPropertiesKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ArrayPropertiesNullableKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesWithNullsKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\EmptyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass;
 use PHPUnit_Framework_TestCase;
 
 class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
@@ -70,4 +73,41 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new PropertyDefinition('mixedValue', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['mixedValue']);
 		$this->assertEquals(new PropertyDefinition('nullValue', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['nullValue']);
 	}
+
+	public function testWithArrayProperties()
+	{
+		$classDefinition = $this->builder->buildFromClass(ArrayPropertiesKlass::class);
+		$this->assertEquals(ArrayPropertiesKlass::class, $classDefinition->name);
+		$this->assertEquals('NorthslopePL\Metassione2\Tests\Fixtures\Klasses', $classDefinition->namespace);
+
+		$this->assertCount(7, $classDefinition->properties);
+
+		$this->assertEquals(new PropertyDefinition('stringArray_1', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, false), $classDefinition->properties['stringArray_1']);
+		$this->assertEquals(new PropertyDefinition('stringArray_2', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, false), $classDefinition->properties['stringArray_2']);
+		$this->assertEquals(new PropertyDefinition('stringArray_3', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, false), $classDefinition->properties['stringArray_3']);
+		//
+		$this->assertEquals(new PropertyDefinition('objectArray_1', true, true, true, SimpleKlass::class, false), $classDefinition->properties['objectArray_1']);
+		$this->assertEquals(new PropertyDefinition('objectArray_2', true, true, true, SimpleKlass::class, false), $classDefinition->properties['objectArray_2']);
+		$this->assertEquals(new PropertyDefinition('objectArray_3', true, true, true, SimpleKlass::class, false), $classDefinition->properties['objectArray_3']);
+		$this->assertEquals(new PropertyDefinition('objectArray_4', true, true, true, 'SimpleKlass', false), $classDefinition->properties['objectArray_4']);
+	}
+
+	public function testWithNullableArrayProperties()
+	{
+		$classDefinition = $this->builder->buildFromClass(ArrayPropertiesNullableKlass::class);
+		$this->assertEquals(ArrayPropertiesNullableKlass::class, $classDefinition->name);
+		$this->assertEquals('NorthslopePL\Metassione2\Tests\Fixtures\Klasses', $classDefinition->namespace);
+
+		$this->assertCount(7, $classDefinition->properties);
+
+		$this->assertEquals(new PropertyDefinition('stringArray_1', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, true), $classDefinition->properties['stringArray_1']);
+		$this->assertEquals(new PropertyDefinition('stringArray_2', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, true), $classDefinition->properties['stringArray_2']);
+		$this->assertEquals(new PropertyDefinition('stringArray_3', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, true), $classDefinition->properties['stringArray_3']);
+		//
+		$this->assertEquals(new PropertyDefinition('objectArray_1', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_1']);
+		$this->assertEquals(new PropertyDefinition('objectArray_2', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_2']);
+		$this->assertEquals(new PropertyDefinition('objectArray_3', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_3']);
+		$this->assertEquals(new PropertyDefinition('objectArray_4', true, true, true, 'SimpleKlass', true), $classDefinition->properties['objectArray_4']);
+	}
+
 }
