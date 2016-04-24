@@ -1,6 +1,7 @@
 <?php
 namespace NorthslopePL\Metassione2\Metadata;
 
+use LogicException;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -228,7 +229,11 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 		}
 
 		$fullyQualifiedClassName = $reflectionProperty->getDeclaringClass()->getNamespaceName() . '\\' . $classname;
-		return $fullyQualifiedClassName;
-		// FIXME czy klasa istnieje?
+
+		if (class_exists($fullyQualifiedClassName, true)) {
+			return $fullyQualifiedClassName;
+		} else {
+			throw new LogicException(sprintf('Class %s (%s) not found for property %s::%s', $classname, $fullyQualifiedClassName, $reflectionProperty->getDeclaringClass()->getName(), $reflectionProperty->getName()));
+		}
 	}
 }

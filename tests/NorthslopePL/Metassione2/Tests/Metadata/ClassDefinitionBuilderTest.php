@@ -1,6 +1,7 @@
 <?php
 namespace NorthslopePL\Metassione2\Tests\Metadata;
 
+use LogicException;
 use NorthslopePL\Metassione2\Metadata\ClassDefinition;
 use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
 use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
@@ -14,6 +15,7 @@ use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\EmptyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SubNamespace\OtherSimpleKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\UndefinedTypeKlass;
 use PHPUnit_Framework_TestCase;
 
@@ -168,4 +170,13 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new PropertyDefinition('undefinedProperty_1', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['undefinedProperty_1']);
 	}
 
+	public function testWithNotFoundClassProperty()
+	{
+		$this->setExpectedException(
+			LogicException::class,
+			'Class Foo (NorthslopePL\Metassione2\Tests\Fixtures\Klasses\Foo) not found for property NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass::fooValue'
+		);
+
+		$this->builder->buildFromClass(TypeNotFoundKlass::class);
+	}
 }
