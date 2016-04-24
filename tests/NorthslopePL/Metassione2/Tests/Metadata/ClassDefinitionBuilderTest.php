@@ -14,6 +14,7 @@ use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\EmptyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SubNamespace\OtherSimpleKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\UndefinedTypeKlass;
 use PHPUnit_Framework_TestCase;
 
 class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
@@ -153,6 +154,18 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new PropertyDefinition('objectArray_2', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_2']);
 		$this->assertEquals(new PropertyDefinition('objectArray_3', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_3']);
 		$this->assertEquals(new PropertyDefinition('objectArray_4', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_4']);
+	}
+
+	public function testWithUndefinedPropertyType()
+	{
+		$classDefinition = $this->builder->buildFromClass(UndefinedTypeKlass::class);
+		$this->assertEquals(UndefinedTypeKlass::class, $classDefinition->name);
+
+		$this->assertCount(3, $classDefinition->properties);
+
+		$this->assertEquals(new PropertyDefinition('undefinedProperty_1', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['undefinedProperty_1']);
+		$this->assertEquals(new PropertyDefinition('undefinedProperty_1', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['undefinedProperty_1']);
+		$this->assertEquals(new PropertyDefinition('undefinedProperty_1', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['undefinedProperty_1']);
 	}
 
 }
