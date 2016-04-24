@@ -84,7 +84,8 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 			if ($this->isBasicType($firstConcreteTypeSpecification)) {
 				return new PropertyDefinition($reflectionProperty->getName(), true, false, false, $firstConcreteTypeSpecification, $typeIsNullable);
 			} else {
-				return new PropertyDefinition($reflectionProperty->getName(), true, true, false, $firstConcreteTypeSpecification, $typeIsNullable);
+				$classname = $this->buildClassnameForType($firstConcreteTypeSpecification, $reflectionProperty);
+				return new PropertyDefinition($reflectionProperty->getName(), true, true, false, $classname, $typeIsNullable);
 			}
 		}
 	}
@@ -126,7 +127,8 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 		if ($this->isBasicType($type)) {
 			return new PropertyDefinition($reflectionProperty->getName(), true, false, true, $type, $typeIsNullable);
 		} else {
-			return new PropertyDefinition($reflectionProperty->getName(), true, true, true, $type, $typeIsNullable);
+			$classname = $this->buildClassnameForType($type, $reflectionProperty);
+			return new PropertyDefinition($reflectionProperty->getName(), true, true, true, $classname, $typeIsNullable);
 		}
 	}
 
@@ -214,5 +216,19 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 		//
 		// are nullable
 		return in_array('null', $typeSpecifications) || in_array('NULL', $typeSpecifications);
+	}
+
+	private function buildClassnameForType($classname, ReflectionProperty $reflectionProperty)
+	{
+		$classname = ltrim($classname, '\\'); // classnames are written as: "\Foo\Bar" not "Foo\Bar"
+		if (class_exists($classname, true)) {
+			// Fully qualified classname
+			// or classname without namespace
+			return $classname;
+		}
+
+		$fullyQualifiedClassName = $reflectionProperty->getDeclaringClass()->getNamespaceName() . '\\' . $classname;
+		return $fullyQualifiedClassName;
+		// FIXME czy klasa istnieje?
 	}
 }

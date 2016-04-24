@@ -8,9 +8,11 @@ use NorthslopePL\Metassione2\Metadata\PropertyDefinition;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ArrayPropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ArrayPropertiesNullableKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesWithNullsKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ClassTypesTypePropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\EmptyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SubNamespace\OtherSimpleKlass;
 use PHPUnit_Framework_TestCase;
 
 class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
@@ -74,6 +76,29 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new PropertyDefinition('nullValue', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['nullValue']);
 	}
 
+	public function testClassWithClassTypeProperties()
+	{
+		$classDefinition = $this->builder->buildFromClass(ClassTypesTypePropertiesKlass::class);
+		$this->assertEquals(ClassTypesTypePropertiesKlass::class, $classDefinition->name);
+		$this->assertEquals('NorthslopePL\Metassione2\Tests\Fixtures\Klasses', $classDefinition->namespace);
+
+		$this->assertCount(4, $classDefinition->properties);
+
+		// Fully Qualified Class name
+		$this->assertEquals(new PropertyDefinition('propertyA', true, true, false, SimpleKlass::class, false), $classDefinition->properties['propertyA']);
+		// not Fully Qualified Class name
+		$this->assertEquals(new PropertyDefinition('propertyB', true, true, false, SimpleKlass::class, false), $classDefinition->properties['propertyB']);
+
+		//
+		//
+		//
+
+		// Fully Qualified Class name
+		$this->assertEquals(new PropertyDefinition('propertyM', true, true, false, OtherSimpleKlass::class, false), $classDefinition->properties['propertyM']);
+		// partialy Fully Qualified Class name
+		$this->assertEquals(new PropertyDefinition('propertyO', true, true, false, OtherSimpleKlass::class, false), $classDefinition->properties['propertyO']);
+	}
+
 	public function testWithArrayProperties()
 	{
 		$classDefinition = $this->builder->buildFromClass(ArrayPropertiesKlass::class);
@@ -89,7 +114,7 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new PropertyDefinition('objectArray_1', true, true, true, SimpleKlass::class, false), $classDefinition->properties['objectArray_1']);
 		$this->assertEquals(new PropertyDefinition('objectArray_2', true, true, true, SimpleKlass::class, false), $classDefinition->properties['objectArray_2']);
 		$this->assertEquals(new PropertyDefinition('objectArray_3', true, true, true, SimpleKlass::class, false), $classDefinition->properties['objectArray_3']);
-		$this->assertEquals(new PropertyDefinition('objectArray_4', true, true, true, 'SimpleKlass', false), $classDefinition->properties['objectArray_4']);
+		$this->assertEquals(new PropertyDefinition('objectArray_4', true, true, true, SimpleKlass::class, false), $classDefinition->properties['objectArray_4']);
 	}
 
 	public function testWithNullableArrayProperties()
@@ -107,7 +132,7 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new PropertyDefinition('objectArray_1', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_1']);
 		$this->assertEquals(new PropertyDefinition('objectArray_2', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_2']);
 		$this->assertEquals(new PropertyDefinition('objectArray_3', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_3']);
-		$this->assertEquals(new PropertyDefinition('objectArray_4', true, true, true, 'SimpleKlass', true), $classDefinition->properties['objectArray_4']);
+		$this->assertEquals(new PropertyDefinition('objectArray_4', true, true, true, SimpleKlass::class, true), $classDefinition->properties['objectArray_4']);
 	}
 
 }
