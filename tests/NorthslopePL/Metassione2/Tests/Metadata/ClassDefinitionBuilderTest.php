@@ -8,6 +8,7 @@ use NorthslopePL\Metassione2\Metadata\PropertyDefinition;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ArrayPropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ArrayPropertiesNullableKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesWithNullsKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ClassTypesTypeNullablePropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ClassTypesTypePropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\EmptyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesKlass;
@@ -90,13 +91,32 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(new PropertyDefinition('propertyB', true, true, false, SimpleKlass::class, false), $classDefinition->properties['propertyB']);
 
 		//
-		//
-		//
 
 		// Fully Qualified Class name
 		$this->assertEquals(new PropertyDefinition('propertyM', true, true, false, OtherSimpleKlass::class, false), $classDefinition->properties['propertyM']);
 		// partialy Fully Qualified Class name
 		$this->assertEquals(new PropertyDefinition('propertyO', true, true, false, OtherSimpleKlass::class, false), $classDefinition->properties['propertyO']);
+	}
+
+	public function testClassWithClassTypeNullableProperties()
+	{
+		$classDefinition = $this->builder->buildFromClass(ClassTypesTypeNullablePropertiesKlass::class);
+		$this->assertEquals(ClassTypesTypeNullablePropertiesKlass::class, $classDefinition->name);
+		$this->assertEquals('NorthslopePL\Metassione2\Tests\Fixtures\Klasses', $classDefinition->namespace);
+
+		$this->assertCount(4, $classDefinition->properties);
+
+		// Fully Qualified Class name
+		$this->assertEquals(new PropertyDefinition('propertyA', true, true, false, SimpleKlass::class, true), $classDefinition->properties['propertyA']);
+		// not Fully Qualified Class name
+		$this->assertEquals(new PropertyDefinition('propertyB', true, true, false, SimpleKlass::class, true), $classDefinition->properties['propertyB']);
+
+		//
+
+		// Fully Qualified Class name
+		$this->assertEquals(new PropertyDefinition('propertyM', true, true, false, OtherSimpleKlass::class, true), $classDefinition->properties['propertyM']);
+		// partialy Fully Qualified Class name
+		$this->assertEquals(new PropertyDefinition('propertyO', true, true, false, OtherSimpleKlass::class, true), $classDefinition->properties['propertyO']);
 	}
 
 	public function testWithArrayProperties()
