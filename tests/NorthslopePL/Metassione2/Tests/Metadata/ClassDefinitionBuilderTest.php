@@ -16,6 +16,7 @@ use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SubNamespace\OtherSimpleKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass2;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\UndefinedTypeKlass;
 use PHPUnit_Framework_TestCase;
 
@@ -178,5 +179,16 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		);
 
 		$this->builder->buildFromClass(TypeNotFoundKlass::class);
+	}
+
+	public function testWithNotFoundClassProperty2()
+	{
+		$this->setExpectedException(
+			LogicException::class,
+			'Class NorthslopePL\Metassione2\Tests\Fixtures\Klasses\Foo (NorthslopePL\Metassione2\Tests\Fixtures\Klasses\NorthslopePL\Metassione2\Tests\Fixtures\Klasses\Foo) not found for property NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass2::fooValue'
+			// TODO duplicated namespaces in the error message
+		);
+
+		$this->builder->buildFromClass(TypeNotFoundKlass2::class);
 	}
 }
