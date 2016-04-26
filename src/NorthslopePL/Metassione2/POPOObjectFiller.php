@@ -3,6 +3,7 @@ namespace NorthslopePL\Metassione2;
 
 use NorthslopePL\Metassione2\Metadata\ClassDefinition;
 use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
+use ReflectionProperty;
 
 class POPOObjectFiller
 {
@@ -77,11 +78,7 @@ class POPOObjectFiller
 
 				} else {
 
-					if ($hasData) {
-						$reflectionProperty->setValue($targetObject, $dataForProperty);
-					} else {
-						// we dont have data for this property - so dont change it - default value will be used
-					}
+					$this->setBasicValue($hasData, $reflectionProperty, $targetObject, $dataForProperty);
 				}
 			}
 		}
@@ -95,5 +92,20 @@ class POPOObjectFiller
 	{
 		// FIXME class exists?
 		return new $classname();
+	}
+
+	/**
+	 * @param boolean $hasData
+	 * @param ReflectionProperty $reflectionProperty
+	 * @param object $targetObject
+	 * @param mixed $value
+	 */
+	private function setBasicValue($hasData, ReflectionProperty $reflectionProperty, $targetObject, $value)
+	{
+		if ($hasData) {
+			$reflectionProperty->setValue($targetObject, $value);
+		} else {
+			// we dont have data for this property - so dont change it - default value will be used
+		}
 	}
 }
