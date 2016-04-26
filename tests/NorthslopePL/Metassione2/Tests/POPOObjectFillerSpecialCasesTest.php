@@ -12,7 +12,7 @@ use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\OnePropertyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass;
 use stdClass;
 
-class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
+class POPOObjectFillerSpecialCasesTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var POPOObjectFiller
