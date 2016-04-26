@@ -21,7 +21,6 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->markTestSkipped();
 		$this->objectFiller = new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()));
 	}
 
@@ -63,7 +62,6 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 
 	public function testFillingPropertiesOfParentClasses()
 	{
-		$this->markTestIncomplete(); // FIXME
 		$sourceData = new stdClass();
 		$sourceData->childProperty = (object)array('value' => 1);
 		$sourceData->parentProperty = (object)array('value' => 2);
