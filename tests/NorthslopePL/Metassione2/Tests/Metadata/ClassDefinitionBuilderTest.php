@@ -149,14 +149,14 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 
 		$this->assertCount(7, $classDefinition->properties);
 
-		$this->assertEquals(new PropertyDefinition('stringArray_1', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, true, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'stringArray_1')), $classDefinition->properties['stringArray_1']);
-		$this->assertEquals(new PropertyDefinition('stringArray_2', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, true, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'stringArray_2')), $classDefinition->properties['stringArray_2']);
-		$this->assertEquals(new PropertyDefinition('stringArray_3', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, true, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'stringArray_3')), $classDefinition->properties['stringArray_3']);
+		$this->assertEquals(new PropertyDefinition('stringArray_1', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, false, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'stringArray_1')), $classDefinition->properties['stringArray_1']);
+		$this->assertEquals(new PropertyDefinition('stringArray_2', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, false, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'stringArray_2')), $classDefinition->properties['stringArray_2']);
+		$this->assertEquals(new PropertyDefinition('stringArray_3', true, false, true, PropertyDefinition::BASIC_TYPE_STRING, false, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'stringArray_3')), $classDefinition->properties['stringArray_3']);
 		//
-		$this->assertEquals(new PropertyDefinition('objectArray_1', true, true, true, SimpleKlass::class, true, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'objectArray_1')), $classDefinition->properties['objectArray_1']);
-		$this->assertEquals(new PropertyDefinition('objectArray_2', true, true, true, SimpleKlass::class, true, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'objectArray_2')), $classDefinition->properties['objectArray_2']);
-		$this->assertEquals(new PropertyDefinition('objectArray_3', true, true, true, SimpleKlass::class, true, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'objectArray_3')), $classDefinition->properties['objectArray_3']);
-		$this->assertEquals(new PropertyDefinition('objectArray_4', true, true, true, SimpleKlass::class, true, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'objectArray_4')), $classDefinition->properties['objectArray_4']);
+		$this->assertEquals(new PropertyDefinition('objectArray_1', true, true, true, SimpleKlass::class, false, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'objectArray_1')), $classDefinition->properties['objectArray_1']);
+		$this->assertEquals(new PropertyDefinition('objectArray_2', true, true, true, SimpleKlass::class, false, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'objectArray_2')), $classDefinition->properties['objectArray_2']);
+		$this->assertEquals(new PropertyDefinition('objectArray_3', true, true, true, SimpleKlass::class, false, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'objectArray_3')), $classDefinition->properties['objectArray_3']);
+		$this->assertEquals(new PropertyDefinition('objectArray_4', true, true, true, SimpleKlass::class, false, new \ReflectionProperty(ArrayPropertiesNullableKlass::class, 'objectArray_4')), $classDefinition->properties['objectArray_4']);
 	}
 
 	public function testWithUndefinedPropertyType()

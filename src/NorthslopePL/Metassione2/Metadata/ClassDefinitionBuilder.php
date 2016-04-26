@@ -80,7 +80,8 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 
 		// only first defined type is taken
 		if ($this->typeIsArray($typeSpecifications)) {
-			return $this->buildPropertyDefinitionForArray($reflectionProperty, $firstConcreteTypeSpecification, $typeIsNullable); // WTF teraz to
+			// array cannot be set to null, if empty - then set to empty array
+			return $this->buildPropertyDefinitionForArray($reflectionProperty, $firstConcreteTypeSpecification, false);
 		} else {
 			if ($this->isBasicType($firstConcreteTypeSpecification)) {
 				return new PropertyDefinition($reflectionProperty->getName(), true, false, false, $firstConcreteTypeSpecification, $typeIsNullable, $reflectionProperty);
