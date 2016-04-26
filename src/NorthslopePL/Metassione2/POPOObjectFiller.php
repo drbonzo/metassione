@@ -3,7 +3,6 @@ namespace NorthslopePL\Metassione2;
 
 use NorthslopePL\Metassione2\Metadata\ClassDefinition;
 use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
-use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
 
 class POPOObjectFiller
 {
@@ -12,9 +11,9 @@ class POPOObjectFiller
 	 */
 	private $classDefinitionBuilder;
 
-	public function __construct()
+	public function __construct(ClassDefinitionBuilder $classDefinitionBuilder)
 	{
-		$this->classDefinitionBuilder = new ClassDefinitionBuilder(new ClassPropertyFinder()); // FIXME DI
+		$this->classDefinitionBuilder = $classDefinitionBuilder;
 	}
 
 	/**

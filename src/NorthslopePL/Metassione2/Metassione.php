@@ -1,6 +1,8 @@
 <?php
 namespace NorthslopePL\Metassione2;
 
+use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
+use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
 use stdClass;
 
 class Metassione
@@ -24,7 +26,7 @@ class Metassione
 	public function __construct(POPOConverter $converter = null, POPOObjectFiller $filler = null)
 	{
 		$this->converter = $converter ? $converter : new POPOConverter();
-		$this->filler = $filler ? $filler : new POPOObjectFiller();
+		$this->filler = $filler ? $filler : new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()));
 	}
 
 	/**

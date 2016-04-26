@@ -1,6 +1,8 @@
 <?php
 namespace NorthslopePL\Metassione2\Tests;
 
+use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
+use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione2\POPOObjectFiller;
 use NorthslopePL\Metassione2\Tests\Fixtures\Blog\Author;
 use NorthslopePL\Metassione2\Tests\Fixtures\Blog\Blog;
@@ -26,7 +28,7 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->objectFiller = new POPOObjectFiller();
+		$this->objectFiller = new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()));
 	}
 
 	public function testFillingEmptyKlass()
