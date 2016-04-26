@@ -29,25 +29,6 @@ class POPOObjectFillerTest extends \PHPUnit_Framework_TestCase
 		$this->objectFiller = new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()));
 	}
 
-	public function testFillingObjectTypedProperty()
-	{
-		$rawBlog = new stdClass();
-		$rawAuthor = new stdClass();
-		$rawAuthor->name = 'John';
-		$rawBlog->author = $rawAuthor;
-
-		$actualBlog = new Blog();
-		$this->objectFiller->fillObjectWithRawData($actualBlog, $rawBlog);
-
-		$expectedBlog = new Blog();
-		$expectedAuthor = new Author();
-		$expectedAuthor->setName('John');
-		$expectedBlog->setAuthor($expectedAuthor);
-		$expectedBlog->setPosts([]);
-
-		$this->assertEquals($expectedBlog, $actualBlog);
-	}
-
 	public function testFillingArrayOfObjectsProperty()
 	{
 		$rawBlog = new stdClass();

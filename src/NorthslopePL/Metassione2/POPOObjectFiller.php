@@ -40,9 +40,9 @@ class POPOObjectFiller
 				$reflectionProperty = $propertyDefinition->getReflectionProperty();
 				$reflectionProperty->setAccessible(true);
 
-				$hasData = property_exists($rawData, $reflectionProperty->getName());
+				$hasData = is_object($rawData) && property_exists($rawData, $reflectionProperty->getName());
 				$dataForProperty = $hasData ? $rawData->{$reflectionProperty->getName()} : null;
-				
+
 				if ($propertyDefinition->getIsObject()) {
 
 					// FIXME if ! hasData = use empty object or null (if alloed)
@@ -59,9 +59,20 @@ class POPOObjectFiller
 
 					} else {
 
-						$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
-						$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $dataForProperty);
-						$reflectionProperty->setValue($targetObject, $targetObjectForProperty);
+						if ($hasData) {
+							$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
+							$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $dataForProperty);
+							$reflectionProperty->setValue($targetObject, $targetObjectForProperty);
+						} else {
+							// no data for property
+							if ($propertyDefinition->getIsNullable()) {
+								$reflectionProperty->setValue($targetObject, null);
+							} else {
+								// empty object
+								$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
+								$reflectionProperty->setValue($targetObject, $targetObjectForProperty);
+							}
+						}
 					}
 
 				} else {
