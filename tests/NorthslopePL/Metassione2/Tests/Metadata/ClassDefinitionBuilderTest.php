@@ -167,8 +167,8 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 		$this->assertCount(3, $classDefinition->properties);
 
 		$this->assertEquals(new PropertyDefinition('undefinedProperty_1', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['undefinedProperty_1']);
-		$this->assertEquals(new PropertyDefinition('undefinedProperty_1', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['undefinedProperty_1']);
-		$this->assertEquals(new PropertyDefinition('undefinedProperty_1', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['undefinedProperty_1']);
+		$this->assertEquals(new PropertyDefinition('undefinedProperty_2', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['undefinedProperty_2']);
+		$this->assertEquals(new PropertyDefinition('undefinedProperty_3', false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true), $classDefinition->properties['undefinedProperty_3']);
 	}
 
 	public function testWithNotFoundClassProperty()
