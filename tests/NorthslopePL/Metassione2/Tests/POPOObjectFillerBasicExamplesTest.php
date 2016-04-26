@@ -4,7 +4,7 @@ namespace NorthslopePL\Metassione2\Tests;
 use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
 use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione2\POPOObjectFiller;
-use NorthslopePL\Metassione2\Tests\Fixtures\Filler\OnePropertyKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Filler\TwoPropertyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Filler\OnlyDefinedBasicTypesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Filler\EmptyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Filler\UndefinedTypeKlass;
@@ -48,12 +48,13 @@ class POPOObjectFillerBasicExamplesTest extends \PHPUnit_Framework_TestCase
 
 	public function testFillingKlassWithPropertiesWithNoData()
 	{
-		$targetObject = new OnePropertyKlass();
+		$targetObject = new TwoPropertyKlass();
 		$rawData = new stdClass();
 
 		$this->objectFiller->fillObjectWithRawData($targetObject, $rawData);
 
-		$expectedObject = new OnePropertyKlass();
+		$expectedObject = new TwoPropertyKlass();
+		$expectedObject->foo2 = 'defaultValue';
 		$this->assertEquals($expectedObject, $targetObject, 'all properties have default values');
 	}
 

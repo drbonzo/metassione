@@ -40,10 +40,12 @@ class POPOObjectFiller
 				$reflectionProperty = $propertyDefinition->getReflectionProperty();
 				$reflectionProperty->setAccessible(true);
 
-				$dataForProperty = isset($rawData->{$reflectionProperty->getName()}) ? $rawData->{$reflectionProperty->getName()} : null;
+				$hasData = property_exists($rawData, $reflectionProperty->getName());
+				$dataForProperty = $hasData ? $rawData->{$reflectionProperty->getName()} : null;
 
 				if ($propertyDefinition->getIsObject()) {
 
+					// FIXME if ! hasData = use empty object or null (if alloed)
 					$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
 					if ($propertyDefinition->getIsArray()) {
 
@@ -58,18 +60,18 @@ class POPOObjectFiller
 					} else {
 
 						$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
-
 						$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $dataForProperty);
-
 						$reflectionProperty->setValue($targetObject, $targetObjectForProperty);
-
 					}
 
 				} else {
 
-					$reflectionProperty->setValue($targetObject, $dataForProperty);
+					if ($hasData) {
+						$reflectionProperty->setValue($targetObject, $dataForProperty);
+					} else {
+						// we dont have data for this property - so dont change it - default value will be used
+					}
 				}
-
 			}
 		}
 	}
