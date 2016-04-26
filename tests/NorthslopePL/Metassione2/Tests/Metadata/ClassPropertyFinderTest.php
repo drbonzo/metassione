@@ -2,10 +2,11 @@
 namespace NorthslopePL\Metassione2\Tests\Metadata;
 
 use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
+use NorthslopePL\Metassione2\Tests\Fixtures\Converter\SimpleKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ChildKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\EmptyKlass;
-use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass;
 use PHPUnit_Framework_TestCase;
+use ReflectionClass;
 use ReflectionProperty;
 
 class ClassPropertyFinderTest extends PHPUnit_Framework_TestCase
@@ -22,7 +23,7 @@ class ClassPropertyFinderTest extends PHPUnit_Framework_TestCase
 
 	public function testClassWithoutProperties()
 	{
-		$reflectionClass = new \ReflectionClass(EmptyKlass::class);
+		$reflectionClass = new ReflectionClass(EmptyKlass::class);
 		$properties = $this->classPropertyFinder->findProperties($reflectionClass);
 
 		$this->assertEquals([], $properties);
@@ -30,7 +31,7 @@ class ClassPropertyFinderTest extends PHPUnit_Framework_TestCase
 
 	public function testClassWithoutParentClass()
 	{
-		$reflectionClass = new \ReflectionClass(SimpleKlass::class);
+		$reflectionClass = new ReflectionClass(SimpleKlass::class);
 		$properties = $this->classPropertyFinder->findProperties($reflectionClass);
 
 		$this->assertCount(5, $properties);
@@ -47,7 +48,7 @@ class ClassPropertyFinderTest extends PHPUnit_Framework_TestCase
 
 	public function testClassWithParentAndGrandparentClass()
 	{
-		$reflectionClass = new \ReflectionClass(ChildKlass::class);
+		$reflectionClass = new ReflectionClass(ChildKlass::class);
 		$properties = $this->classPropertyFinder->findProperties($reflectionClass);
 
 		$this->assertCount(4, $properties);

@@ -3,11 +3,11 @@ namespace NorthslopePL\Metassione2\Tests;
 
 use NorthslopePL\Metassione2\POPOConverter;
 use NorthslopePL\Metassione2\Tests\Fixtures\Blog\TestBlogBuilder;
-use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ArrayedKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Converter\ArrayedKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Converter\SimpleKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ChildKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\EmptyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\OnePropertyKlass;
-use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass;
 use PHPUnit_Framework_TestCase;
 
 class POPOConverterTest extends PHPUnit_Framework_TestCase

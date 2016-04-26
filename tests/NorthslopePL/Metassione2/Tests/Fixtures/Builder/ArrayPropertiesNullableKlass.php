@@ -1,5 +1,5 @@
 <?php
-namespace NorthslopePL\Metassione2\Tests\Fixtures\Klasses;
+namespace NorthslopePL\Metassione2\Tests\Fixtures\Builder;
 
 class ArrayPropertiesNullableKlass
 {
@@ -19,17 +19,17 @@ class ArrayPropertiesNullableKlass
 	public $stringArray_3 = [];
 
 	/**
-	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass[]|null
+	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Builder\SimpleKlass[]|null
 	 */
 	public $objectArray_1 = [];
 
 	/**
-	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass[]|array|null
+	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Builder\SimpleKlass[]|array|null
 	 */
 	public $objectArray_2 = [];
 
 	/**
-	 * @var array|\NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass[]|null
+	 * @var array|\NorthslopePL\Metassione2\Tests\Fixtures\Builder\SimpleKlass[]|null
 	 */
 	public $objectArray_3 = [];
 

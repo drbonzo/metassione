@@ -1,5 +1,5 @@
 <?php
-namespace NorthslopePL\Metassione2\Tests\Fixtures\Klasses;
+namespace NorthslopePL\Metassione2\Tests\Fixtures\Converter;
 
 class ArrayedKlass
 {

@@ -1,5 +1,5 @@
 <?php
-namespace NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SubNamespace;
+namespace NorthslopePL\Metassione2\Tests\Fixtures\Builder\SubNamespace;
 
 class OtherSimpleKlass
 {

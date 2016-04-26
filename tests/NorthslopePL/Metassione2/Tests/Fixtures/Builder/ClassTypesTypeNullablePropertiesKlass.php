@@ -1,10 +1,10 @@
 <?php
-namespace NorthslopePL\Metassione2\Tests\Fixtures\Klasses;
+namespace NorthslopePL\Metassione2\Tests\Fixtures\Builder;
 
 class ClassTypesTypeNullablePropertiesKlass
 {
 	/**
-	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass|null
+	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Builder\SimpleKlass|null
 	 */
 	public $propertyA;
 
@@ -14,7 +14,7 @@ class ClassTypesTypeNullablePropertiesKlass
 	public $propertyB;
 
 	/**
-	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SubNamespace\OtherSimpleKlass|null
+	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Builder\SubNamespace\OtherSimpleKlass|null
 	 */
 	public $propertyM;
 

@@ -1,10 +1,10 @@
 <?php
-namespace NorthslopePL\Metassione2\Tests\Fixtures\Klasses;
+namespace NorthslopePL\Metassione2\Tests\Fixtures\Builder;
 
 class ClassTypesTypePropertiesKlass
 {
 	/**
-	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass
+	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Builder\SimpleKlass
 	 */
 	public $propertyA;
 
@@ -14,7 +14,7 @@ class ClassTypesTypePropertiesKlass
 	public $propertyB;
 
 	/**
-	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SubNamespace\OtherSimpleKlass
+	 * @var \NorthslopePL\Metassione2\Tests\Fixtures\Builder\SubNamespace\OtherSimpleKlass
 	 */
 	public $propertyM;
 
