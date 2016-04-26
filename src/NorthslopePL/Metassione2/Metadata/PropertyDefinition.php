@@ -1,6 +1,8 @@
 <?php
 namespace NorthslopePL\Metassione2\Metadata;
 
+use ReflectionProperty;
+
 class PropertyDefinition
 {
 	const BASIC_TYPE_STRING = 'string';
@@ -48,7 +50,12 @@ class PropertyDefinition
 	 */
 	private $isNullable = false;
 
-	public function __construct($name, $isDefined, $isObject, $isArray, $type, $isNullable)
+	/**
+	 * @var ReflectionProperty
+	 */
+	private $reflectionProperty;
+
+	public function __construct($name, $isDefined, $isObject, $isArray, $type, $isNullable, ReflectionProperty $reflectionProperty)
 	{
 		$this->isDefined = $isDefined;
 		$this->isObject = $isObject;
@@ -56,6 +63,7 @@ class PropertyDefinition
 		$this->type = $type;
 		$this->isNullable = $isNullable;
 		$this->name = $name;
+		$this->reflectionProperty = $reflectionProperty;
 	}
 
 	/**
@@ -112,6 +120,22 @@ class PropertyDefinition
 	public function getIsNullable()
 	{
 		return $this->isNullable;
+	}
+
+	/**
+	 * @return ReflectionProperty
+	 */
+	public function getReflectionProperty()
+	{
+		return $this->reflectionProperty;
+	}
+
+	/**
+	 * @param ReflectionProperty $reflectionProperty
+	 */
+	public function setReflectionProperty($reflectionProperty)
+	{
+		$this->reflectionProperty = $reflectionProperty;
 	}
 
 }

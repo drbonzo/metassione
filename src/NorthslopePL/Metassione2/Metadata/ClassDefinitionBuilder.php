@@ -73,7 +73,7 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 		$firstConcreteTypeSpecification = $this->extractConcreteTypeSpecification($typeSpecifications);
 
 		if ($this->propertyTypeIsUndefined($firstConcreteTypeSpecification)) {
-			return new PropertyDefinition($reflectionProperty->getName(), false, false, false, 'null', true);
+			return new PropertyDefinition($reflectionProperty->getName(), false, false, false, 'null', true, $reflectionProperty);
 		}
 
 		$typeIsNullable = $this->isNullable($typeSpecifications);
@@ -83,10 +83,10 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 			return $this->buildPropertyDefinitionForArray($reflectionProperty, $firstConcreteTypeSpecification, $typeIsNullable); // WTF teraz to
 		} else {
 			if ($this->isBasicType($firstConcreteTypeSpecification)) {
-				return new PropertyDefinition($reflectionProperty->getName(), true, false, false, $firstConcreteTypeSpecification, $typeIsNullable);
+				return new PropertyDefinition($reflectionProperty->getName(), true, false, false, $firstConcreteTypeSpecification, $typeIsNullable, $reflectionProperty);
 			} else {
 				$classname = $this->buildClassnameForType($firstConcreteTypeSpecification, $reflectionProperty);
-				return new PropertyDefinition($reflectionProperty->getName(), true, true, false, $classname, $typeIsNullable);
+				return new PropertyDefinition($reflectionProperty->getName(), true, true, false, $classname, $typeIsNullable, $reflectionProperty);
 			}
 		}
 	}
@@ -126,10 +126,10 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 		$type = ltrim($type, '\\'); // remove \ from the beginning
 
 		if ($this->isBasicType($type)) {
-			return new PropertyDefinition($reflectionProperty->getName(), true, false, true, $type, $typeIsNullable);
+			return new PropertyDefinition($reflectionProperty->getName(), true, false, true, $type, $typeIsNullable, $reflectionProperty);
 		} else {
 			$classname = $this->buildClassnameForType($type, $reflectionProperty);
-			return new PropertyDefinition($reflectionProperty->getName(), true, true, true, $classname, $typeIsNullable);
+			return new PropertyDefinition($reflectionProperty->getName(), true, true, true, $classname, $typeIsNullable, $reflectionProperty);
 		}
 	}
 
