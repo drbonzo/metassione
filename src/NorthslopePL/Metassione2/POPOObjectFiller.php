@@ -42,7 +42,7 @@ class POPOObjectFiller
 
 				$hasData = property_exists($rawData, $reflectionProperty->getName());
 				$dataForProperty = $hasData ? $rawData->{$reflectionProperty->getName()} : null;
-
+				
 				if ($propertyDefinition->getIsObject()) {
 
 					// FIXME if ! hasData = use empty object or null (if alloed)

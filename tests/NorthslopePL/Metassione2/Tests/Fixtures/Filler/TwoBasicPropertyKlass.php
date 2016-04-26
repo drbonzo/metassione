@@ -1,7 +1,7 @@
 <?php
 namespace NorthslopePL\Metassione2\Tests\Fixtures\Filler;
 
-class TwoPropertyKlass
+class TwoBasicPropertyKlass
 {
 	/**
 	 * @var string
