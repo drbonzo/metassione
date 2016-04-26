@@ -1,0 +1,16 @@
+<?php
+namespace NorthslopePL\Metassione\Tests\Fixtures\Builder;
+
+class UndefinedTypeKlass
+{
+	/**
+	 * @var
+	 */
+	public $undefinedProperty_1;
+
+	/**
+	 */
+	public $undefinedProperty_2;
+
+	public $undefinedProperty_3;
+}
