@@ -1,5 +1,5 @@
 <?php
-namespace NorthslopePL\Metassione2\Tests\Fixtures\Klasses; // FIXME MOVE_CLASS
+namespace NorthslopePL\Metassione2\Tests\Fixtures\Builder;
 
 class BasicTypesWithNullsKlass
 {

@@ -6,9 +6,9 @@ use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione2\POPOObjectFiller;
 use NorthslopePL\Metassione2\Tests\Fixtures\Blog\Blog;
 use NorthslopePL\Metassione2\Tests\Fixtures\Blog\TestBlogBuilder;
+use NorthslopePL\Metassione2\Tests\Fixtures\Builder\BasicTypesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ChildKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\OnePropertyKlass;
-use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass;
 use stdClass;
 

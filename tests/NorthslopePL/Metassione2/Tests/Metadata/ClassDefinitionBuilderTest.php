@@ -8,6 +8,8 @@ use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione2\Metadata\PropertyDefinition;
 use NorthslopePL\Metassione2\Tests\Fixtures\Builder\ArrayPropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Builder\ArrayPropertiesNullableKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Builder\BasicTypesKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Builder\BasicTypesWithNullsKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Builder\ClassTypesTypeNullablePropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Builder\ClassTypesTypePropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Builder\SimpleKlass;
@@ -15,9 +17,7 @@ use NorthslopePL\Metassione2\Tests\Fixtures\Builder\SubNamespace\OtherSimpleKlas
 use NorthslopePL\Metassione2\Tests\Fixtures\Builder\TypeNotFoundKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Builder\TypeNotFoundKlass2;
 use NorthslopePL\Metassione2\Tests\Fixtures\Builder\UndefinedTypeKlass;
-use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesWithNullsKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\EmptyKlass;
-use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesKlass;
 use PHPUnit_Framework_TestCase;
 use ReflectionProperty;
 
@@ -46,7 +46,7 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		$classDefinition = $this->builder->buildFromClass(BasicTypesKlass::class);
 		$this->assertEquals(BasicTypesKlass::class, $classDefinition->name);
-		$this->assertEquals('NorthslopePL\Metassione2\Tests\Fixtures\Klasses', $classDefinition->namespace);
+		$this->assertEquals('NorthslopePL\Metassione2\Tests\Fixtures\Builder', $classDefinition->namespace);
 
 		$this->assertCount(10, $classDefinition->properties);
 
@@ -66,7 +66,7 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 	{
 		$classDefinition = $this->builder->buildFromClass(BasicTypesWithNullsKlass::class);
 		$this->assertEquals(BasicTypesWithNullsKlass::class, $classDefinition->name);
-		$this->assertEquals('NorthslopePL\Metassione2\Tests\Fixtures\Klasses', $classDefinition->namespace);
+		$this->assertEquals('NorthslopePL\Metassione2\Tests\Fixtures\Builder', $classDefinition->namespace);
 
 		$this->assertCount(10, $classDefinition->properties);
 
