@@ -1,7 +1,7 @@
 <?php
-namespace NorthslopePL\Metassione2\Tests\Fixtures\Klasses;
+namespace NorthslopePL\Metassione2\Tests\Fixtures\Filler;
 
-class BasicTypesOnlyDefinedKlass
+class OnlyDefinedBasicTypesKlass
 {
 	/**
 	 * @var string

@@ -6,6 +6,7 @@ use NorthslopePL\Metassione2\Metadata\ClassDefinition;
 use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
 use NorthslopePL\Metassione2\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione2\Metadata\PropertyDefinition;
+use NorthslopePL\Metassione2\Tests\Fixtures\Builder\UndefinedTypeKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ArrayPropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ArrayPropertiesNullableKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\BasicTypesWithNullsKlass;
@@ -17,7 +18,6 @@ use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SimpleKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\SubNamespace\OtherSimpleKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass2;
-use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\UndefinedTypeKlass;
 use PHPUnit_Framework_TestCase;
 
 class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
