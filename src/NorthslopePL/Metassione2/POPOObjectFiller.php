@@ -43,14 +43,14 @@ class POPOObjectFiller
 				$reflectionProperty->setAccessible(true);
 
 				$hasData = is_object($rawData) && property_exists($rawData, $reflectionProperty->getName());
-				$dataForProperty = $hasData ? $rawData->{$reflectionProperty->getName()} : null;
+				$rawValue = $hasData ? $rawData->{$reflectionProperty->getName()} : null;
 
 				if ($propertyDefinition->getIsObject()) {
 
 					if ($propertyDefinition->getIsArray()) {
 
 						$values = [];
-						foreach ((array)$dataForProperty as $item) {
+						foreach ((array)$rawValue as $item) {
 							$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
 							$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
 							$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $item);
@@ -59,12 +59,12 @@ class POPOObjectFiller
 						$reflectionProperty->setValue($targetObject, $values);
 
 					} else {
-						$this->setObjectValue($hasData, $reflectionProperty, $targetObject, $dataForProperty, $propertyDefinition);
+						$this->setObjectValue($hasData, $reflectionProperty, $targetObject, $rawValue, $propertyDefinition);
 					}
 
 				} else {
 
-					$this->setBasicValue($hasData, $reflectionProperty, $targetObject, $dataForProperty);
+					$this->setBasicValue($hasData, $reflectionProperty, $targetObject, $rawValue);
 				}
 			}
 		}
