@@ -7,6 +7,7 @@ use NorthslopePL\Metassione2\POPOObjectFiller;
 use NorthslopePL\Metassione2\Tests\Fixtures\Blog\Blog;
 use NorthslopePL\Metassione2\Tests\Fixtures\Blog\TestBlogBuilder;
 use NorthslopePL\Metassione2\Tests\Fixtures\Builder\BasicTypesKlass;
+use NorthslopePL\Metassione2\Tests\Fixtures\Filler\PrivateAndProtectedPropertiesKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\ChildKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\OnePropertyKlass;
 use NorthslopePL\Metassione2\Tests\Fixtures\Klasses\TypeNotFoundKlass;
@@ -22,6 +23,22 @@ class POPOObjectFillerSpecialCasesTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->objectFiller = new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()));
+	}
+
+	public function testFillingPrivateAndProtectedProperties()
+	{
+		$targetObject = new PrivateAndProtectedPropertiesKlass();
+
+		$rawData = new stdClass();
+		$rawData->privateValue = 'aaa';
+		$rawData->protectedValue = 'bbb';
+		$rawData->publicValue = 'ccc';
+
+		$this->objectFiller->fillObjectWithRawData($targetObject, $rawData);
+
+		$this->assertEquals('aaa', $targetObject->getPrivateValue());
+		$this->assertEquals('bbb', $targetObject->getProtectedValue());
+		$this->assertEquals('ccc', $targetObject->getPublicValue());
 	}
 
 	public function testComplexObjectHierarchyIsFilledWithComplexStdClassesAndArrays()
