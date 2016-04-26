@@ -3,6 +3,7 @@ namespace NorthslopePL\Metassione2;
 
 use NorthslopePL\Metassione2\Metadata\ClassDefinition;
 use NorthslopePL\Metassione2\Metadata\ClassDefinitionBuilder;
+use NorthslopePL\Metassione2\Metadata\PropertyDefinition;
 use ReflectionProperty;
 
 class POPOObjectFiller
@@ -46,12 +47,11 @@ class POPOObjectFiller
 
 				if ($propertyDefinition->getIsObject()) {
 
-					// FIXME if ! hasData = use empty object or null (if alloed)
-					$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
 					if ($propertyDefinition->getIsArray()) {
 
 						$values = [];
 						foreach ((array)$dataForProperty as $item) {
+							$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
 							$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
 							$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $item);
 							$values[] = $targetObjectForProperty;
@@ -59,21 +59,7 @@ class POPOObjectFiller
 						$reflectionProperty->setValue($targetObject, $values);
 
 					} else {
-
-						if ($hasData) {
-							$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
-							$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $dataForProperty);
-							$reflectionProperty->setValue($targetObject, $targetObjectForProperty);
-						} else {
-							// no data for property
-							if ($propertyDefinition->getIsNullable()) {
-								$reflectionProperty->setValue($targetObject, null);
-							} else {
-								// empty object
-								$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
-								$reflectionProperty->setValue($targetObject, $targetObjectForProperty);
-							}
-						}
+						$this->setObjectValue($hasData, $reflectionProperty, $targetObject, $dataForProperty, $propertyDefinition);
 					}
 
 				} else {
@@ -107,5 +93,33 @@ class POPOObjectFiller
 		} else {
 			// we dont have data for this property - so dont change it - default value will be used
 		}
+	}
+
+	/**
+	 * @param boolean $hasData
+	 * @param ReflectionProperty $reflectionProperty
+	 * @param object $targetObject
+	 * @param mixed $dataForProperty
+	 * @param PropertyDefinition $propertyDefinition
+	 */
+	private function setObjectValue($hasData, ReflectionProperty $reflectionProperty, $targetObject, $dataForProperty, PropertyDefinition $propertyDefinition)
+	{
+		$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
+
+		if ($hasData) {
+			$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
+			$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $dataForProperty);
+			$reflectionProperty->setValue($targetObject, $targetObjectForProperty);
+		} else {
+			// no data for property
+			if ($propertyDefinition->getIsNullable()) {
+				$reflectionProperty->setValue($targetObject, null);
+			} else {
+				// empty object
+				$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
+				$reflectionProperty->setValue($targetObject, $targetObjectForProperty);
+			}
+		}
+
 	}
 }
