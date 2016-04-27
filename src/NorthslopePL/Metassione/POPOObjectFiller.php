@@ -64,7 +64,11 @@ class POPOObjectFiller
 
 				} else {
 
-					$this->setBasicValue($hasData, $reflectionProperty, $targetObject, $rawValue);
+					if (is_object($rawValue) || is_array($rawValue)) {
+						// dont set - use default values
+					} else {
+						$this->setBasicValue($hasData, $reflectionProperty, $targetObject, $rawValue);
+					}
 				}
 			}
 		}

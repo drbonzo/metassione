@@ -6,36 +6,36 @@ class BasicTypesKlass
 	/**
 	 * @var string
 	 */
-	public $stringValue;
+	public $stringValue = 'defaultValue';
 
 	/**
 	 * @var integer
 	 */
-	public $integerValue;
+	public $integerValue = 100;
 
 	/**
 	 * @var int
 	 */
-	public $intValue;
+	public $intValue = 200;
 
 	/**
 	 * @var float
 	 */
-	public $floatValue;
+	public $floatValue = 300.003;
 
 	/**
 	 * @var double
 	 */
-	public $doubleValue;
+	public $doubleValue = 400.004;
 
 	/**
 	 * @var boolean
 	 */
-	public $booleanValue;
+	public $booleanValue = false;
 
 	/**
 	 * @var bool
 	 */
-	public $boolValue;
+	public $boolValue = false;
 
 }
