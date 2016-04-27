@@ -38,19 +38,4 @@ class BasicTypesWithNullsKlass
 	 */
 	public $boolValue;
 
-	/**
-	 * @var void|null
-	 */
-	public $voidValue;
-
-	/**
-	 * @var mixed|null
-	 */
-	public $mixedValue;
-
-	/**
-	 * @var null|null
-	 */
-	public $nullValue;
-
 }
