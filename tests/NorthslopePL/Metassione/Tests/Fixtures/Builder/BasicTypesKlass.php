@@ -38,19 +38,4 @@ class BasicTypesKlass
 	 */
 	public $boolValue;
 
-	/**
-	 * @var void
-	 */
-	public $voidValue;
-
-	/**
-	 * @var mixed
-	 */
-	public $mixedValue;
-
-	/**
-	 * @var null
-	 */
-	public $nullValue;
-
 }
