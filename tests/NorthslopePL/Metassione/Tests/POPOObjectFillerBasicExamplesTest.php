@@ -4,6 +4,7 @@ namespace NorthslopePL\Metassione\Tests;
 use NorthslopePL\Metassione\Metadata\ClassDefinitionBuilder;
 use NorthslopePL\Metassione\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione\POPOObjectFiller;
+use NorthslopePL\Metassione\PropertyValueCaster;
 use NorthslopePL\Metassione\Tests\Fixtures\Filler\TwoBasicPropertyKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Filler\OnlyDefinedBasicTypesKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Filler\EmptyKlass;
@@ -19,7 +20,7 @@ class POPOObjectFillerBasicExamplesTest extends \PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->objectFiller = new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()));
+		$this->objectFiller = new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()), new PropertyValueCaster());
 	}
 
 	public function testFillingEmptyKlass()

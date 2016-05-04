@@ -26,7 +26,7 @@ class Metassione
 	public function __construct(POPOConverter $converter = null, POPOObjectFiller $filler = null)
 	{
 		$this->converter = $converter ? $converter : new POPOConverter();
-		$this->filler = $filler ? $filler : new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()));
+		$this->filler = $filler ? $filler : new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()), new PropertyValueCaster());
 	}
 
 	/**

@@ -4,6 +4,7 @@ namespace NorthslopePL\Metassione\Tests;
 use NorthslopePL\Metassione\Metadata\ClassDefinitionBuilder;
 use NorthslopePL\Metassione\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione\POPOObjectFiller;
+use NorthslopePL\Metassione\PropertyValueCaster;
 use NorthslopePL\Metassione\Tests\Fixtures\Blog\Blog;
 use NorthslopePL\Metassione\Tests\Fixtures\Blog\TestBlogBuilder;
 use NorthslopePL\Metassione\Tests\Fixtures\Builder\BasicTypesKlass;
@@ -22,7 +23,7 @@ class POPOObjectFillerSpecialCasesTest extends \PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->objectFiller = new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()));
+		$this->objectFiller = new POPOObjectFiller(new ClassDefinitionBuilder(new ClassPropertyFinder()), new PropertyValueCaster());
 	}
 
 	public function testFillingPrivateAndProtectedProperties()

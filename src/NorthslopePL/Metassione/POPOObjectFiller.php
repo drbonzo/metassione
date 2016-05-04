@@ -13,9 +13,15 @@ class POPOObjectFiller
 	 */
 	private $classDefinitionBuilder;
 
-	public function __construct(ClassDefinitionBuilder $classDefinitionBuilder)
+	/**
+	 * @var PropertyValueCaster
+	 */
+	private $propertyValueCaster;
+
+	public function __construct(ClassDefinitionBuilder $classDefinitionBuilder, PropertyValueCaster $propertyValueCaster)
 	{
 		$this->classDefinitionBuilder = $classDefinitionBuilder;
+		$this->propertyValueCaster = $propertyValueCaster;
 	}
 
 	/**
@@ -76,7 +82,7 @@ class POPOObjectFiller
 					if (is_array($rawValue)) {
 						$values = [];
 						foreach ($rawValue as $rawValueItem) {
-							$basicValue = $this->getBasicValue(true, $reflectionProperty, $targetObject, $rawValueItem, $propertyDefinition);
+							$basicValue = $this->propertyValueCaster->getBasicValueForProperty($propertyDefinition, $rawValueItem);
 							$values[] = $basicValue;
 						}
 						$reflectionProperty->setValue($targetObject, $values);
@@ -85,7 +91,11 @@ class POPOObjectFiller
 					}
 
 				} else {
-					$basicValue = $this->getBasicValue($hasData, $reflectionProperty, $targetObject, $rawValue, $propertyDefinition);
+					if ($hasData) {
+						$basicValue = $this->propertyValueCaster->getBasicValueForProperty($propertyDefinition, $rawValue);
+					} else {
+						$basicValue = $this->propertyValueCaster->getEmptyBasicValueForProperty($propertyDefinition, $rawValue);
+					}
 					$reflectionProperty->setValue($targetObject, $basicValue);
 				}
 			}
@@ -100,52 +110,6 @@ class POPOObjectFiller
 	{
 		// FIXME class exists?
 		return new $classname();
-	}
-
-	/**
-	 * @param boolean $hasData
-	 * @param ReflectionProperty $reflectionProperty
-	 * @param object $targetObject
-	 * @param mixed $value
-	 * @param PropertyDefinition $propertyDefinition
-	 *
-	 * @return mixed
-	 */
-	private function getBasicValue($hasData, ReflectionProperty $reflectionProperty, $targetObject, $value, PropertyDefinition $propertyDefinition)
-	{
-		if ($hasData) {
-			if ($propertyDefinition->getIsNullable() && $value === null) {
-				return null;
-			} else {
-
-				if ($propertyDefinition->getType() === 'string') {
-					if (is_object($value) || is_array($value)) {
-						return ($propertyDefinition->getIsNullable() ? null : '');
-					} else {
-						return strval($value);
-					}
-				} else {
-					// FIXME
-					return $value;
-				}
-			}
-
-		} else {
-
-			// NULL values when there is no value
-
-			if ($propertyDefinition->getIsNullable()) {
-				return null;
-			} else {
-
-				if ($propertyDefinition->getType() === 'string') {
-					return '';
-				} else {
-					// FIXME
-					return $value;
-				}
-			}
-		}
 	}
 
 	/**
