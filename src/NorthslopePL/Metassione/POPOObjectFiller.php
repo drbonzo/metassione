@@ -37,38 +37,56 @@ class POPOObjectFiller
 	{
 		foreach ($classDefinition->properties as $propertyDefinition) {
 
-			if ($propertyDefinition->getIsDefined()) {
+			$this->processObjectProperty($propertyDefinition, $targetObject, $rawData);
+		}
+	}
 
-				$reflectionProperty = $propertyDefinition->getReflectionProperty();
-				$reflectionProperty->setAccessible(true);
+	private function processObjectProperty(PropertyDefinition $propertyDefinition, $targetObject, $rawData)
+	{
+		if ($propertyDefinition->getIsDefined()) {
 
-				$hasData = is_object($rawData) && property_exists($rawData, $reflectionProperty->getName());
-				$rawValue = $hasData ? $rawData->{$reflectionProperty->getName()} : null;
+			$reflectionProperty = $propertyDefinition->getReflectionProperty();
+			$reflectionProperty->setAccessible(true);
 
-				if ($propertyDefinition->getIsObject()) {
+			$hasData = is_object($rawData) && property_exists($rawData, $reflectionProperty->getName());
+			$rawValue = $hasData ? $rawData->{$reflectionProperty->getName()} : null;
 
-					if ($propertyDefinition->getIsArray()) {
+			if ($propertyDefinition->getIsObject()) {
 
+				if ($propertyDefinition->getIsArray()) {
+
+					// FIXME
+//						$values = [];
+//						foreach ((array)$rawValue as $rawValueItem) {
+//							$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
+//							$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
+//							$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $rawValueItem);
+//							$values[] = $targetObjectForProperty;
+//						}
+//					$reflectionProperty->setValue($targetObject, $values);
+
+				} else {
+					$this->setObjectValue($hasData, $reflectionProperty, $targetObject, $rawValue, $propertyDefinition);
+				}
+
+			} else {
+
+				if ($propertyDefinition->getIsArray()) {
+
+					if (is_array($rawValue)) {
 						$values = [];
-						foreach ((array)$rawValue as $item) {
-							$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
-							$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
-							$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $item);
-							$values[] = $targetObjectForProperty;
+						foreach ($rawValue as $rawValueItem) {
+							$basicValue = $this->getBasicValue(true, $reflectionProperty, $targetObject, $rawValueItem, $propertyDefinition);
+							$values[] = $basicValue;
 						}
 						$reflectionProperty->setValue($targetObject, $values);
-
 					} else {
-						$this->setObjectValue($hasData, $reflectionProperty, $targetObject, $rawValue, $propertyDefinition);
+						$reflectionProperty->setValue($targetObject, []);
 					}
 
 				} else {
-
-					if (is_object($rawValue) || is_array($rawValue)) {
-						// dont set - use default values
-					} else {
-						$this->setBasicValue($hasData, $reflectionProperty, $targetObject, $rawValue);
-					}
+					$basicValue = $this->getBasicValue($hasData, $reflectionProperty, $targetObject, $rawValue, $propertyDefinition);
+					$reflectionProperty->setValue($targetObject, $basicValue);
 				}
 			}
 		}
@@ -89,13 +107,44 @@ class POPOObjectFiller
 	 * @param ReflectionProperty $reflectionProperty
 	 * @param object $targetObject
 	 * @param mixed $value
+	 * @param PropertyDefinition $propertyDefinition
+	 *
+	 * @return mixed
 	 */
-	private function setBasicValue($hasData, ReflectionProperty $reflectionProperty, $targetObject, $value)
+	private function getBasicValue($hasData, ReflectionProperty $reflectionProperty, $targetObject, $value, PropertyDefinition $propertyDefinition)
 	{
 		if ($hasData) {
-			$reflectionProperty->setValue($targetObject, $value);
+			if ($propertyDefinition->getIsNullable() && $value === null) {
+				return null;
+			} else {
+
+				if ($propertyDefinition->getType() === 'string') {
+					if (is_object($value) || is_array($value)) {
+						return ($propertyDefinition->getIsNullable() ? null : '');
+					} else {
+						return strval($value);
+					}
+				} else {
+					// FIXME
+					return $value;
+				}
+			}
+
 		} else {
-			// we dont have data for this property - so dont change it - default value will be used
+
+			// NULL values when there is no value
+
+			if ($propertyDefinition->getIsNullable()) {
+				return null;
+			} else {
+
+				if ($propertyDefinition->getType() === 'string') {
+					return '';
+				} else {
+					// FIXME
+					return $value;
+				}
+			}
 		}
 	}
 
@@ -126,4 +175,5 @@ class POPOObjectFiller
 		}
 
 	}
+
 }
