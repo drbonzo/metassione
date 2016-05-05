@@ -80,11 +80,7 @@ class POPOObjectFiller
 				if ($propertyDefinition->getIsArray()) {
 
 					if (is_array($rawValue)) {
-						$values = [];
-						foreach ($rawValue as $rawValueItem) {
-							$basicValue = $this->propertyValueCaster->getBasicValueForProperty($propertyDefinition, $rawValueItem);
-							$values[] = $basicValue;
-						}
+						$values = $this->propertyValueCaster->getBasicValueForArrayProperty($propertyDefinition, $rawValue);
 						$reflectionProperty->setValue($targetObject, $values);
 					} else {
 						$reflectionProperty->setValue($targetObject, []);
@@ -94,7 +90,7 @@ class POPOObjectFiller
 					if ($hasData) {
 						$basicValue = $this->propertyValueCaster->getBasicValueForProperty($propertyDefinition, $rawValue);
 					} else {
-						$basicValue = $this->propertyValueCaster->getEmptyBasicValueForProperty($propertyDefinition, $rawValue);
+						$basicValue = $this->propertyValueCaster->getEmptyBasicValueForProperty($propertyDefinition);
 					}
 					$reflectionProperty->setValue($targetObject, $basicValue);
 				}

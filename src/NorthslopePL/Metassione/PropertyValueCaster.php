@@ -5,6 +5,11 @@ use NorthslopePL\Metassione\Metadata\PropertyDefinition;
 
 class PropertyValueCaster
 {
+	/**
+	 * @param PropertyDefinition $propertyDefinition
+	 * @param mixed $rawValue
+	 * @return mixed
+	 */
 	public function getBasicValueForProperty(PropertyDefinition $propertyDefinition, $rawValue)
 	{
 		if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_INTEGER) {
@@ -22,6 +27,10 @@ class PropertyValueCaster
 		}
 	}
 
+	/**
+	 * @param PropertyDefinition $propertyDefinition
+	 * @return mixed
+	 */
 	public function getEmptyBasicValueForProperty(PropertyDefinition $propertyDefinition)
 	{
 		if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_INTEGER) {
@@ -29,5 +38,40 @@ class PropertyValueCaster
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * @param PropertyDefinition $propertyDefinition
+	 * @param $rawValue
+	 *
+	 * @return array|mixed[]
+	 */
+	public function getBasicValueForArrayProperty(PropertyDefinition $propertyDefinition, $rawValue)
+	{
+		if (is_array($rawValue)) {
+			$values = [];
+
+			foreach ($rawValue as $rawValueItem) {
+
+				if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_INTEGER) {
+					if (is_numeric($rawValueItem) || is_bool($rawValueItem) || is_string($rawValueItem)) {
+						$values[] = intval($rawValueItem);
+					}
+				}
+			}
+
+			return $values;
+		} else {
+			return [];
+		}
+	}
+
+	/**
+	 * @param PropertyDefinition $propertyDefinition
+	 * @return array
+	 */
+	public function getEmptyBasicValueForArrayProperty(PropertyDefinition $propertyDefinition)
+	{
+		return [];
 	}
 }
