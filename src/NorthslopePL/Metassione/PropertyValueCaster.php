@@ -32,6 +32,12 @@ class PropertyValueCaster
 					return $propertyDefinition->getIsNullable() ? null : 0.0;
 				}
 			}
+		} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_STRING) {
+			if (is_object($rawValue) || is_array($rawValue) || is_null($rawValue)) {
+				return $propertyDefinition->getIsNullable() ? null : '';
+			} else {
+				return strval($rawValue);
+			}
 		} else {
 			return null;
 		}
@@ -47,6 +53,8 @@ class PropertyValueCaster
 			return $propertyDefinition->getIsNullable() ? null : 0;
 		} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_FLOAT) {
 			return $propertyDefinition->getIsNullable() ? null : 0.0;
+		} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_STRING) {
+			return $propertyDefinition->getIsNullable() ? null : '';
 		} else {
 			return null;
 		}
@@ -69,10 +77,14 @@ class PropertyValueCaster
 					if (is_numeric($rawValueItem) || is_bool($rawValueItem) || is_string($rawValueItem)) {
 						$values[] = intval($rawValueItem);
 					}
-					
+
 				} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_FLOAT) {
 					if (is_numeric($rawValueItem) || is_bool($rawValueItem) || is_string($rawValueItem)) {
 						$values[] = floatval($rawValueItem);
+					}
+				} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_STRING) {
+					if (!is_array($rawValueItem) && !is_object($rawValueItem)) {
+						$values[] = strval($rawValueItem);
 					}
 				}
 			}
