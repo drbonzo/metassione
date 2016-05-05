@@ -15,28 +15,32 @@ class PropertyValueCaster
 		if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_INTEGER) {
 			if (is_object($rawValue) || is_array($rawValue)) {
 				return $propertyDefinition->getIsNullable() ? null : 0;
+			} else if (is_numeric($rawValue) || is_bool($rawValue)) {
+				return intval($rawValue);
 			} else {
-				if (is_numeric($rawValue) || is_bool($rawValue)) {
-					return intval($rawValue);
-				} else {
-					return $propertyDefinition->getIsNullable() ? null : 0;
-				}
+				return $propertyDefinition->getIsNullable() ? null : 0;
 			}
 		} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_FLOAT) {
 			if (is_object($rawValue) || is_array($rawValue)) {
 				return $propertyDefinition->getIsNullable() ? null : 0.0;
+			} else if (is_numeric($rawValue) || is_bool($rawValue)) {
+				return floatval($rawValue);
 			} else {
-				if (is_numeric($rawValue) || is_bool($rawValue)) {
-					return floatval($rawValue);
-				} else {
-					return $propertyDefinition->getIsNullable() ? null : 0.0;
-				}
+				return $propertyDefinition->getIsNullable() ? null : 0.0;
 			}
 		} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_STRING) {
 			if (is_object($rawValue) || is_array($rawValue) || is_null($rawValue)) {
 				return $propertyDefinition->getIsNullable() ? null : '';
 			} else {
 				return strval($rawValue);
+			}
+		} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_BOOLEAN) {
+			if (is_object($rawValue) || is_array($rawValue)) {
+				return $propertyDefinition->getIsNullable() ? null : false;
+			} else if ($rawValue !== null) {
+				return boolval($rawValue);
+			} else {
+				return $propertyDefinition->getIsNullable() ? null : false;
 			}
 		} else {
 			return null;
@@ -55,6 +59,8 @@ class PropertyValueCaster
 			return $propertyDefinition->getIsNullable() ? null : 0.0;
 		} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_STRING) {
 			return $propertyDefinition->getIsNullable() ? null : '';
+		} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_BOOLEAN) {
+			return $propertyDefinition->getIsNullable() ? null : false;
 		} else {
 			return null;
 		}
@@ -86,6 +92,12 @@ class PropertyValueCaster
 					if (!is_array($rawValueItem) && !is_object($rawValueItem)) {
 						$values[] = strval($rawValueItem);
 					}
+				} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_BOOLEAN) {
+					if (!is_array($rawValueItem) && !is_object($rawValueItem)) {
+						$values[] = boolval($rawValueItem);
+					}
+				} else {
+					// skip this value
 				}
 			}
 
