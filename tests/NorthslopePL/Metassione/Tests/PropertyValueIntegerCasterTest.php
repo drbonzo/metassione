@@ -7,7 +7,7 @@ use NorthslopePL\Metassione\Tests\Fixtures\Filler\SimpleKlass;
 use ReflectionProperty;
 use stdClass;
 
-class PropertyValueCasterTest extends \PHPUnit_Framework_TestCase
+class PropertyValueIntegerCasterTest extends \PHPUnit_Framework_TestCase
 {
 	/**
 	 * @var PropertyValueCaster
