@@ -6,7 +6,7 @@ class TwoBasicPropertyKlass
 	/**
 	 * @var string
 	 */
-	public $foo1;
+	public $foo1 = 'aaa';
 
 	/**
 	 * @var string

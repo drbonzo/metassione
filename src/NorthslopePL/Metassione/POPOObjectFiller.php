@@ -61,15 +61,15 @@ class POPOObjectFiller
 
 				if ($propertyDefinition->getIsArray()) {
 
-					// FIXME
-//						$values = [];
-//						foreach ((array)$rawValue as $rawValueItem) {
-//							$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
-//							$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
-//							$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $rawValueItem);
-//							$values[] = $targetObjectForProperty;
-//						}
-//					$reflectionProperty->setValue($targetObject, $values);
+					$values = [];
+					foreach ($this->propertyValueCaster->getObjectValueForArrayProperty($propertyDefinition, $rawValue) as $rawValueItem) {
+
+						$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
+						$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
+						$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $rawValueItem);
+						$values[] = $targetObjectForProperty;
+					}
+					$reflectionProperty->setValue($targetObject, $values);
 
 				} else {
 					$this->setObjectValue($hasData, $reflectionProperty, $targetObject, $rawValue, $propertyDefinition);

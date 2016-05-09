@@ -14,9 +14,9 @@ class Blog
 	private $author;
 
 	/**
-	 * @var array|\NorthslopePL\Metassione\Tests\Fixtures\Blog\Post[]
+	 * @var \NorthslopePL\Metassione\Tests\Fixtures\Blog\Post[]
 	 */
-	private $posts;
+	private $posts = [];
 
 	/**
 	 * @param string $name

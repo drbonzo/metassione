@@ -54,9 +54,8 @@ class POPOObjectFillerBasicExamplesTest extends \PHPUnit_Framework_TestCase
 
 		$this->objectFiller->fillObjectWithRawData($targetObject, $rawData);
 
-		$expectedObject = new TwoBasicPropertyKlass();
-		$expectedObject->foo2 = 'defaultValue';
-		$this->assertEquals($expectedObject, $targetObject, 'all properties have default values');
+		$this->assertSame('', $targetObject->foo1);
+		$this->assertSame('', $targetObject->foo2);
 	}
 
 	public function testFillingDefinedPropertiesOfAKlass()

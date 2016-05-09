@@ -157,7 +157,7 @@ class PropertyValueCaster
 	/**
 	 * @param PropertyDefinition $propertyDefinition
 	 * @param mixed $rawValue
-	 * @return []
+	 * @return object[]
 	 */
 	public function getObjectValueForArrayProperty(PropertyDefinition $propertyDefinition, $rawValue)
 	{
