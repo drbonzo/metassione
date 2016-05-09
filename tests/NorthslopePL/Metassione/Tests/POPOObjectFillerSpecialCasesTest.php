@@ -7,7 +7,6 @@ use NorthslopePL\Metassione\POPOObjectFiller;
 use NorthslopePL\Metassione\PropertyValueCaster;
 use NorthslopePL\Metassione\Tests\Fixtures\Blog\Blog;
 use NorthslopePL\Metassione\Tests\Fixtures\Blog\TestBlogBuilder;
-use NorthslopePL\Metassione\Tests\Fixtures\Builder\BasicTypesKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Filler\PrivateAndProtectedPropertiesKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Filler\SimpleKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Klasses\ChildKlass;

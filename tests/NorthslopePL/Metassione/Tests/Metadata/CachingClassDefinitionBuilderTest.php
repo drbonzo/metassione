@@ -6,11 +6,8 @@ use NorthslopePL\Metassione\Metadata\ClassDefinition;
 use NorthslopePL\Metassione\Metadata\ClassDefinitionBuilder;
 use NorthslopePL\Metassione\Metadata\ClassDefinitionBuilderInterface;
 use NorthslopePL\Metassione\Metadata\ClassPropertyFinder;
-use NorthslopePL\Metassione\Metadata\PropertyDefinition;
 use NorthslopePL\Metassione\Tests\Fixtures\Builder\BasicTypesKlass;
-use NorthslopePL\Metassione\Tests\Fixtures\Klasses\EmptyKlass;
 use PHPUnit_Framework_TestCase;
-use ReflectionProperty;
 
 class CachingClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 {
