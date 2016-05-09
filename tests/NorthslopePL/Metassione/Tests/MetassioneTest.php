@@ -6,6 +6,7 @@ use NorthslopePL\Metassione\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione\Metassione;
 use NorthslopePL\Metassione\POPOConverter;
 use NorthslopePL\Metassione\POPOObjectFiller;
+use NorthslopePL\Metassione\PropertyValueCaster;
 use NorthslopePL\Metassione\Tests\Fixtures\Klasses\OnePropertyKlass;
 use PHPUnit_Framework_MockObject_MockObject;
 use stdClass;
@@ -25,7 +26,7 @@ class MetassioneTest extends \PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->popoConverter = $this->getMock(POPOConverter::class, ['convert']);
-		$this->popoObjectFiller = $this->getMock(POPOObjectFiller::class, ['fillObjectWithRawData'], [new ClassDefinitionBuilder(new ClassPropertyFinder())]);
+		$this->popoObjectFiller = $this->getMock(POPOObjectFiller::class, ['fillObjectWithRawData'], [new ClassDefinitionBuilder(new ClassPropertyFinder()), new PropertyValueCaster()]);
 	}
 
 	public function testConvertingPOPO()
