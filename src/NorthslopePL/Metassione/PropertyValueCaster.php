@@ -136,7 +136,7 @@ class PropertyValueCaster
 	 */
 	public function getObjectValueForProperty(PropertyDefinition $propertyDefinition, $rawValue)
 	{
-		if (!$propertyDefinition->getIsObject() || $propertyDefinition->getIsArray()) {
+		if ($propertyDefinition->getIsBasicType() || $propertyDefinition->getIsArray()) {
 			return null;
 		}
 
@@ -158,7 +158,7 @@ class PropertyValueCaster
 	 */
 	public function getEmptyObjectValueForProperty(PropertyDefinition $propertyDefinition)
 	{
-		if (!$propertyDefinition->getIsObject() || $propertyDefinition->getIsArray()) {
+		if ($propertyDefinition->getIsBasicType() || $propertyDefinition->getIsArray()) {
 			return null;
 		}
 
@@ -177,7 +177,7 @@ class PropertyValueCaster
 	 */
 	public function getObjectValueForArrayProperty(PropertyDefinition $propertyDefinition, $rawValue)
 	{
-		if (!$propertyDefinition->getIsObject() || !$propertyDefinition->getIsArray()) {
+		if ($propertyDefinition->getIsBasicType() || !$propertyDefinition->getIsArray()) {
 			return [];
 		}
 

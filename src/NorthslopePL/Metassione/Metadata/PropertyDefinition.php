@@ -99,6 +99,14 @@ class PropertyDefinition
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function getIsBasicType()
+	{
+		return !$this->getIsObject();
+	}
+
+	/**
 	 * @return boolean
 	 */
 	public function getIsArray()
