@@ -10,22 +10,16 @@ class POPOConverter
 	 */
 	public function convert($value)
 	{
-		if (is_array(($value)))
-		{
+		if (is_array(($value))) {
 			$retval = [];
-			foreach ($value as $object)
-			{
+			foreach ($value as $object) {
 				$retval[] = $this->convert($object); // force sequential indexing
 			}
 
 			return $retval;
-		}
-		else if (is_object($value))
-		{
+		} else if (is_object($value)) {
 			return $this->convertObject($value);
-		}
-		else
-		{
+		} else {
 			return $value;
 		}
 	}
@@ -36,22 +30,16 @@ class POPOConverter
 
 		$reflectionObject = new \ReflectionObject($object);
 
-		foreach ($this->getPropertiesFromObjectOrParentClasses($reflectionObject) as $property)
-		{
+		foreach ($this->getPropertiesFromObjectOrParentClasses($reflectionObject) as $property) {
 			$property->setAccessible(true);
 			$propertyName = $property->getName();
 			$propertyValue = $property->getValue($object);
 
-			if (is_object($propertyValue))
-			{
+			if (is_object($propertyValue)) {
 				$propertyValue = $this->convert($propertyValue);
-			}
-			else if (is_array($propertyValue))
-			{
+			} else if (is_array($propertyValue)) {
 				$propertyValue = $this->convert($propertyValue);
-			}
-			else
-			{
+			} else {
 				// just use $propertyValue unchanged
 			}
 
@@ -82,12 +70,10 @@ class POPOConverter
 		{
 			$properties = $currentClassReflection->getProperties();
 
-			foreach ($properties as $property)
-			{
+			foreach ($properties as $property) {
 				// add only properties defined in current class
 				// properties added in parent classes will be added later
-				if ($property->getDeclaringClass()->getName() == $currentClassReflection->getName())
-				{
+				if ($property->getDeclaringClass()->getName() == $currentClassReflection->getName()) {
 					$allProperties[] = $property;
 				}
 			}
