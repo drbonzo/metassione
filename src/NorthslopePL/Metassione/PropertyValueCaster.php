@@ -13,6 +13,10 @@ class PropertyValueCaster
 	 */
 	public function getBasicValueForProperty(PropertyDefinition $propertyDefinition, $rawValue)
 	{
+		if ($propertyDefinition->getIsObject() || $propertyDefinition->getIsArray()) {
+			return null;
+		}
+
 		if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_INTEGER) {
 			if (is_object($rawValue) || is_array($rawValue)) {
 				return $propertyDefinition->getIsNullable() ? null : 0;
@@ -54,6 +58,10 @@ class PropertyValueCaster
 	 */
 	public function getEmptyBasicValueForProperty(PropertyDefinition $propertyDefinition)
 	{
+		if ($propertyDefinition->getIsObject() || $propertyDefinition->getIsArray()) {
+			return null;
+		}
+
 		if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_INTEGER) {
 			return $propertyDefinition->getIsNullable() ? null : 0;
 		} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_FLOAT) {
@@ -75,37 +83,41 @@ class PropertyValueCaster
 	 */
 	public function getBasicValueForArrayProperty(PropertyDefinition $propertyDefinition, $rawValue)
 	{
-		if (is_array($rawValue)) {
-			$values = [];
-
-			foreach ($rawValue as $rawValueItem) {
-
-				if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_INTEGER) {
-					if (is_numeric($rawValueItem) || is_bool($rawValueItem) || is_string($rawValueItem)) {
-						$values[] = intval($rawValueItem);
-					}
-
-				} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_FLOAT) {
-					if (is_numeric($rawValueItem) || is_bool($rawValueItem) || is_string($rawValueItem)) {
-						$values[] = floatval($rawValueItem);
-					}
-				} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_STRING) {
-					if (!is_array($rawValueItem) && !is_object($rawValueItem)) {
-						$values[] = strval($rawValueItem);
-					}
-				} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_BOOLEAN) {
-					if (!is_array($rawValueItem) && !is_object($rawValueItem)) {
-						$values[] = boolval($rawValueItem);
-					}
-				} else {
-					// skip this value
-				}
-			}
-
-			return $values;
-		} else {
+		if (!is_array($rawValue)) {
 			return [];
 		}
+
+		if (!$propertyDefinition->getIsArray()) {
+			return [];
+		}
+
+		$values = [];
+
+		foreach ($rawValue as $rawValueItem) {
+
+			if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_INTEGER) {
+				if (is_numeric($rawValueItem) || is_bool($rawValueItem) || is_string($rawValueItem)) {
+					$values[] = intval($rawValueItem);
+				}
+
+			} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_FLOAT) {
+				if (is_numeric($rawValueItem) || is_bool($rawValueItem) || is_string($rawValueItem)) {
+					$values[] = floatval($rawValueItem);
+				}
+			} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_STRING) {
+				if (!is_array($rawValueItem) && !is_object($rawValueItem)) {
+					$values[] = strval($rawValueItem);
+				}
+			} else if ($propertyDefinition->getType() == PropertyDefinition::BASIC_TYPE_BOOLEAN) {
+				if (!is_array($rawValueItem) && !is_object($rawValueItem)) {
+					$values[] = boolval($rawValueItem);
+				}
+			} else {
+				// skip this value
+			}
+		}
+
+		return $values;
 	}
 
 	/**
@@ -124,6 +136,10 @@ class PropertyValueCaster
 	 */
 	public function getObjectValueForProperty(PropertyDefinition $propertyDefinition, $rawValue)
 	{
+		if (!$propertyDefinition->getIsObject() || $propertyDefinition->getIsArray()) {
+			return null;
+		}
+
 		if (is_object($rawValue)) {
 			return $rawValue;
 		} else {
@@ -142,15 +158,15 @@ class PropertyValueCaster
 	 */
 	public function getEmptyObjectValueForProperty(PropertyDefinition $propertyDefinition)
 	{
+		if (!$propertyDefinition->getIsObject() || $propertyDefinition->getIsArray()) {
+			return null;
+		}
+
 		if ($propertyDefinition->getIsNullable()) {
 			return null;
 		} else {
-			if ($propertyDefinition->getIsObject()) {
-				$reflectionClass = new ReflectionClass($propertyDefinition->getType());
-				return $reflectionClass->newInstance();
-			} else {
-				return null;
-			}
+			$reflectionClass = new ReflectionClass($propertyDefinition->getType());
+			return $reflectionClass->newInstance();
 		}
 	}
 
@@ -161,6 +177,10 @@ class PropertyValueCaster
 	 */
 	public function getObjectValueForArrayProperty(PropertyDefinition $propertyDefinition, $rawValue)
 	{
+		if (!$propertyDefinition->getIsObject() || !$propertyDefinition->getIsArray()) {
+			return [];
+		}
+
 		if (is_array($rawValue)) {
 			$values = [];
 
