@@ -2,6 +2,7 @@
 namespace NorthslopePL\Metassione;
 
 use NorthslopePL\Metassione\Metadata\PropertyDefinition;
+use ReflectionClass;
 
 class PropertyValueCaster
 {
@@ -115,4 +116,64 @@ class PropertyValueCaster
 	{
 		return [];
 	}
+
+	/**
+	 * @param PropertyDefinition $propertyDefinition
+	 * @param mixed $rawValue
+	 * @return object
+	 */
+	public function getObjectValueForProperty(PropertyDefinition $propertyDefinition, $rawValue)
+	{
+		if (is_object($rawValue)) {
+			return $rawValue;
+		} else {
+			if ($propertyDefinition->getIsNullable()) {
+				return null;
+			} else {
+				$reflectionClass = new ReflectionClass($propertyDefinition->getType());
+				return $reflectionClass->newInstance();
+			}
+		}
+	}
+
+	/**
+	 * @param PropertyDefinition $propertyDefinition
+	 * @return object|null
+	 */
+	public function getEmptyObjectValueForProperty(PropertyDefinition $propertyDefinition)
+	{
+		if ($propertyDefinition->getIsNullable()) {
+			return null;
+		} else {
+			if ($propertyDefinition->getIsObject()) {
+				$reflectionClass = new ReflectionClass($propertyDefinition->getType());
+				return $reflectionClass->newInstance();
+			} else {
+				return null;
+			}
+		}
+	}
+
+	/**
+	 * @param PropertyDefinition $propertyDefinition
+	 * @param mixed $rawValue
+	 * @return []
+	 */
+	public function getObjectValueForArrayProperty(PropertyDefinition $propertyDefinition, $rawValue)
+	{
+		if (is_array($rawValue)) {
+			$values = [];
+
+			foreach ($rawValue as $rawValueItem) {
+				if (is_object($rawValueItem)) {
+					$values[] = $rawValueItem;
+				}
+			}
+
+			return $values;
+		} else {
+			return [];
+		}
+	}
+
 }
