@@ -49,51 +49,52 @@ class POPOObjectFiller
 
 	private function processObjectProperty(PropertyDefinition $propertyDefinition, $targetObject, $rawData)
 	{
-		if ($propertyDefinition->getIsDefined()) {
+		if (!$propertyDefinition->getIsDefined()) {
+			return;
+		}
 
-			$reflectionProperty = $propertyDefinition->getReflectionProperty();
-			$reflectionProperty->setAccessible(true);
+		$reflectionProperty = $propertyDefinition->getReflectionProperty();
+		$reflectionProperty->setAccessible(true);
 
-			$hasData = is_object($rawData) && property_exists($rawData, $reflectionProperty->getName());
-			$rawValue = $hasData ? $rawData->{$reflectionProperty->getName()} : null;
+		$hasData = is_object($rawData) && property_exists($rawData, $reflectionProperty->getName());
+		$rawValue = $hasData ? $rawData->{$reflectionProperty->getName()} : null;
 
-			if ($propertyDefinition->getIsObject()) {
+		if ($propertyDefinition->getIsObject()) {
 
-				if ($propertyDefinition->getIsArray()) {
+			if ($propertyDefinition->getIsArray()) {
 
-					$values = [];
-					foreach ($this->propertyValueCaster->getObjectValueForArrayProperty($propertyDefinition, $rawValue) as $rawValueItem) {
+				$values = [];
+				foreach ($this->propertyValueCaster->getObjectValueForArrayProperty($propertyDefinition, $rawValue) as $rawValueItem) {
 
-						$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
-						$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
-						$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $rawValueItem);
-						$values[] = $targetObjectForProperty;
-					}
+					$classDefinitionForProperty = $this->classDefinitionBuilder->buildFromClass($propertyDefinition->getType());
+					$targetObjectForProperty = $this->newInstance($classDefinitionForProperty->name);
+					$this->processObject($classDefinitionForProperty, $targetObjectForProperty, $rawValueItem);
+					$values[] = $targetObjectForProperty;
+				}
+				$reflectionProperty->setValue($targetObject, $values);
+
+			} else {
+				$this->setObjectValue($hasData, $reflectionProperty, $targetObject, $rawValue, $propertyDefinition);
+			}
+
+		} else {
+
+			if ($propertyDefinition->getIsArray()) {
+
+				if (is_array($rawValue)) {
+					$values = $this->propertyValueCaster->getBasicValueForArrayProperty($propertyDefinition, $rawValue);
 					$reflectionProperty->setValue($targetObject, $values);
-
 				} else {
-					$this->setObjectValue($hasData, $reflectionProperty, $targetObject, $rawValue, $propertyDefinition);
+					$reflectionProperty->setValue($targetObject, []);
 				}
 
 			} else {
-
-				if ($propertyDefinition->getIsArray()) {
-
-					if (is_array($rawValue)) {
-						$values = $this->propertyValueCaster->getBasicValueForArrayProperty($propertyDefinition, $rawValue);
-						$reflectionProperty->setValue($targetObject, $values);
-					} else {
-						$reflectionProperty->setValue($targetObject, []);
-					}
-
+				if ($hasData) {
+					$basicValue = $this->propertyValueCaster->getBasicValueForProperty($propertyDefinition, $rawValue);
 				} else {
-					if ($hasData) {
-						$basicValue = $this->propertyValueCaster->getBasicValueForProperty($propertyDefinition, $rawValue);
-					} else {
-						$basicValue = $this->propertyValueCaster->getEmptyBasicValueForProperty($propertyDefinition);
-					}
-					$reflectionProperty->setValue($targetObject, $basicValue);
+					$basicValue = $this->propertyValueCaster->getEmptyBasicValueForProperty($propertyDefinition);
 				}
+				$reflectionProperty->setValue($targetObject, $basicValue);
 			}
 		}
 	}
