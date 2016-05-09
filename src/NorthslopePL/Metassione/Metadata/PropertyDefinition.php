@@ -99,14 +99,6 @@ class PropertyDefinition
 	}
 
 	/**
-	 * @return bool
-	 */
-	public function isBasicType()
-	{
-		return !$this->getIsObject();
-	}
-
-	/**
 	 * @return boolean
 	 */
 	public function getIsArray()
@@ -128,14 +120,6 @@ class PropertyDefinition
 	public function getReflectionProperty()
 	{
 		return $this->reflectionProperty;
-	}
-
-	/**
-	 * @param ReflectionProperty $reflectionProperty
-	 */
-	public function setReflectionProperty($reflectionProperty)
-	{
-		$this->reflectionProperty = $reflectionProperty;
 	}
 
 }
