@@ -4,7 +4,7 @@ namespace NorthslopePL\Metassione\Metadata;
 class CachingClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 {
 	/**
-	 * @var ClassDefinitionBuilder
+	 * @var ClassDefinitionBuilderInterface
 	 */
 	private $classDefinitionBuilder;
 
@@ -13,7 +13,7 @@ class CachingClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 	 */
 	private $cache = [];
 
-	public function __construct(ClassDefinitionBuilder $classDefinitionBuilder)
+	public function __construct(ClassDefinitionBuilderInterface $classDefinitionBuilder)
 	{
 		$this->classDefinitionBuilder = $classDefinitionBuilder;
 	}
