@@ -9,6 +9,7 @@ use NorthslopePL\Metassione\Tests\Fixtures\Blog\Blog;
 use NorthslopePL\Metassione\Tests\Fixtures\Blog\TestBlogBuilder;
 use NorthslopePL\Metassione\Tests\Fixtures\Builder\BasicTypesKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Filler\PrivateAndProtectedPropertiesKlass;
+use NorthslopePL\Metassione\Tests\Fixtures\Filler\SimpleKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Klasses\ChildKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Klasses\OnePropertyKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Klasses\TypeNotFoundKlass;
@@ -58,14 +59,15 @@ class POPOObjectFillerSpecialCasesTest extends \PHPUnit_Framework_TestCase
 
 	public function testFillingSimpleObjectWithRawDataThatIsNotAnObject()
 	{
-		$this->markTestIncomplete(); // FIXME
-		$simpleObject = new BasicTypesKlass();
-		$rawData = 'foobar';
+		$simpleObject = new SimpleKlass('initialName');
+		$this->assertEquals('initialName', $simpleObject->name);
 
-		$this->setExpectedException('NorthslopePL\Metassione\ObjectFillingException', 'Raw data should be an object, but string was given. I was trying to fill object of class NorthslopePL\Metassione\Tests\Examples\BasicTypesKlass.');
+		$rawData = 'foobar';
 
 		/** @noinspection PhpParamsInspection */
 		$this->objectFiller->fillObjectWithRawData($simpleObject, $rawData);
+
+		$this->assertEquals('', $simpleObject->name); // we can handle $rawData that is not an object
 	}
 
 	public function testFillingObjectWhenItsPropertysClassDoesNotExist()
