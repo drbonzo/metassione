@@ -5,6 +5,11 @@ use NorthslopePL\Metassione\Metadata\ClassDefinitionBuilder;
 use NorthslopePL\Metassione\Metadata\ClassPropertyFinder;
 use NorthslopePL\Metassione\POPOObjectFiller;
 use NorthslopePL\Metassione\PropertyValueCaster;
+use NorthslopePL\Metassione\Tests\Fixtures\Blog\Author;
+use NorthslopePL\Metassione\Tests\Fixtures\Blog\Blog;
+use NorthslopePL\Metassione\Tests\Fixtures\Blog\Comment;
+use NorthslopePL\Metassione\Tests\Fixtures\Blog\Post;
+use NorthslopePL\Metassione\Tests\Fixtures\Blog\TestBlogBuilder;
 use NorthslopePL\Metassione\Tests\Fixtures\Filler\TwoBasicPropertyKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Filler\TwoObjectPropertyKlass;
 use stdClass;
@@ -70,5 +75,24 @@ class POPOObjectFillerObjectSimpleExamplesTest extends \PHPUnit_Framework_TestCa
 			$expectedObject->twoNullable = null;
 		}
 		$this->assertEquals($expectedObject, $targetObject, 'all properties have default values');
+	}
+
+	public function testFillingComplexObjectHierarchy()
+	{
+		$blogBuilder = new TestBlogBuilder();
+		$rawBlog = $blogBuilder->buildBlogAsStdClass();
+
+		$blog = new Blog();
+		$this->objectFiller->fillObjectWithRawData($blog, $rawBlog);
+
+		$this->assertInstanceOf(Author::class, $blog->getAuthor());
+
+		foreach ($blog->getPosts() as $post) {
+			$this->assertInstanceOf(Post::class, $post);
+
+			foreach ($post->getComments() as $comment) {
+				$this->assertInstanceOf(Comment::class, $comment);
+			}
+		}
 	}
 }
