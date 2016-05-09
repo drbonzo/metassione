@@ -117,6 +117,6 @@ class PropertyValueBooleanCasterTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame([], $this->propertyValueCaster->getBasicValueForArrayProperty($booleanProperty, [[1, 2], ['a', 'b'], [1.0, 2.0]]));
 		//
 		$this->assertSame([], $this->propertyValueCaster->getBasicValueForArrayProperty($booleanProperty, null));
-		$this->assertSame([], $this->propertyValueCaster->getEmptyValueForArrayProperty($booleanProperty));
+		$this->assertSame([], $this->propertyValueCaster->getEmptyValueForArrayProperty());
 	}
 }

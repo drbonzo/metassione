@@ -142,6 +142,6 @@ class PropertyValueObjectCasterTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame([], $this->propertyValueCaster->getObjectValueForArrayProperty($objectProperty, [[1, 2], ['a', 'b'], [1.0, 2.0]]));
 		//
 		$this->assertSame([], $this->propertyValueCaster->getObjectValueForArrayProperty($objectProperty, null));
-		$this->assertSame([], $this->propertyValueCaster->getEmptyValueForArrayProperty($objectProperty));
+		$this->assertSame([], $this->propertyValueCaster->getEmptyValueForArrayProperty());
 	}
 }

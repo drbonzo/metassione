@@ -117,6 +117,6 @@ class PropertyValueIntegerCasterTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame([], $this->propertyValueCaster->getBasicValueForArrayProperty($integerProperty, [[1, 2], ['a', 'b'], [1.0, 2.0]]));
 		//
 		$this->assertSame([], $this->propertyValueCaster->getBasicValueForArrayProperty($integerProperty, null));
-		$this->assertSame([], $this->propertyValueCaster->getEmptyValueForArrayProperty($integerProperty));
+		$this->assertSame([], $this->propertyValueCaster->getEmptyValueForArrayProperty());
 	}
 }

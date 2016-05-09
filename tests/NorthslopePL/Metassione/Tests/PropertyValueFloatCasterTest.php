@@ -117,6 +117,6 @@ class PropertyValueFloatCasterTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame([], $this->propertyValueCaster->getBasicValueForArrayProperty($floatProperty, [[1, 2], ['a', 'b'], [1.0, 2.0]]));
 		//
 		$this->assertSame([], $this->propertyValueCaster->getBasicValueForArrayProperty($floatProperty, null));
-		$this->assertSame([], $this->propertyValueCaster->getEmptyValueForArrayProperty($floatProperty));
+		$this->assertSame([], $this->propertyValueCaster->getEmptyValueForArrayProperty());
 	}
 }
