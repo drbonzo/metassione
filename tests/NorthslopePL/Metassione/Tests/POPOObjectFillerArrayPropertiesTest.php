@@ -47,6 +47,9 @@ class POPOObjectFillerArrayPropertiesTest extends \PHPUnit_Framework_TestCase
 				$rawItem_2_1,
 				$rawItem_2_2,
 			];
+
+			$rawData->stringItemsNotNullable = ['a', 'b', 'c'];
+			$rawData->stringItemsNullable = ['d', 'e', 'f'];
 		}
 
 		$this->objectFiller->fillObjectWithRawData($targetObject, $rawData);
@@ -63,6 +66,8 @@ class POPOObjectFillerArrayPropertiesTest extends \PHPUnit_Framework_TestCase
 				new SimpleKlass('ddd')
 			];
 		}
+		$expectedObject->stringItemsNotNullable = ['a', 'b', 'c'];
+		$expectedObject->stringItemsNullable = ['d', 'e', 'f'];
 
 		$this->assertEquals($expectedObject, $targetObject);
 	}
