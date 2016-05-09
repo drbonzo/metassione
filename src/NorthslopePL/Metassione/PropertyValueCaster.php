@@ -111,7 +111,7 @@ class PropertyValueCaster
 	 * @param PropertyDefinition $propertyDefinition
 	 * @return array
 	 */
-	public function getEmptyBasicValueForArrayProperty(PropertyDefinition $propertyDefinition)
+	public function getEmptyValueForArrayProperty(PropertyDefinition $propertyDefinition)
 	{
 		return [];
 	}
