@@ -73,7 +73,7 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 		$firstConcreteTypeSpecification = $this->extractConcreteTypeSpecification($typeSpecifications);
 
 		if ($this->propertyTypeIsUndefined($firstConcreteTypeSpecification)) {
-			return new PropertyDefinition($reflectionProperty->getName(), false, false, false, 'null', true, $reflectionProperty);
+			return new PropertyDefinition($reflectionProperty->getName(), false, false, false, PropertyDefinition::BASIC_TYPE_NULL, true, $reflectionProperty);
 		}
 
 		$typeIsNullable = $this->isNullable($typeSpecifications);
@@ -118,7 +118,7 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 	 * @param string $type
 	 * @param boolean $typeIsNullable
 	 *
-	 * @return \NorthslopePL\Metassione\ObjectPropertyType
+	 * @return PropertyDefinition
 	 */
 	private function buildPropertyDefinitionForArray(ReflectionProperty $reflectionProperty, $type, $typeIsNullable)
 	{
@@ -190,15 +190,8 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 			return true;
 		}
 
-		if (strpos(PropertyDefinition::BASIC_TYPE_VOID, $phpdocTypeSpecification) !== false) {
-			return true;
-		}
-
 		if (strpos(PropertyDefinition::BASIC_TYPE_NULL, $phpdocTypeSpecification) !== false) {
-			return true;
-		}
-
-		if (strpos(PropertyDefinition::BASIC_TYPE_MIXED, $phpdocTypeSpecification) !== false) {
+			// BASIC_TYPE_VOID and BASIC_TYPE_MIXED are coverted to BASIC_TYPE_NULL in extractConcreteTypeSpecification()
 			return true;
 		}
 
