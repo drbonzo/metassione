@@ -22,6 +22,11 @@ class PropertyValueSpecialCasesCasterTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @var PropertyDefinition
 	 */
+	private $objectNullableProperty;
+
+	/**
+	 * @var PropertyDefinition
+	 */
 	private $objectArrayProperty;
 
 	/**
@@ -39,19 +44,26 @@ class PropertyValueSpecialCasesCasterTest extends \PHPUnit_Framework_TestCase
 	 */
 	private $basicTypeProperty;
 
+	/**
+	 * @var PropertyDefinition
+	 */
+	private $basicTypeNullableProperty;
+
 	protected function setUp()
 	{
 		$this->propertyValueCaster = new PropertyValueCaster();
 
 		$reflectionProperty = new ReflectionProperty(SimpleKlass::class, 'name'); // Just to build PropertyDefinition
 
-		$isNullable = false;
-
-		$this->objectProperty = new PropertyDefinition('objectProperty', true, $isObject = true, $isArray = false, SimpleKlass::class, $isNullable, $reflectionProperty);
-		$this->objectArrayProperty = new PropertyDefinition('objectArrayProperty', true, $isObject = true, $isArray = true, SimpleKlass::class, $isNullable, $reflectionProperty);
-		$this->arrayProperty = new PropertyDefinition('arrayProperty', true, $isObject = false, $isArray = true, PropertyDefinition::BASIC_TYPE_STRING, $isNullable, $reflectionProperty);
-		$this->invalidBasicProperty = new PropertyDefinition('invalidProperty', true, $isObject = false, $isArray = false, 'invalid-type', $isNullable, $reflectionProperty);
-		$this->basicTypeProperty = new PropertyDefinition('basicTypeProperty', true, $isObject = false, $isArray = false, PropertyDefinition::BASIC_TYPE_STRING, $isNullable, $reflectionProperty);
+		$nullable = true;
+		$nonNullable = false;
+		$this->objectProperty = new PropertyDefinition('objectProperty', true, $isObject = true, $isArray = false, SimpleKlass::class, $nonNullable, $reflectionProperty);
+		$this->objectNullableProperty = new PropertyDefinition('objectProperty', true, $isObject = true, $isArray = false, SimpleKlass::class, $nullable, $reflectionProperty);
+		$this->objectArrayProperty = new PropertyDefinition('objectArrayProperty', true, $isObject = true, $isArray = true, SimpleKlass::class, $nonNullable, $reflectionProperty);
+		$this->arrayProperty = new PropertyDefinition('arrayProperty', true, $isObject = false, $isArray = true, PropertyDefinition::BASIC_TYPE_STRING, $nonNullable, $reflectionProperty);
+		$this->invalidBasicProperty = new PropertyDefinition('invalidProperty', true, $isObject = false, $isArray = false, 'invalid-type', $nonNullable, $reflectionProperty);
+		$this->basicTypeProperty = new PropertyDefinition('basicTypeProperty', true, $isObject = false, $isArray = false, PropertyDefinition::BASIC_TYPE_STRING, $nonNullable, $reflectionProperty);
+		$this->basicTypeNullableProperty = new PropertyDefinition('basicTypeProperty', true, $isObject = false, $isArray = false, PropertyDefinition::BASIC_TYPE_STRING, $nullable, $reflectionProperty);
 	}
 
 	public function testEdgeCasesForBasicValueForProperty()
@@ -100,6 +112,19 @@ class PropertyValueSpecialCasesCasterTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame([], $this->propertyValueCaster->getObjectValueForArrayProperty($this->objectProperty, [new stdClass()]));
 		$this->assertSame([], $this->propertyValueCaster->getObjectValueForArrayProperty($this->arrayProperty, [new stdClass()]));
 		$this->assertSame([], $this->propertyValueCaster->getObjectValueForArrayProperty($this->basicTypeProperty, [new stdClass()]));
+	}
+
+	// getEmptyValueForArrayProperty()
+
+	public function testEmptyValueForArrayProperty()
+	{
+		// basic
+		$this->assertSame('', $this->propertyValueCaster->getEmptyValueForArrayProperty($this->basicTypeProperty));
+		$this->assertNull($this->propertyValueCaster->getEmptyValueForArrayProperty($this->basicTypeNullableProperty));
+
+		// object
+		$this->assertEquals(new SimpleKlass(), $this->propertyValueCaster->getEmptyValueForArrayProperty($this->objectProperty));
+		$this->assertNull($this->propertyValueCaster->getEmptyValueForArrayProperty($this->objectNullableProperty));
 	}
 
 }

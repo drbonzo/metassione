@@ -83,11 +83,7 @@ class PropertyValueCaster
 	 */
 	public function getBasicValueForArrayProperty(PropertyDefinition $propertyDefinition, $rawValue)
 	{
-		if (!is_array($rawValue)) {
-			return [];
-		}
-
-		if (!$propertyDefinition->getIsArray()) {
+		if (!$propertyDefinition->getIsArray() || !is_array($rawValue)) {
 			return [];
 		}
 
@@ -121,11 +117,21 @@ class PropertyValueCaster
 	}
 
 	/**
+	 * @param PropertyDefinition $propertyDefinition
+	 *
 	 * @return array
 	 */
-	public function getEmptyValueForArrayProperty()
+	public function getEmptyValueForArrayProperty(PropertyDefinition $propertyDefinition)
 	{
-		return [];
+		if ($propertyDefinition->getIsArray()) {
+			return [];
+		} else {
+			if ($propertyDefinition->getIsObject()) {
+				return $this->getEmptyObjectValueForProperty($propertyDefinition);
+			} else {
+				return $this->getEmptyBasicValueForProperty($propertyDefinition);
+			}
+		}
 	}
 
 	/**
