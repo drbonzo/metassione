@@ -84,7 +84,7 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 			return $this->buildPropertyDefinitionForArray($reflectionProperty, $firstConcreteTypeSpecification, false);
 		} else {
 			if ($this->isBasicType($firstConcreteTypeSpecification)) {
-				return new PropertyDefinition($reflectionProperty->getName(), true, false, false, $firstConcreteTypeSpecification, $typeIsNullable, $reflectionProperty);
+				return new PropertyDefinition($reflectionProperty->getName(), true, false, false, $this->mapBasicType($firstConcreteTypeSpecification), $typeIsNullable, $reflectionProperty);
 			} else {
 				$classname = $this->buildClassnameForType($firstConcreteTypeSpecification, $reflectionProperty);
 				return new PropertyDefinition($reflectionProperty->getName(), true, true, false, $classname, $typeIsNullable, $reflectionProperty);
@@ -235,6 +235,25 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 			return $fullyQualifiedClassName;
 		} else {
 			throw new LogicException(sprintf('Class %s (%s) not found for property %s::%s', $classname, $fullyQualifiedClassName, $reflectionProperty->getDeclaringClass()->getName(), $reflectionProperty->getName()));
+		}
+	}
+
+	/**
+	 * @param string $basicType
+	 * @return string
+	 */
+	private function mapBasicType($basicType)
+	{
+		$map = [
+			PropertyDefinition::BASIC_TYPE_INT => PropertyDefinition::BASIC_TYPE_INTEGER,
+			PropertyDefinition::BASIC_TYPE_BOOL => PropertyDefinition::BASIC_TYPE_BOOLEAN,
+			PropertyDefinition::BASIC_TYPE_DOUBLE => PropertyDefinition::BASIC_TYPE_FLOAT,
+		];
+
+		if (isset($map[$basicType])) {
+			return $map[$basicType];
+		} else {
+			return $basicType;
 		}
 	}
 }
