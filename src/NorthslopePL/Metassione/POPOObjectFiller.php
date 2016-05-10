@@ -3,13 +3,14 @@ namespace NorthslopePL\Metassione;
 
 use NorthslopePL\Metassione\Metadata\ClassDefinition;
 use NorthslopePL\Metassione\Metadata\ClassDefinitionBuilder;
+use NorthslopePL\Metassione\Metadata\ClassDefinitionBuilderInterface;
 use NorthslopePL\Metassione\Metadata\PropertyDefinition;
 use ReflectionProperty;
 
 class POPOObjectFiller
 {
 	/**
-	 * @var ClassDefinitionBuilder
+	 * @var ClassDefinitionBuilderInterface
 	 */
 	private $classDefinitionBuilder;
 
@@ -18,7 +19,7 @@ class POPOObjectFiller
 	 */
 	private $propertyValueCaster;
 
-	public function __construct(ClassDefinitionBuilder $classDefinitionBuilder, PropertyValueCaster $propertyValueCaster)
+	public function __construct(ClassDefinitionBuilderInterface $classDefinitionBuilder, PropertyValueCaster $propertyValueCaster)
 	{
 		$this->classDefinitionBuilder = $classDefinitionBuilder;
 		$this->propertyValueCaster = $propertyValueCaster;
