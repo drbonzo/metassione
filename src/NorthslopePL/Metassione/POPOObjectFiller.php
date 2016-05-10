@@ -35,7 +35,7 @@ class POPOObjectFiller
 	 */
 	public function fillObjectWithRawData($targetObject, $rawData)
 	{
-		$classDefinition = $this->classDefinitionBuilder->buildFromClass($targetObject);
+		$classDefinition = $this->classDefinitionBuilder->buildFromClass(get_class($targetObject));
 
 		$this->processObject($classDefinition, $targetObject, $rawData);
 	}
