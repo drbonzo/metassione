@@ -9,7 +9,7 @@ use NorthslopePL\Metassione\Metadata\PropertyDefinition;
 use NorthslopePL\Metassione\Tests\Fixtures\Builder\ArrayPropertiesKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Builder\ArrayPropertiesNullableKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Builder\BasicTypesKlass;
-use NorthslopePL\Metassione\Tests\Fixtures\Builder\BasicTypesWithNullsKlass;
+use NorthslopePL\Metassione\Tests\Fixtures\Builder\BasicTypesNullableKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Builder\ClassTypesTypeNullablePropertiesKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Builder\ClassTypesTypePropertiesKlass;
 use NorthslopePL\Metassione\Tests\Fixtures\Builder\SimpleKlass;
@@ -61,19 +61,19 @@ class ClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 
 	public function testClassWithNullableBasicTypeProperties()
 	{
-		$classDefinition = $this->builder->buildFromClass(BasicTypesWithNullsKlass::class);
-		$this->assertEquals(BasicTypesWithNullsKlass::class, $classDefinition->name);
+		$classDefinition = $this->builder->buildFromClass(BasicTypesNullableKlass::class);
+		$this->assertEquals(BasicTypesNullableKlass::class, $classDefinition->name);
 		$this->assertEquals('NorthslopePL\Metassione\Tests\Fixtures\Builder', $classDefinition->namespace);
 
 		$this->assertCount(7, $classDefinition->properties);
 
-		$this->assertEquals(new PropertyDefinition('stringValue', true, false, false, PropertyDefinition::BASIC_TYPE_STRING, true, new ReflectionProperty(BasicTypesWithNullsKlass::class, 'stringValue')), $classDefinition->properties['stringValue']);
-		$this->assertEquals(new PropertyDefinition('integerValue', true, false, false, PropertyDefinition::BASIC_TYPE_INTEGER, true, new ReflectionProperty(BasicTypesWithNullsKlass::class, 'integerValue')), $classDefinition->properties['integerValue']);
-		$this->assertEquals(new PropertyDefinition('intValue', true, false, false, PropertyDefinition::BASIC_TYPE_INTEGER, true, new ReflectionProperty(BasicTypesWithNullsKlass::class, 'intValue')), $classDefinition->properties['intValue']);
-		$this->assertEquals(new PropertyDefinition('floatValue', true, false, false, PropertyDefinition::BASIC_TYPE_FLOAT, true, new ReflectionProperty(BasicTypesWithNullsKlass::class, 'floatValue')), $classDefinition->properties['floatValue']);
-		$this->assertEquals(new PropertyDefinition('doubleValue', true, false, false, PropertyDefinition::BASIC_TYPE_FLOAT, true, new ReflectionProperty(BasicTypesWithNullsKlass::class, 'doubleValue')), $classDefinition->properties['doubleValue']);
-		$this->assertEquals(new PropertyDefinition('booleanValue', true, false, false, PropertyDefinition::BASIC_TYPE_BOOLEAN, true, new ReflectionProperty(BasicTypesWithNullsKlass::class, 'booleanValue')), $classDefinition->properties['booleanValue']);
-		$this->assertEquals(new PropertyDefinition('boolValue', true, false, false, PropertyDefinition::BASIC_TYPE_BOOLEAN, true, new ReflectionProperty(BasicTypesWithNullsKlass::class, 'boolValue')), $classDefinition->properties['boolValue']);
+		$this->assertEquals(new PropertyDefinition('stringValue', true, false, false, PropertyDefinition::BASIC_TYPE_STRING, true, new ReflectionProperty(BasicTypesNullableKlass::class, 'stringValue')), $classDefinition->properties['stringValue']);
+		$this->assertEquals(new PropertyDefinition('integerValue', true, false, false, PropertyDefinition::BASIC_TYPE_INTEGER, true, new ReflectionProperty(BasicTypesNullableKlass::class, 'integerValue')), $classDefinition->properties['integerValue']);
+		$this->assertEquals(new PropertyDefinition('intValue', true, false, false, PropertyDefinition::BASIC_TYPE_INTEGER, true, new ReflectionProperty(BasicTypesNullableKlass::class, 'intValue')), $classDefinition->properties['intValue']);
+		$this->assertEquals(new PropertyDefinition('floatValue', true, false, false, PropertyDefinition::BASIC_TYPE_FLOAT, true, new ReflectionProperty(BasicTypesNullableKlass::class, 'floatValue')), $classDefinition->properties['floatValue']);
+		$this->assertEquals(new PropertyDefinition('doubleValue', true, false, false, PropertyDefinition::BASIC_TYPE_FLOAT, true, new ReflectionProperty(BasicTypesNullableKlass::class, 'doubleValue')), $classDefinition->properties['doubleValue']);
+		$this->assertEquals(new PropertyDefinition('booleanValue', true, false, false, PropertyDefinition::BASIC_TYPE_BOOLEAN, true, new ReflectionProperty(BasicTypesNullableKlass::class, 'booleanValue')), $classDefinition->properties['booleanValue']);
+		$this->assertEquals(new PropertyDefinition('boolValue', true, false, false, PropertyDefinition::BASIC_TYPE_BOOLEAN, true, new ReflectionProperty(BasicTypesNullableKlass::class, 'boolValue')), $classDefinition->properties['boolValue']);
 	}
 
 	public function testClassWithClassTypeProperties()

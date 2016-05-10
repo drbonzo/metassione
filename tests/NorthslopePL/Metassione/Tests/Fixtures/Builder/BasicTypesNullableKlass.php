@@ -1,7 +1,7 @@
 <?php
 namespace NorthslopePL\Metassione\Tests\Fixtures\Builder;
 
-class BasicTypesWithNullsKlass
+class BasicTypesNullableKlass
 {
 	/**
 	 * @var string|null
