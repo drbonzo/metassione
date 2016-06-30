@@ -23,7 +23,10 @@ class CachingClassDefinitionBuilderTest extends PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->internalBuilder = $this->getMock(ClassDefinitionBuilder::class, ['buildFromClass'], [new ClassPropertyFinder()]);
+		$this->internalBuilder = $this->getMockBuilder(ClassDefinitionBuilder::class)
+			->enableOriginalConstructor()->setConstructorArgs([new ClassPropertyFinder()])
+			->setMethods(['buildFromClass'])
+			->getMock();
 		$this->builder = new CachingClassDefinitionBuilder($this->internalBuilder);
 	}
 

@@ -25,8 +25,14 @@ class MetassioneTest extends \PHPUnit_Framework_TestCase
 
 	protected function setUp()
 	{
-		$this->popoConverter = $this->getMock(POPOConverter::class, ['convert']);
-		$this->popoObjectFiller = $this->getMock(POPOObjectFiller::class, ['fillObjectWithRawData'], [new ClassDefinitionBuilder(new ClassPropertyFinder()), new PropertyValueCaster()]);
+		$this->popoConverter = $this->getMockBuilder(POPOConverter::class)
+			->setMethods(['convert'])
+			->getMock();
+
+		$this->popoObjectFiller = $this->getMockBuilder(POPOObjectFiller::class)
+			->enableOriginalConstructor()->setConstructorArgs([new ClassDefinitionBuilder(new ClassPropertyFinder()), new PropertyValueCaster()])
+			->setMethods(['fillObjectWithRawData'])
+			->getMock();
 	}
 
 	public function testConvertingPOPO()
