@@ -214,6 +214,8 @@ Example:
 
 # Changelog
 
+## 0.6.1 Updated tests to phpunit 5.4
+
 ## 0.6.0 Total rewrite
 
 - `Metassione::fillObjectWithRawData($targetObject, stdClass $rawData)` returns `$targetObject`
