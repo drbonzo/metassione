@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/drbonzo/metassione.svg?branch=master)](https://travis-ci.org/drbonzo/metassione)
+
 # metassione
 
 
