@@ -1,4 +1,7 @@
 
+
+[![Latest Stable Version](https://img.shields.io/packagist/v/drbonzo/metassione.svg?style=flat-square)](https://packagist.org/packages/drbonzo/metassione)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/)
 [![Build Status](https://travis-ci.org/drbonzo/metassione.svg?branch=master)](https://travis-ci.org/drbonzo/metassione)
 
 # metassione
