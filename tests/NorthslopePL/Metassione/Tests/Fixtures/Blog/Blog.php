@@ -3,19 +3,13 @@ namespace NorthslopePL\Metassione\Tests\Fixtures\Blog;
 
 class Blog
 {
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $name;
 
-	/**
-	 * @var \NorthslopePL\Metassione\Tests\Fixtures\Blog\Author
-	 */
+	/** @var \NorthslopePL\Metassione\Tests\Fixtures\Blog\Author */
 	private $author;
 
-	/**
-	 * @var \NorthslopePL\Metassione\Tests\Fixtures\Blog\Post[]
-	 */
+	/** @var \NorthslopePL\Metassione\Tests\Fixtures\Blog\Post[] */
 	private $posts = [];
 
 	/**
@@ -65,5 +59,4 @@ class Blog
 	{
 		return $this->author;
 	}
-
 }

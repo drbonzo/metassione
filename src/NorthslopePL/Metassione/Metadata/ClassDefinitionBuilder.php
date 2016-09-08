@@ -61,7 +61,7 @@ class ClassDefinitionBuilder implements ClassDefinitionBuilderInterface
 		//
 		// all other definitions are invalid
 
-		$pattern = '#@var\\s+(.+?)\\s*\\n#m';
+		$pattern = '#@var\s+(\S*?)[\s\*\/]*$#m';
 		if (preg_match($pattern, $phpdoc, $m)) {
 			$phpdocTypeSpecification = $m[1];
 		} else {
